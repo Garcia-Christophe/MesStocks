@@ -1,0 +1,12 @@
+{
+  "name": "MesStocks",
+  "displayName": "MesStocks",
+  "expo": {
+    "name": "MesStocks",
+    "slug": "MesStocks",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
