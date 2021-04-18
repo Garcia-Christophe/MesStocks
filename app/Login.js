@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Image, Dimensions, TextInput, TouchableOpacity,
 import colors from '../config/colors';
 import Animated, { Easing, Extrapolate } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
+import Svg, { Image as SvgImage, Circle, ClipPath } from 'react-native-svg';
 
 const { width, height } = Dimensions.get('screen');
 const { Value, event, block, cond, eq, set, Clock, startClock, stopClock, debug, timing, clockRunning, interpolate, concat } = Animated;
@@ -15,9 +16,9 @@ function runTiming(clock, value, dest) {
         time: new Value(0),
         frameTime: new Value(0)
     };
-  
+
     const config = {
-        duration: 1000,
+        duration: 750,
         toValue: new Value(0),
         easing: Easing.inOut(Easing.ease)
     };
@@ -117,10 +118,18 @@ class Login extends Component {
 
                 {/* Logo */}
                 <Animated.View style={{ ...StyleSheet.absoluteFill, transform:[{ translateY:this.bgY }] }}>
-                    <Image
-                        style={{flex: 1, height: height, width: width}}
-                        source={require('../assets/background.png')}
-                    />
+                    <Svg height={height} width={width}>
+                        <ClipPath id="clip">
+                            <Circle r={height} cx={width / 2}/>
+                        </ClipPath>
+                        <SvgImage
+                            height={height}
+                            width={width}
+                            href={require('../assets/background.png')}
+                            preserveAspectRatio="xMidYMid slice"
+                            clipPath="url(#clip)"
+                        />
+                    </Svg>
                 </Animated.View>
 
                 {/* Buttons */}
