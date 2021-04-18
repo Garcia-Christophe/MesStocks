@@ -22,7 +22,7 @@ function runTiming(clock, value, dest) {
         toValue: new Value(0),
         easing: Easing.inOut(Easing.ease)
     };
-  
+
     return block([
         cond(clockRunning(clock), 0, [
             set(state.finished, 0),
