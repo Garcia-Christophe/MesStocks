@@ -17,7 +17,7 @@ const App = () => {
         initialRouteName={'Recap'}
       >
         <Stack.Screen
-          name="Recap" 
+          name="Recap"
           component={Tabs}
         />
         <Stack.Screen
