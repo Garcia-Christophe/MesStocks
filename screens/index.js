@@ -1,9 +1,9 @@
-import Home from "./Home"
+import Recap from "./Recap"
 import CryptoDetail from "./CryptoDetail"
 import Transaction from "./Transaction"
 
 export {
-    Home,
+    Recap,
     CryptoDetail,
     Transaction
 };

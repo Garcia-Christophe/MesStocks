@@ -9,7 +9,7 @@ import {
 const Home = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text>Home</Text>
+            <Text>Récapitulation Générale</Text>
             <TouchableOpacity
                 onPress={() => navigation.navigate("CryptoDetail")}
             >
