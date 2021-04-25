@@ -1,23 +1,24 @@
-const back_arrow = require("../assets/icons/back_arrow.png");
-const home = require("../assets/icons/home.png");
-const line_graph = require("../assets/icons/line_graph.png");
-const notification_color = require("../assets/icons/notification_color.png");
-const notification_white = require("../assets/icons/notification_white.png");
-const pie_chart = require("../assets/icons/pie_chart.png");
-const right_arrow = require("../assets/icons/right_arrow.png");
-const settings = require("../assets/icons/settings.png");
-const star = require("../assets/icons/star.png");
-const transaction = require("../assets/icons/transaction.png");
+const retour = require("../assets/icons/retour.png");
+const recap = require("../assets/icons/recap.png");
+const rechercher = require("../assets/icons/rechercher.png");
+const scan = require("../assets/icons/scan.png");
+const ajouter = require("../assets/icons/ajouter.png");
+const notification_couleur = require("../assets/icons/notification_couleur.png");
+const notification_blanc = require("../assets/icons/notification_blanc.png");
+const aller = require("../assets/icons/aller.png");
+const params = require("../assets/icons/params.png");
+const etoile = require("../assets/icons/etoile.png");
+const entree_sortie = require("../assets/icons/entree_sortie.png");
 
 export default {
-    back_arrow,
-    home,
-    line_graph,
-    notification_color,
-    notification_white,
-    pie_chart,
-    right_arrow,
-    settings,
-    star,
-    transaction
+    recap,
+    rechercher,
+    scan,
+    ajouter,
+    params,
+    retour,
+    aller,etoile,
+    entree_sortie,
+    notification_couleur,
+    notification_blanc
 }

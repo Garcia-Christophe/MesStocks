@@ -14,10 +14,26 @@ const App = () => {
         screenOptions={{
           headerShown: false
         }}
-        initialRouteName={'Recap'}
+        initialRouteName={"Récap'"}
       >
         <Stack.Screen
-          name="Recap"
+          name="Récap'"
+          component={Tabs}
+        />
+        <Stack.Screen
+          name="Rechercher"
+          component={Tabs}
+        />
+        <Stack.Screen
+          name="Scan"
+          component={Tabs}
+        />
+        <Stack.Screen
+          name="Ajouter"
+          component={Tabs}
+        />
+        <Stack.Screen
+          name="Params"
           component={Tabs}
         />
         <Stack.Screen

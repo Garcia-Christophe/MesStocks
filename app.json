@@ -1,3 +1,26 @@
 {
-  "name": "MesStocks"
+  "expo": {
+    "name": "MesStocks",
+    "slug": "MesStocks",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/ecranChargement.png",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/images.icon.png"
+    }
+  }
 }

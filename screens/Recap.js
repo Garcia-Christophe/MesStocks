@@ -6,7 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-const Home = ({ navigation }) => {
+const Recap = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text>Récapitulation Générale</Text>
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Home;
+export default Recap;
