@@ -26,8 +26,10 @@ const Recap = ({ navigation }) => {
                     paddingHorizontal: SIZES.padding,
                     marginLeft: index == 0 ? SIZES.padding : 0,
                     marginRight: SIZES.radius,
+                    marginBottom: 15,
                     borderRadius: 10,
-                    backgroundColor: COLORS.white
+                    backgroundColor: COLORS.white,
+                    ...styles.shadow
                 }}
             >
                 {/* Titres */}
@@ -70,7 +72,7 @@ const Recap = ({ navigation }) => {
             <View
                 style={{
                     width: "100%",
-                    height: 290, // 350,
+                    height: 380, // 290,
                     ...styles.shadow
                 }}
             >
@@ -124,7 +126,7 @@ const Recap = ({ navigation }) => {
                     <View
                         style={{
                             position: 'absolute',
-                            bottom: "-22%" // 0
+                            bottom: 0 // "-30%"
                         }}
                     >
                         <Text style={{ marginLeft: SIZES.padding, color: COLORS.white, fontWeight: 'bold', ...FONTS.h2 }}>
