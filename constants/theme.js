@@ -8,6 +8,7 @@ export const COLORS = {
     white: "#fff",
     black: "#000000",
     green: "#37E39F",
+    yellow: "#FFC900",
     red: "#F9A8BA",
     gray: "#6A6A6A",
     lightGray: "#dbdbdb",
@@ -21,7 +22,7 @@ export const SIZES = {
     padding: 24,
 
     // font sizes
-    h1: 30,
+    h1: 42,
     h2: 22,
     h3: 16,
     h4: 14,

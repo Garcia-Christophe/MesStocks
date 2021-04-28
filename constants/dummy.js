@@ -1,7 +1,45 @@
-export const portfolio = {
-    balance: "12,724.33",
-    changes: "+2.36%",
-};
+export const sousCategories = [
+    {
+        id: 1,
+        nom: "Détecteur de mouvement / Contexte",
+        nomCategorie: "ÉCLAIRAGE",
+        image: require("../assets/images/bitcoin.png"),
+        nbArticles: 62,
+        nbArticlesACommander: 9
+    },
+    {
+        id: 2,
+        nom: "Ampoules",
+        nomCategorie: "ÉCLAIRAGE",
+        image: require("../assets/images/bitcoin.png"),
+        nbArticles: 4,
+        nbArticlesACommander: 0
+    },
+    {
+        id: 3,
+        nom: "Ampoules",
+        nomCategorie: "156",
+        image: require("../assets/images/bitcoin.png"),
+        nbArticles: 11,
+        nbArticlesACommander: 0
+    },
+    {
+        id: 4,
+        nom: "Ampoules",
+        nomCategorie: "APPAREILLAGE",
+        image: require("../assets/images/bitcoin.png"),
+        nbArticles: 17,
+        nbArticlesACommander: 3
+    },
+    {
+        id: 5,
+        nom: "Ampoules",
+        nomCategorie: "ÉCLAIRAGE",
+        image: require("../assets/images/bitcoin.png"),
+        nbArticles: 8,
+        nbArticlesACommander: 0
+    },
+]
 
 export const trendingCurrencies = [
     {
@@ -495,6 +533,6 @@ const chartOptions = [
     }
 ]
 
-const dummyData = { portfolio, trendingCurrencies, transactionHistory, chartOptions };
+const dummyData = { sousCategories, trendingCurrencies, transactionHistory, chartOptions };
 
 export default dummyData;

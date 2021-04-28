@@ -2,13 +2,19 @@ import React from 'react';
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native';
 
-const Transaction = () => {
+const Historique = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text>Transaction</Text>
+            <Text>Historique</Text>
+            <TouchableOpacity
+                onPress={() => navigation.navigate("FicheProduit")}
+            >
+                <Text>Navigate to FicheProduit</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -32,4 +38,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Transaction;
+export default Historique;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CryptoDetail, Transaction } from "./screens";
+import { Historique, FicheProduit } from "./screens";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -37,12 +37,12 @@ const App = () => {
           component={Tabs}
         />
         <Stack.Screen
-          name="CryptoDetail"
-          component={CryptoDetail}
+          name="Historique"
+          component={Historique}
         />
         <Stack.Screen
-          name="Transaction"
-          component={Transaction}
+          name="FicheProduit"
+          component={FicheProduit}
         />
       </Stack.Navigator>
     </NavigationContainer>

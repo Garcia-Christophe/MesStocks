@@ -3,8 +3,8 @@ import Rechercher from "./Rechercher"
 import Scan from "./Scan"
 import Ajouter from "./Ajouter"
 import Params from "./Params"
-import CryptoDetail from "./CryptoDetail"
-import Transaction from "./Transaction"
+import Historique from "./Historique"
+import FicheProduit from "./FicheProduit"
 
 export {
     Recap,
@@ -12,6 +12,6 @@ export {
     Scan,
     Ajouter,
     Params,
-    CryptoDetail,
-    Transaction
+    Historique,
+    FicheProduit
 };
