@@ -1,5 +1,5 @@
 import React from 'react';
-import { Historique, FicheProduit } from "./screens";
+import { Historique, FicheProduit, DerniersEvenements } from "./screens";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -43,6 +43,10 @@ const App = () => {
         <Stack.Screen
           name="FicheProduit"
           component={FicheProduit}
+        />
+        <Stack.Screen
+          name="DerniersEvenements"
+          component={DerniersEvenements}
         />
       </Stack.Navigator>
     </NavigationContainer>

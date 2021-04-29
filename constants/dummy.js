@@ -1,7 +1,7 @@
 export const sousCategories = [
     {
         id: 1,
-        nom: "Détecteur de mouvement / Contexte",
+        nom: "Détecteur de mouvement / Coffret",
         nomCategorie: "ÉCLAIRAGE",
         image: require("../assets/images/bitcoin.png"),
         nbArticles: 62,
@@ -41,472 +41,169 @@ export const sousCategories = [
     },
 ]
 
-export const trendingCurrencies = [
+export const historiquePremieresEntreesSorties = [
     {
         id: 1,
-        currency: "Bitcoin",
-        code: "BTC",
-        image: require("../assets/images/bitcoin.png"),
-        amount: "29,455.74",
-        changes: "+7.24%",
-        type: "I",      // I - Increased, D - Decreased
-        description: "Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people using the name Satoshi Nakamoto. The currency began use in 2009 when its implementation was released as open-source software.",
-        chartData: [
-            { x: 1, y: 2.5 },
-            { x: 1.5, y: 2 },
-            { x: 2, y: 2.3 },
-            { x: 2.5, y: 1.4 },
-            { x: 3, y: 1.5 },
-            { x: 3.5, y: 2.3 },
-            { x: 4, y: 2.8 }
-        ],
-        wallet: {
-            value: "170435.86",
-            crypto: "5.1"
-        },
-        transactionHistory: [
-            {
-                id: 1,
-                description: "Sold Bitcoin",
-                amount: -2.0034,
-                currency: "BTC",
-                type: "S",      // S - Sold, B - Bought
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 2,
-                description: "Bought Bitcoin",
-                amount: 2.0034,
-                currency: "BTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 3,
-                description: "Sold Bitcoin",
-                amount: -2.0034,
-                currency: "BTC",
-                type: "S",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 4,
-                description: "Bought Bitcoin",
-                amount: 2.0034,
-                currency: "BTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 5,
-                description: "Bought Bitcoin",
-                amount: 2.0034,
-                currency: "BTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-
-            {
-                id: 6,
-                description: "Bought Bitcoin",
-                amount: 2.0034,
-                currency: "BTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 7,
-                description: "Bought Bitcoin",
-                amount: 2.0034,
-                currency: "BTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 8,
-                description: "Bought Bitcoin",
-                amount: 2.0034,
-                currency: "BTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 9,
-                description: "Bought Bitcoin",
-                amount: 2.0034,
-                currency: "BTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-        ]
+        nomArticle: "Ampoule E27",
+        nombre: 5,
+        personne: "Frédéric",
+        type: "E", 
+        date: "29/04/2020 10:04"
     },
     {
         id: 2,
-        currency: "Ethereum",
-        code: "ETH",
-        image: require("../assets/images/ethereum.png"),
-        amount: "919.03",
-        changes: "-0.73%",
-        type: "D",
-        description: "Ethereum is a decentralized, open-source blockchain featuring smart contract functionality. Ether is the native cryptocurrency of the platform. It is the second-largest cryptocurrency by market capitalization, after Bitcoin. Ethereum is the most actively used blockchain.",
-        chartData: [
-            { x: 1, y: 2 },
-            { x: 1.5, y: 2.3 },
-            { x: 2, y: 2 },
-            { x: 2.5, y: 2.2 },
-            { x: 3, y: 1.5 },
-            { x: 3.5, y: 2.1 },
-            { x: 4, y: 2.5 }
-        ],
-        wallet: {
-            value: "18409.24",
-            crypto: "13.7"
-        },
-        transactionHistory: [
-            {
-                id: 1,
-                description: "Sold Ethereum",
-                amount: -2.0034,
-                currency: "ETH",
-                type: "S",      // S - Sold, B - Bought
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 2,
-                description: "Bought Ethereum",
-                amount: 2.0034,
-                currency: "ETH",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 3,
-                description: "Sold Ethereum",
-                amount: -2.0034,
-                currency: "ETH",
-                type: "S",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 4,
-                description: "Bought Ethereum",
-                amount: 2.0034,
-                currency: "ETH",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 5,
-                description: "Bought Ethereum",
-                amount: 2.0034,
-                currency: "ETH",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-
-            {
-                id: 6,
-                description: "Bought Ethereum",
-                amount: 2.0034,
-                currency: "ETH",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 7,
-                description: "Bought Ethereum",
-                amount: 2.0034,
-                currency: "ETH",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 8,
-                description: "Bought Ethereum",
-                amount: 2.0034,
-                currency: "ETH",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 9,
-                description: "Bought Ethereum",
-                amount: 2.0034,
-                currency: "ETH",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-        ]
-    },
-    {
-        id: 3,
-        currency: "Litecoin",
-        code: "LTC",
-        image: require("../assets/images/litecoin.png"),
-        amount: "118.33",
-        changes: "+1.73%",
-        type: "I",
-        description: "Litecoin is a peer-to-peer cryptocurrency and open-source software project released under the MIT/X11 license. Litecoin was an early bitcoin spinoff or altcoin, starting in October 2011. In technical details, Litecoin is nearly identical to Bitcoin.",
-        chartData: [
-            { x: 1, y: 2.6 },
-            { x: 1.5, y: 2.2 },
-            { x: 2, y: 2 },
-            { x: 2.5, y: 2.2 },
-            { x: 3, y: 1.6 },
-            { x: 3.5, y: 2.1 },
-            { x: 4, y: 2.5 }
-        ],
-        wallet: {
-            value: "13139.23",
-            crypto: "100.2"
-        },
-        transactionHistory: [
-            {
-                id: 1,
-                description: "Sold Litecoin",
-                amount: -2.0034,
-                currency: "LTC",
-                type: "S",      // S - Sold, B - Bought
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 2,
-                description: "Bought Litecoin",
-                amount: 2.0034,
-                currency: "LTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 3,
-                description: "Sold Litecoin",
-                amount: -2.0034,
-                currency: "LTC",
-                type: "S",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 4,
-                description: "Bought Litecoin",
-                amount: 2.0034,
-                currency: "LTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 5,
-                description: "Bought Litecoin",
-                amount: 2.0034,
-                currency: "LTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 6,
-                description: "Bought Litecoin",
-                amount: 2.0034,
-                currency: "LTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 7,
-                description: "Bought Litecoin",
-                amount: 2.0034,
-                currency: "LTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 8,
-                description: "Bought Litecoin",
-                amount: 2.0034,
-                currency: "LTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 9,
-                description: "Bought Litecoin",
-                amount: 2.0034,
-                currency: "LTC",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-        ]
-    },
-    {
-        id: 4,
-        currency: "Ripple",
-        code: "XRP",
-        image: require("../assets/images/ripple.png"),
-        amount: "0.24",
-        changes: "-0.51%",
-        type: "D",
-        description: "Ripple is a real-time gross settlement system, currency exchange and remittance network created by Ripple Labs Inc., a US-based technology company.",
-        chartData: [
-            { x: 1, y: 2.3 },
-            { x: 1.5, y: 2.3 },
-            { x: 2, y: 2.5 },
-            { x: 2.5, y: 2.1 },
-            { x: 3, y: 2.2 },
-            { x: 3.5, y: 1.8 },
-            { x: 4, y: 2.5 }
-        ],
-        wallet: {
-            value: "2000.0",
-            crypto: "6000.0"
-        },
-        transactionHistory: [
-            {
-                id: 1,
-                description: "Sold Ripple",
-                amount: -2.0034,
-                currency: "XRP",
-                type: "S",      // S - Sold, B - Bought
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 2,
-                description: "Bought Ripple",
-                amount: 2.0034,
-                currency: "XRP",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 3,
-                description: "Sold Ripple",
-                amount: -2.0034,
-                currency: "XRP",
-                type: "S",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 4,
-                description: "Bought Ripple",
-                amount: 2.0034,
-                currency: "XRP",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 5,
-                description: "Bought Ripple",
-                amount: 2.0034,
-                currency: "XRP",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 6,
-                description: "Bought Ripple",
-                amount: 2.0034,
-                currency: "XRP",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 7,
-                description: "Bought Ripple",
-                amount: 2.0034,
-                currency: "XRP",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 8,
-                description: "Bought Ripple",
-                amount: 2.0034,
-                currency: "XRP",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-            {
-                id: 9,
-                description: "Bought Ripple",
-                amount: 2.0034,
-                currency: "XRP",
-                type: "B",
-                date: "14:20 12 Apr"
-            },
-        ]
-    },
-]
-
-export const transactionHistory = [
-    {
-        id: 1,
-        description: "Sold Ethereum",
-        amount: -2.0034,
-        currency: "ETH",
-        type: "S",      // S - Sold, B - Bought
-        date: "14:20 12 Apr"
-    },
-    {
-        id: 2,
-        description: "Bought Ethereum",
-        amount: 2.0034,
-        currency: "ETH",
-        type: "B",
-        date: "14:20 12 Apr"
-    },
-    {
-        id: 3,
-        description: "Sold Ethereum",
-        amount: -2.0034,
-        currency: "ETH",
+        nomArticle: "Hydro Fluo 1X58W",
+        nombre: 2,
+        personne: "Romain",
         type: "S",
-        date: "14:20 12 Apr"
+        date: "27/04/2020 17:01"
+    },
+    {
+        id: 3,
+        nomArticle: "Hublot LED A Detection 22W",
+        nombre: 1,
+        personne: "Romain",
+        type: "S",
+        date: "27/04/2020 09:48"
     },
     {
         id: 4,
-        description: "Bought Ethereum",
-        amount: 2.0034,
-        currency: "ETH",
-        type: "B",
-        date: "14:20 12 Apr"
+        nomArticle: "Ampoule Culot E40 MAIH-2 - 250W",
+        nombre: 1,
+        personne: "Frédéric",
+        type: "E",
+        date: "27/04/2020 08:30"
     },
     {
         id: 5,
-        description: "Bought Ethereum",
-        amount: 2.0034,
-        currency: "ETH",
-        type: "B",
-        date: "14:20 12 Apr"
+        nomArticle: "Tube 18W T5",
+        nombre: 3,
+        personne: "Louis",
+        type: "E",
+        date: "23/04/2020 15:12"
     },
+]
 
+export const historiqueEntreesSorties = [
+    {
+        id: 1,
+        nomArticle: "Ampoule E27",
+        nombre: 5,
+        personne: "Frédéric",
+        type: "E", 
+        date: "29/04/2020 10:04"
+    },
+    {
+        id: 2,
+        nomArticle: "Hydro Fluo 1X58W",
+        nombre: 2,
+        personne: "Romain",
+        type: "S",
+        date: "27/04/2020 17:01"
+    },
+    {
+        id: 3,
+        nomArticle: "Hublot LED A Detection 22W",
+        nombre: 1,
+        personne: "Romain",
+        type: "S",
+        date: "27/04/2020 09:48"
+    },
+    {
+        id: 4,
+        nomArticle: "Ampoule Culot E40 MAIH-2 - 250W",
+        nombre: 1,
+        personne: "Frédéric",
+        type: "E",
+        date: "27/04/2020 08:30"
+    },
+    {
+        id: 5,
+        nomArticle: "Tube 18W T5",
+        nombre: 3,
+        personne: "Louis",
+        type: "E",
+        date: "23/04/2020 15:12"
+    },
     {
         id: 6,
-        description: "Bought Ethereum",
-        amount: 2.0034,
-        currency: "ETH",
-        type: "B",
-        date: "14:20 12 Apr"
+        nomArticle: "Ampoule Halogène Culot GU5,3 - 12V - 35/50W",
+        nombre: 1,
+        personne: "Romain",
+        type: "E",
+        date: "21/04/2020 11:07"
     },
     {
         id: 7,
-        description: "Bought Ethereum",
-        amount: 2.0034,
-        currency: "ETH",
-        type: "B",
-        date: "14:20 12 Apr"
+        nomArticle: "Hublot Led Limaro",
+        nombre: 10,
+        personne: "Frédéric",
+        type: "S",
+        date: "21/04/2020 12:24"
     },
     {
         id: 8,
-        description: "Bought Ethereum",
-        amount: 2.0034,
-        currency: "ETH",
-        type: "B",
-        date: "14:20 12 Apr"
+        nomArticle: "Coffret IP65 12 MOD",
+        nombre: 3,
+        personne: "Frédéric",
+        type: "E",
+        date: "20/04/2020 16:58"
     },
     {
         id: 9,
-        description: "Bought Ethereum",
-        amount: 2.0034,
-        currency: "ETH",
-        type: "B",
-        date: "14:20 12 Apr"
+        nomArticle: "Lampe LED R75 78mm",
+        nombre: 1,
+        personne: "Louis",
+        type: "S",
+        date: "20/04/2020 13:46"
+    },
+    {
+        id: 10,
+        nomArticle: "Griffes pour Appareillage Niloe",
+        nombre: 20,
+        personne: "Romain",
+        type: "S",
+        date: "18/04/2020 10:00"
+    },
+    {
+        id: 11,
+        nomArticle: "Détecteur de Mouvement Luxomat 200°",
+        nombre: 5,
+        personne: "Frédéric",
+        type: "E",
+        date: "17/04/2020 15:55"
+    },
+    {
+        id: 12,
+        nomArticle: "Détecteur 180° Motion Detector White",
+        nombre: 1,
+        personne: "Romain",
+        type: "S",
+        date: "13/04/2020 12:23"
+    },
+    {
+        id: 13,
+        nomArticle: "Ampoule B22",
+        nombre: 2,
+        personne: "Romain",
+        type: "E",
+        date: "13/04/2020 12:25"
+    },
+    {
+        id: 14,
+        nomArticle: "Panneau LED 600 * 600 2700K",
+        nombre: 1,
+        personne: "Louis",
+        type: "E",
+        date: "10/04/2020 08:15"
+    },
+    {
+        id: 15,
+        nomArticle: "Hublot LED 11W",
+        nombre: 1,
+        personne: "Frédéric",
+        type: "S",
+        date: "09/04/2020 09:36"
     },
 ];
 
@@ -533,6 +230,6 @@ const chartOptions = [
     }
 ]
 
-const dummyData = { sousCategories, trendingCurrencies, transactionHistory, chartOptions };
+const dummyData = { sousCategories, historiquePremieresEntreesSorties, historiqueEntreesSorties, chartOptions };
 
 export default dummyData;

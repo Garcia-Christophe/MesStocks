@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -7,16 +7,25 @@ import {
     FlatList,
     TouchableOpacity,
     Image,
-    ImageBackground
+    ImageBackground,
+    LogBox
 } from 'react-native';
+import { block } from 'react-native-reanimated';
 
-import { dummyData, COLORS, SIZES, FONTS, icons, images } from "../constants" 
+import { dummyData, COLORS, SIZES, FONTS, icons, images } from "../constants";
+import HistoriqueEntreesSorties from "../components/HistoriqueEntreesSorties";
 
 const Recap = ({ navigation }) => {
 
     const [sousCategories, setSousCategories] = useState(dummyData.sousCategories)
+    const [historiquePremieresEntreesSorties, setHistoriqueEntreesSorties] = useState(dummyData.historiquePremieresEntreesSorties)
+
+    // Enlever les warnings inutiles
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
+    }, [])
     
-    function renderHeader() {
+    function renderEntete() {
 
         const renderItem = ({ item, index }) => (
             <View
@@ -37,8 +46,10 @@ const Recap = ({ navigation }) => {
                     style={{ flexDirection: 'column' }}
                 >
                     <View style={{ marginleft: SIZES.base }}>
-                        <View style={{ height: 30 }}>
-                            <ScrollView>
+                        <View style={{ height: 31 }}>
+                            <ScrollView
+                                nestedScrollEnabled={true}
+                            >
                                 <Text style={{ ...FONTS.body2 }}>{item.nom}</Text>
                             </ScrollView>
                         </View>
@@ -46,14 +57,17 @@ const Recap = ({ navigation }) => {
                     </View>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => console.log("go to Rechercher")}
+                >
+                    
                     {/* Séparateur */}
                     <View 
                         style={{
-                            width: 66,
-                            height: 5,
+                            width: 75,
+                            height: 2,
                             backgroundColor: COLORS.yellow,
-                            marginLeft: 33,
+                            marginLeft: 29,
                             marginVertical: 5,
                             borderRadius: 10
                         }}
@@ -62,7 +76,9 @@ const Recap = ({ navigation }) => {
                     {/* Informations */}
                     <View>
                         <Text style={{ ...FONTS.h4 }}><Text style={{ fontWeight: 'bold' }}>{item.nbArticles}</Text> articles</Text>
-                        <Text style={{ color: item.nbArticlesACommander == 0 ? COLORS.green : COLORS.red, ...FONTS.body5 }}>{item.nbArticlesACommander == 0 ? "Stocks à jour" : item.nbArticlesACommander + " à commander"}</Text>
+                        <Text style={{ color: item.nbArticlesACommander == 0 ? COLORS.green : COLORS.red, ...FONTS.body5 }}>
+                            {item.nbArticlesACommander == 0 ? "Stocks à jour" : item.nbArticlesACommander + " à commander"}
+                        </Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -100,7 +116,7 @@ const Recap = ({ navigation }) => {
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
-                            onPress={() => console.log("Notification on pressed")}
+                            onPress={() => console.log("Go to DerniersEvenements")}
                         >
                             <Image
                                 source={icons.notification_blanc}
@@ -118,7 +134,15 @@ const Recap = ({ navigation }) => {
                         }}
                     >
                         <Text style={{ color: COLORS.white, ...FONTS.h3 }}>Récapitulation générale</Text>
-                        <Text style={{ color: COLORS.white, ...FONTS.h1, marginTop: SIZES.base, paddingTop: SIZES.base, fontWeight: 'bold' }}>102</Text>
+                        <Text style={{ 
+                            color: COLORS.white, 
+                            ...FONTS.h1, 
+                            marginTop: SIZES.base, 
+                            paddingTop: SIZES.base, 
+                            fontWeight: 'bold' }}
+                        >
+                            102
+                        </Text>
                         <Text style={{ color: COLORS.white, ...FONTS.body5 }}>articles dans l'inventaire</Text>
                     </View>
 
@@ -145,11 +169,105 @@ const Recap = ({ navigation }) => {
             </View>
         )
     }
+
+    function renderACommander() {
+        return (
+            <TouchableOpacity
+                style={{
+                    flexDirection:'row',
+                    alignItems: 'center',
+                    marginTop: SIZES.padding,
+                    marginHorizontal: SIZES.padding,
+                    paddingVertical: SIZES.padding,
+                    paddingHorizontal: SIZES.padding,
+                    backgroundColor: COLORS.white,
+                    borderRadius: SIZES.radius,
+                    ...styles.shadow
+                }}
+                onPress={() => console.log("go to Rechercher")}
+            >
+                <Image 
+                    source={icons.reapprovisionnement}
+                    style={{
+                        width: 30,
+                        height: 30
+                    }}
+                />
+
+                <View
+                    style={{ flex: 1, marginLeft: SIZES.radius }}
+                >
+                    <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>À commander</Text>
+                    <Text style={{ ...FONTS.body4, color: COLORS.gray }}>Voir les articles en manque de stock</Text>
+                </View>
+
+                <Image 
+                    source={icons.aller}
+                    style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: COLORS.gray
+                    }}
+                />
+            </TouchableOpacity>
+        )
+    }
+
+    function renderAjouterUnProduit() {
+        return (
+            <TouchableOpacity
+                style={{
+                    flexDirection:'row',
+                    alignItems: 'center',
+                    marginTop: SIZES.padding,
+                    marginHorizontal: SIZES.padding,
+                    padding: 20,
+                    backgroundColor: COLORS.secondary,
+                    borderRadius: SIZES.radius,
+                    ...styles.shadow
+                }}
+                onPress={() => console.log("go to Ajouter")}
+            >
+                <View
+                    style={{ flex: 1, paddingRight: 10 }}
+                >
+                    <Text style={{ ...FONTS.h3, fontWeight: 'bold', color: COLORS.white }}>Ajouter un article</Text>
+                    <Text style={{ ...FONTS.body4, color: COLORS.white, lineHeight: 18, marginTop: SIZES.base }}>
+                    Il est également possible d'ajouter une catégorie, une sous-catégorie, une marque, un utilisateur...
+                    </Text>
+                </View>
+
+                <Image 
+                    source={icons.plus}
+                    style={{
+                        width: 30,
+                        height: 30,
+                        tintColor: COLORS.primary
+                    }}
+                />
+            </TouchableOpacity>
+        )
+    }
+
+    function renderHistoriqueEntreesSorties() {
+        return (
+            <HistoriqueEntreesSorties
+                customContainerStyle={{ ...styles.shadow }}
+                history={historiquePremieresEntreesSorties}
+                number={5}
+                personne="Tous"
+                type="Tous"
+            />
+        )
+    }
     
     return (
         <ScrollView>
             <View style={{ flex: 1, paddingBottom: 130 }}>
-                {renderHeader()}
+                {renderEntete()}
+                {renderACommander()}
+                {renderAjouterUnProduit()}
+                {renderHistoriqueEntreesSorties()}
             </View>
         </ScrollView>
     )

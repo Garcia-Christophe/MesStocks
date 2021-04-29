@@ -9,6 +9,9 @@ const aller = require("../assets/icons/aller.png");
 const params = require("../assets/icons/params.png");
 const etoile = require("../assets/icons/etoile.png");
 const entree_sortie = require("../assets/icons/entree_sortie.png");
+const reapprovisionnement = require("../assets/icons/reapprovisionnement.png");
+const plus = require("../assets/icons/plus.png");
+const troisPetitsPoints = require("../assets/icons/troisPetitsPoints.png")
 
 export default {
     recap,
@@ -20,5 +23,8 @@ export default {
     aller,etoile,
     entree_sortie,
     notification_couleur,
-    notification_blanc
+    notification_blanc,
+    reapprovisionnement,
+    plus,
+    troisPetitsPoints
 }
