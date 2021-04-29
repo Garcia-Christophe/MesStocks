@@ -3,19 +3,20 @@ import {
     StyleSheet,
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
+
+import { BarreRetour } from '../components';
+import { COLORS, SIZES, FONTS, icons } from '../constants';
 
 const Historique = ({ navigation }) => {
     return (
-        <View style={styles.container}>
-            <Text>Historique</Text>
-            <TouchableOpacity
-                onPress={() => navigation.navigate("FicheProduit")}
-            >
-                <Text>Navigate to FicheProduit</Text>
-            </TouchableOpacity>
-        </View>
+        <ScrollView>
+            <BarreRetour 
+                right={false}
+            />
+        </ScrollView>
     )
 }
 

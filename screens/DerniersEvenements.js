@@ -3,14 +3,20 @@ import {
     StyleSheet,
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
+
+import { BarreRetour } from '../components';
+import { COLORS, SIZES, FONTS, icons } from '../constants';
 
 const DerniersEvenements = ({ navigation }) => {
     return (
-        <View style={styles.container}>
-            <Text>DerniersEvenements</Text>
-        </View>
+        <ScrollView>
+            <BarreRetour 
+                right={false}
+            />
+        </ScrollView>
     )
 }
 

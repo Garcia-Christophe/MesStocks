@@ -13,7 +13,7 @@ import {
 import { block } from 'react-native-reanimated';
 
 import { dummyData, COLORS, SIZES, FONTS, icons, images } from "../constants";
-import HistoriqueEntreesSorties from "../components/HistoriqueEntreesSorties";
+import { HistoriqueEntreesSorties } from "../components";
 
 const Recap = ({ navigation }) => {
 
@@ -58,7 +58,7 @@ const Recap = ({ navigation }) => {
                 </View>
 
                 <TouchableOpacity
-                    onPress={() => console.log("go to Rechercher")}
+                    onPress={() => navigation.navigate("Rechercher", {sousCategorie: item})}
                 >
                     
                     {/* Séparateur */}
@@ -116,7 +116,7 @@ const Recap = ({ navigation }) => {
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
-                            onPress={() => console.log("Go to DerniersEvenements")}
+                            onPress={() => navigation.navigate("DerniersEvenements")}
                         >
                             <Image
                                 source={icons.notification_blanc}
@@ -184,7 +184,7 @@ const Recap = ({ navigation }) => {
                     borderRadius: SIZES.radius,
                     ...styles.shadow
                 }}
-                onPress={() => console.log("go to Rechercher")}
+                onPress={() => navigation.navigate("Rechercher", {aCommander: true})}
             >
                 <Image 
                     source={icons.reapprovisionnement}
@@ -226,7 +226,7 @@ const Recap = ({ navigation }) => {
                     borderRadius: SIZES.radius,
                     ...styles.shadow
                 }}
-                onPress={() => console.log("go to Ajouter")}
+                onPress={() => navigation.navigate("Ajouter", {produit: true})}
             >
                 <View
                     style={{ flex: 1, paddingRight: 10 }}
@@ -253,6 +253,7 @@ const Recap = ({ navigation }) => {
         return (
             <HistoriqueEntreesSorties
                 customContainerStyle={{ ...styles.shadow }}
+                navigation={navigation}
                 history={historiquePremieresEntreesSorties}
                 number={5}
                 personne="Tous"

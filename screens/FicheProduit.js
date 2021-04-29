@@ -2,14 +2,21 @@ import React from 'react';
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    SafeAreaView,
+    ScrollView
 } from 'react-native';
+
+import { BarreRetour } from '../components';
+import { COLORS, SIZES, FONTS, icons } from '../constants';
 
 const FicheProduit = () => {
     return (
-        <View style={styles.container}>
-            <Text>FicheProduit</Text>
-        </View>
+        <ScrollView>
+            <BarreRetour 
+                right={true}
+            />
+        </ScrollView>
     )
 }
 

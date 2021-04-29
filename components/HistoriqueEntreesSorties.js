@@ -11,7 +11,7 @@ import { COLORS, SIZES, FONTS, icons } from '../constants';
 import { historiqueEntreesSorties } from '../constants/dummy';
 import { historiquePremieresEntreesSorties } from '../constants/dummy';
 
-const HistoriqueEntreesSorties = ({customContainerStyle, history, number, personne, type}) => {
+const HistoriqueEntreesSorties = ({navigation, customContainerStyle, history, number, personne, type}) => {
 
     const renderItem = ({item}) => {
         return (
@@ -21,7 +21,7 @@ const HistoriqueEntreesSorties = ({customContainerStyle, history, number, person
                     alignItems: 'center',
                     paddingVertical: SIZES.base
                 }}
-                onPress={() => console.log("go to FicheProduit")}
+                onPress={() => navigation.navigate("FicheProduit", {idProduit: item.id})}
             >
                 <Image 
                     source={icons.entree_sortie}
@@ -86,7 +86,7 @@ const HistoriqueEntreesSorties = ({customContainerStyle, history, number, person
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
-                    onPress={() => console.log("go to Historique")}
+                    onPress={() => navigation.navigate("Historique")}
                 >
                     <Image 
                         source={icons.troisPetitsPoints}

@@ -11,7 +11,8 @@ const etoile = require("../assets/icons/etoile.png");
 const entree_sortie = require("../assets/icons/entree_sortie.png");
 const reapprovisionnement = require("../assets/icons/reapprovisionnement.png");
 const plus = require("../assets/icons/plus.png");
-const troisPetitsPoints = require("../assets/icons/troisPetitsPoints.png")
+const troisPetitsPoints = require("../assets/icons/troisPetitsPoints.png");
+const suppression = require("../assets/icons/suppression.png");
 
 export default {
     recap,
@@ -26,5 +27,6 @@ export default {
     notification_blanc,
     reapprovisionnement,
     plus,
-    troisPetitsPoints
+    troisPetitsPoints,
+    suppression
 }
