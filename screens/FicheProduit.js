@@ -15,6 +15,7 @@ const FicheProduit = () => {
         <ScrollView>
             <BarreRetour 
                 right={true}
+                color={COLORS.black}
             />
         </ScrollView>
     )

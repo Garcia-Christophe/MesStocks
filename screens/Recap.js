@@ -174,7 +174,7 @@ const Recap = ({ navigation }) => {
         return (
             <TouchableOpacity
                 style={{
-                    flexDirection:'row',
+                    flexDirection: 'row',
                     alignItems: 'center',
                     marginTop: SIZES.padding,
                     marginHorizontal: SIZES.padding,

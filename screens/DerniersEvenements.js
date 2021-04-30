@@ -15,6 +15,7 @@ const DerniersEvenements = ({ navigation }) => {
         <ScrollView>
             <BarreRetour 
                 right={false}
+                color={COLORS.black}
             />
         </ScrollView>
     )

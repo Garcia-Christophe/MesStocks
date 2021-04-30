@@ -13,6 +13,9 @@ const reapprovisionnement = require("../assets/icons/reapprovisionnement.png");
 const plus = require("../assets/icons/plus.png");
 const troisPetitsPoints = require("../assets/icons/troisPetitsPoints.png");
 const suppression = require("../assets/icons/suppression.png");
+const entree_sortie_disque = require("../assets/icons/entree_sortie_disque.png");
+const qui = require("../assets/icons/qui.png");
+const chrono = require("../assets/icons/chrono.png");
 
 export default {
     recap,
@@ -28,5 +31,8 @@ export default {
     reapprovisionnement,
     plus,
     troisPetitsPoints,
-    suppression
+    suppression,
+    entree_sortie_disque,
+    qui,
+    chrono
 }

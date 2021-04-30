@@ -9,7 +9,7 @@ import {
 
  import { COLORS, SIZES, FONTS, icons } from "../constants";
 
- const BarreRetour = ({right}) => {
+ const BarreRetour = ({right, color}) => {
 
     const navigation = useNavigation();
 
@@ -31,10 +31,10 @@ import {
                         style={{
                             width: 25,
                             height: 25,
-                            tintColor: COLORS.gray
+                            tintColor: color === COLORS.white ? COLORS.white : COLORS.gray
                         }}
                     />
-                    <Text style={{ marginLeft: SIZES.base, ...FONTS.h2, fontWeight: 'bold' }}>Retour</Text>
+                    <Text style={{ marginLeft: SIZES.base, ...FONTS.h2, fontWeight: 'bold', color: color === COLORS.white ? COLORS.white : COLORS.black }}>Retour</Text>
                 </TouchableOpacity>
             </View>
 

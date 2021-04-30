@@ -8,6 +8,22 @@ import Tabs from "./navigation/tabs";
 const Stack = createStackNavigator();
 
 const App = () => {
+/* componentWillMount dans une cons5
+  componentWillMount() {
+    var firebaseConfig = {
+      apiKey: "AIzaSyAeCXOrmoIp0mlumlHP4OXFLYGCBIRmCAc",
+      authDomain: "messtocks-240379.firebaseapp.com",
+      projectId: "messtocks-240379",
+      storageBucket: "messtocks-240379.appspot.com",
+      messagingSenderId: "1095956858761",
+      appId: "1:1095956858761:web:873ab836cec0ceb6820358",
+      measurementId: "G-JF80S725F6"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  }*/
+
   return (
     <NavigationContainer>
       <Stack.Navigator

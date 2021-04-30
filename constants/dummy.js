@@ -207,6 +207,59 @@ export const historiqueEntreesSorties = [
     },
 ];
 
-const dummyData = { sousCategories, historiquePremieresEntreesSorties, historiqueEntreesSorties };
+export const types = [
+    {
+        id: 1,
+        nom: "Tous"
+    },
+    {
+        id: 2,
+        nom: "Entrées"
+    },
+    {
+        id: 3,
+        nom: "Sorties"
+    }
+];
+
+export const personnes = [
+    {
+        id: 1,
+        nom: "Toutes"
+    },
+    {
+        id: 2,
+        nom: "Frédéric"
+    },
+    {
+        id: 3,
+        nom: "Romain"
+    },
+    {
+        id: 4,
+        nom: "Louis"
+    }
+];
+
+export const periodes = [
+    {
+        id: 1,
+        nom: "Toutes"
+    },
+    {
+        id: 2,
+        nom: "Ce mois"
+    },
+    {
+        id: 3,
+        nom: "Cette semaine"
+    },
+    {
+        id: 4,
+        nom: "Aujourd'hui"
+    }
+];
+
+const dummyData = { sousCategories, historiquePremieresEntreesSorties, historiqueEntreesSorties, types, personnes, periodes };
 
 export default dummyData;

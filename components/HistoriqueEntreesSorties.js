@@ -4,7 +4,8 @@ import {
     Text,
     FlatList,
     TouchableOpacity,
-    Image
+    Image,
+    ScrollView
 } from 'react-native';
 
 import { COLORS, SIZES, FONTS, icons } from '../constants';
@@ -46,7 +47,7 @@ const HistoriqueEntreesSorties = ({navigation, customContainerStyle, history, nu
                     }}
                 >
                     <Text 
-                        style={{ color: item.type === "E" ? COLORS.green : COLORS.black, fontWeight: 'bold', ...FONTS.body4 }}
+                        style={{ color: item.type === "E" ? COLORS.green : COLORS.red, fontWeight: 'bold', ...FONTS.body4 }}
                     >
                         {item.type === "E" ? "+" : "-"} {item.nombre}
                     </Text>
@@ -66,21 +67,27 @@ const HistoriqueEntreesSorties = ({navigation, customContainerStyle, history, nu
                 ...customContainerStyle
             }}
         >
-            <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>Historique des entrées/sorties</Text>
-            <FlatList 
-                contentContainerStyle={{ marginTop: SIZES.radius }}
-                scrollEnabled={false}
-                data={number === 5 ? historiquePremieresEntreesSorties : historiqueEntreesSorties}
-                keyExtractor={item => `${item.id}`}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={() => {
-                    return (
-                        <View style={{ width: "100%", height: 1, backgroundColor: COLORS.lightGray }} />
-                    )
-                }}
-            />
-            {number === 5 ? 
+            <Text style={{ ...FONTS.h2, fontWeight: 'bold', marginBottom: SIZES.base }}>Historique des entrées/sorties</Text>
+            <ScrollView 
+                showsVerticalScrollIndicator={false} 
+                nestedScrollEnabled={true}
+            >
+                <FlatList 
+                    contentContainerStyle={{ marginTop: SIZES.radius }}
+                    scrollEnabled={false}
+                    data={number === 5 ? historiquePremieresEntreesSorties : historiqueEntreesSorties}
+                    keyExtractor={item => `${item.id}`}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                    ItemSeparatorComponent={() => {
+                        return (
+                            <View style={{ width: "100%", height: 1, backgroundColor: COLORS.lightGray }} />
+                        )
+                    }}
+                />
+            </ScrollView>
+
+            {number === 5 && 
                 <TouchableOpacity
                     style={{
                         justifyContent: 'center',
@@ -97,7 +104,7 @@ const HistoriqueEntreesSorties = ({navigation, customContainerStyle, history, nu
                         }}
                     />
                 </TouchableOpacity>
-            : <View />}
+            }
         </View>
     )
 }
