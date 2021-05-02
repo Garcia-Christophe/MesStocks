@@ -9,7 +9,6 @@ import {
     Image,
     Animated
 } from 'react-native';
-import useColorScheme from 'react-native/Libraries/Utilities/useColorScheme';
 
 import { BarreRetour, HistoriqueEntreesSorties, BoutonTexte } from '../components';
 import { COLORS, SIZES, FONTS, icons, images, dummyData } from '../constants';
@@ -26,18 +25,6 @@ const Historique = ({ navigation }) => {
     const [personneSelectionnee, setPersonneSelectionnee] = useState(dummyData.personnes[0])
     const [periodes, setPeriodes] = useState(dummyData.periodes)
     const [periodeSelectionnee, setPeriodeSelectionnee] = useState(dummyData.periodes[0])
-
-    function typeOnClickHandler(type) {
-        setTypeSelectionne(type)
-    }
-
-    function personneOnClickHandler(personne) {
-        setPersonneSelectionnee(personne)
-    }
-
-    function periodeOnClickHandler(periode) {
-        setPeriodeSelectionnee(periode)
-    }
 
     function renderPetitsPoints() {
         const positionPoint = Animated.divide(scrollX, SIZES.width)
@@ -240,7 +227,7 @@ const Historique = ({ navigation }) => {
                                                         customLabelStyle={{
                                                             color: typeSelectionne.id === type.id ? COLORS.white : COLORS.gray
                                                         }}
-                                                        onPress={() => typeOnClickHandler(type)}
+                                                        onPress={() => setTypeSelectionne(type)}
                                                     />
                                                 )
                                             })
@@ -260,7 +247,7 @@ const Historique = ({ navigation }) => {
                                                         customLabelStyle={{
                                                             color: personneSelectionnee.id === personne.id ? COLORS.white : COLORS.gray
                                                         }}
-                                                        onPress={() => personneOnClickHandler(personne)}
+                                                        onPress={() => setPersonneSelectionnee(personne)}
                                                     />
                                                 )
                                             })
@@ -280,7 +267,7 @@ const Historique = ({ navigation }) => {
                                                         customLabelStyle={{
                                                             color: periodeSelectionnee.id === periode.id ? COLORS.white : COLORS.gray
                                                         }}
-                                                        onPress={() => periodeOnClickHandler(periode)}
+                                                        onPress={() => setPeriodeSelectionnee(periode)}
                                                     />
                                                 )
                                             })
@@ -300,14 +287,16 @@ const Historique = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             {renderEntete()}
-            <ScrollView>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+            >
                 {renderFiltres()}
                 
                 <HistoriqueEntreesSorties
                     customContainerStyle={{ 
                         ...styles.shadow, 
                         marginBottom: SIZES.padding, 
-                        height: SIZES.height /* écran */ - 150 /* banniere */ - SIZES.padding * 6
+                        height: SIZES.height /* écran */ - 150 /* banniere */ - SIZES.padding * 6 /* le reste */
                     }}
                     navigation={navigation}
                     history={historiqueEntreesSorties}
@@ -321,11 +310,6 @@ const Historique = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     shadow: {
         shadowColor: "#000",
         shadowOffset: {

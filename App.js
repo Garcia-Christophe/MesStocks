@@ -1,5 +1,5 @@
 import React from 'react';
-import { Historique, FicheProduit, DerniersEvenements } from "./screens";
+import { Historique, FicheArticle, DerniersEvenements } from "./screens";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -57,8 +57,8 @@ const App = () => {
           component={Historique}
         />
         <Stack.Screen
-          name="FicheProduit"
-          component={FicheProduit}
+          name="FicheArticle"
+          component={FicheArticle}
         />
         <Stack.Screen
           name="DerniersEvenements"

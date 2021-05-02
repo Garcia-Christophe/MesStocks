@@ -10,7 +10,7 @@ import {
 import { BarreRetour } from '../components';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 
-const FicheProduit = () => {
+const FicheArticle = () => {
     return (
         <ScrollView>
             <BarreRetour 
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default FicheProduit;
+export default FicheArticle;

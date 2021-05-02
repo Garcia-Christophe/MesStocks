@@ -3,8 +3,7 @@ const recap = require("../assets/icons/recap.png");
 const rechercher = require("../assets/icons/rechercher.png");
 const scan = require("../assets/icons/scan.png");
 const ajouter = require("../assets/icons/ajouter.png");
-const notification_couleur = require("../assets/icons/notification_couleur.png");
-const notification_blanc = require("../assets/icons/notification_blanc.png");
+const notification = require("../assets/icons/notification.png");
 const aller = require("../assets/icons/aller.png");
 const params = require("../assets/icons/params.png");
 const etoile = require("../assets/icons/etoile.png");
@@ -16,6 +15,8 @@ const suppression = require("../assets/icons/suppression.png");
 const entree_sortie_disque = require("../assets/icons/entree_sortie_disque.png");
 const qui = require("../assets/icons/qui.png");
 const chrono = require("../assets/icons/chrono.png");
+const croix = require("../assets/icons/croix.png");
+const article = require("../assets/icons/article.png");
 
 export default {
     recap,
@@ -26,13 +27,14 @@ export default {
     retour,
     aller,etoile,
     entree_sortie,
-    notification_couleur,
-    notification_blanc,
+    notification,
     reapprovisionnement,
     plus,
     troisPetitsPoints,
     suppression,
     entree_sortie_disque,
     qui,
-    chrono
+    chrono,
+    croix,
+    article
 }

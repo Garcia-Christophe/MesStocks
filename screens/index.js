@@ -4,7 +4,7 @@ import Scan from "./Scan"
 import Ajouter from "./Ajouter"
 import Params from "./Params"
 import Historique from "./Historique"
-import FicheProduit from "./FicheProduit"
+import FicheArticle from "./FicheArticle"
 import DerniersEvenements from "./DerniersEvenements"
 
 export {
@@ -14,6 +14,6 @@ export {
     Ajouter,
     Params,
     Historique,
-    FicheProduit,
+    FicheArticle,
     DerniersEvenements
 };

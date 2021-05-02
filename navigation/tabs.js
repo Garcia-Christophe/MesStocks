@@ -6,7 +6,7 @@ import {
     Text,
     StyleSheet
 } from "react-native";
-import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {LinearGradient} from 'expo-linear-gradient';
 
 import { Recap, Rechercher, Scan, Ajouter, Params } from "../screens";
@@ -52,7 +52,7 @@ const Tabs = () => {
                     elevation: 0,
                     backgroundColor: COLORS.white,
                     borderTopColor: "transparent",
-                    height: 100
+                    height: 90
                 }
             }}
         >

@@ -22,7 +22,7 @@ const HistoriqueEntreesSorties = ({navigation, customContainerStyle, history, nu
                     alignItems: 'center',
                     paddingVertical: SIZES.base
                 }}
-                onPress={() => navigation.navigate("FicheProduit", {idProduit: item.id})}
+                onPress={() => navigation.navigate("FicheArticle", {idArticle: item.id})}
             >
                 <Image 
                     source={icons.entree_sortie}

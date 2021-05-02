@@ -10,7 +10,6 @@ import {
     ImageBackground,
     LogBox
 } from 'react-native';
-import { block } from 'react-native-reanimated';
 
 import { dummyData, COLORS, SIZES, FONTS, icons, images } from "../constants";
 import { HistoriqueEntreesSorties } from "../components";
@@ -50,7 +49,7 @@ const Recap = ({ navigation }) => {
                             <ScrollView
                                 nestedScrollEnabled={true}
                             >
-                                <Text style={{ ...FONTS.body2 }}>{item.nom}</Text>
+                                <Text style={{ ...FONTS.body2, flexWrap: 'wrap' }}>{item.nom}</Text>
                             </ScrollView>
                         </View>
                         <Text style={{ color: COLORS.gray, ...FONTS.body5 }}>{item.nomCategorie}</Text>
@@ -100,7 +99,7 @@ const Recap = ({ navigation }) => {
                         alignItems: 'center'
                     }}
                 >
-                    {/* En-tête */}
+                    {/* Bouton Derniers évènements */}
                     <View
                         style={{
                             marginTop: SIZES.padding * 2,
@@ -119,7 +118,7 @@ const Recap = ({ navigation }) => {
                             onPress={() => navigation.navigate("DerniersEvenements")}
                         >
                             <Image
-                                source={icons.notification_blanc}
+                                source={icons.notification}
                                 resizeMode="contain"
                                 style={{ flex: 1 }}
                             />
@@ -275,11 +274,6 @@ const Recap = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     shadow: {
         shadowColor: "#000",
         shadowOffset: {
