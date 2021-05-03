@@ -197,7 +197,7 @@ const Recap = ({ navigation }) => {
                     style={{ flex: 1, marginLeft: SIZES.radius }}
                 >
                     <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>À commander</Text>
-                    <Text style={{ ...FONTS.body4, color: COLORS.gray }}>Voir les articles en manque de stock</Text>
+                    <Text style={{ ...FONTS.body4, color: COLORS.gray, lineHeight: 18 }}>Voir les articles en manque de stock</Text>
                 </View>
 
                 <Image 

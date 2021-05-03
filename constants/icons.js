@@ -17,6 +17,12 @@ const qui = require("../assets/icons/qui.png");
 const chrono = require("../assets/icons/chrono.png");
 const croix = require("../assets/icons/croix.png");
 const article = require("../assets/icons/article.png");
+const stocksMini = require("../assets/icons/stocksMini.png");
+const moins = require("../assets/icons/moins.png");
+const parents = require("../assets/icons/parents.png");
+const categories = require("../assets/icons/categories.png");
+const sousCategories = require("../assets/icons/sousCategories.png");
+const marques = require("../assets/icons/marques.png");
 
 export default {
     recap,
@@ -36,5 +42,11 @@ export default {
     qui,
     chrono,
     croix,
-    article
+    article,
+    stocksMini,
+    moins,
+    parents,
+    categories,
+    sousCategories,
+    marques
 }

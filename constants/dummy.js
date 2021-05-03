@@ -207,11 +207,11 @@ export const periodes = [
     },
     {
         id: 2,
-        nom: "Ce mois"
+        nom: "Mois"
     },
     {
         id: 3,
-        nom: "Cette semaine"
+        nom: "Semaine"
     },
     {
         id: 4,
@@ -285,6 +285,80 @@ export const marquesFiltresRecherche = [
     {
         id: 1,
         nom: "Toutes"
+    },
+    {
+        id: 2,
+        nom: "Robus"
+    },
+    {
+        id: 3,
+        nom: "Philips"
+    },
+    {
+        id: 4,
+        nom: "Decoute"
+    },
+    {
+        id: 5,
+        nom: "Legrand"
+    },
+    {
+        id: 6,
+        nom: "Limaro"
+    }
+];
+
+// Parents fiche article
+export const categoriesParentsArticle = [
+    {
+        id: 1,
+        nom: "Aucune"
+    },
+    {
+        id: 2,
+        nom: "Éclairage"
+    },
+    {
+        id: 3,
+        nom: "Appareillage"
+    }
+];
+
+export const sousCategoriesParentsArticle = [
+    {
+        id: 1,
+        nom: "Aucune"
+    },
+    {
+        id: 2,
+        nom: "Ampoules"
+    },
+    {
+        id: 3,
+        nom: "Appliques"
+    },
+    {
+        id: 4,
+        nom: "Plafonniers"
+    },
+    {
+        id: 5,
+        nom: "Hublots"
+    },
+    {
+        id: 6,
+        nom: "Boite de dérivation / Coffret"
+    },
+    {
+        id: 7,
+        nom: "Détecteurs de mouvementations"
+    }
+];
+
+export const marquesParentsArticle = [
+    {
+        id: 1,
+        nom: "Aucune"
     },
     {
         id: 2,
@@ -1441,7 +1515,10 @@ const dummyData = {
     typesFiltresRecherche,
     categoriesFiltresRecherche,
     sousCategoriesFiltresRecherche,
-    marquesFiltresRecherche
+    marquesFiltresRecherche,
+    categoriesParentsArticle,
+    sousCategoriesParentsArticle,
+    marquesParentsArticle
 };
 
 export default dummyData;
