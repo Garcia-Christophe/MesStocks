@@ -3,7 +3,8 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Image
+    Image,
+    Alert
  } from 'react-native';
  import { useNavigation } from "@react-navigation/native";
 
@@ -40,7 +41,24 @@ import {
 
             {right &&
                 <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            Alert.alert(
+                                "Confirmation",
+                                "Souhaitez-vous supprimer définitivement cet article ?",
+                                [
+                                    {
+                                        text: "Annuler",
+                                        onPress: () => console.log("Annulé")
+                                    },
+                                    { 
+                                        text: "Confirmer", 
+                                        onPress: () => console.log("Confirmé")
+                                    }
+                                ]
+                            );
+                        }}
+                    >
                         <Image 
                             source={icons.suppression}
                             resizeMode="contain"
