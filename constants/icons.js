@@ -23,6 +23,7 @@ const parents = require("../assets/icons/parents.png");
 const categories = require("../assets/icons/categories.png");
 const sousCategories = require("../assets/icons/sousCategories.png");
 const marques = require("../assets/icons/marques.png");
+const modifier = require("../assets/icons/modifier.png");
 
 export default {
     recap,
@@ -48,5 +49,6 @@ export default {
     parents,
     categories,
     sousCategories,
-    marques
+    marques,
+    modifier
 }
