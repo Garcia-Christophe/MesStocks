@@ -23,6 +23,7 @@ export const SIZES = {
 
     // font sizes
     h1: 42,
+    h15: 32,
     h2: 22,
     h3: 16,
     h4: 14,
@@ -38,6 +39,7 @@ export const SIZES = {
 };
 export const FONTS = {
     h1: { fontFamily: "Roboto-Black", fontSize: SIZES.h1, lineHeight: 36 },
+    h15: { fontFamily: "Roboto-Black", fontSize: SIZES.h15, lineHeight: 36 },
     h2: { fontFamily: "Roboto-Bold", fontSize: SIZES.h2, lineHeight: 30 },
     h3: { fontFamily: "Roboto-Bold", fontSize: SIZES.h3, lineHeight: 22 },
     h4: { fontFamily: "Roboto-Bold", fontSize: SIZES.h4, lineHeight: 22 },

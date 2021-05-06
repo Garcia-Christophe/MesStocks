@@ -100,7 +100,7 @@ const DerniersEvenements = ({ navigation }) => {
                         icon: icons.ajouter, 
                         iconColor: COLORS.green,
                         titre: "Ampoules",
-                        description: "Catégorie créée",
+                        description: "Catégorie ajoutée",
                         personne: "Romain",
                         date: "11/04/2021 09:47"
                     })}
@@ -172,7 +172,7 @@ const DerniersEvenements = ({ navigation }) => {
                         icon: icons.entree_sortie, 
                         iconColor: COLORS.primary,
                         titre: "Tube 18W T5",
-                        description: "Article ajouté",
+                        description: "+4",
                         personne: "Romain",
                         date: "31/03/2021 14:23"
                     })}

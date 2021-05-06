@@ -49,7 +49,8 @@ import {
                                 [
                                     {
                                         text: "Annuler",
-                                        onPress: () => console.log("Annulé")
+                                        onPress: () => console.log("Annulé"),
+                                        style: "cancel"
                                     },
                                     { 
                                         text: "Confirmer", 

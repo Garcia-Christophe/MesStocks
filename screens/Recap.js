@@ -212,7 +212,7 @@ const Recap = ({ navigation }) => {
         )
     }
 
-    function renderAjouterUnProduit() {
+    function renderAjouterUnArticle() {
         return (
             <TouchableOpacity
                 style={{
@@ -225,14 +225,14 @@ const Recap = ({ navigation }) => {
                     borderRadius: SIZES.radius,
                     ...styles.shadow
                 }}
-                onPress={() => navigation.navigate("Ajouter", {produit: true})}
+                onPress={() => navigation.navigate("Ajouter", {article: true})}
             >
                 <View
                     style={{ flex: 1, paddingRight: 10 }}
                 >
-                    <Text style={{ ...FONTS.h3, fontWeight: 'bold', color: COLORS.white }}>Ajouter un article</Text>
+                    <Text style={{ ...FONTS.h3, fontWeight: 'bold', color: COLORS.white }}>Ajouter une donnée</Text>
                     <Text style={{ ...FONTS.body4, color: COLORS.white, lineHeight: 18, marginTop: SIZES.base }}>
-                    Il est également possible d'ajouter une catégorie, une sous-catégorie, une marque, un utilisateur...
+                        Ajoutez / Modifiez / Supprimez{'\n'}un article, une (sous-)catégorie, une marque, un utilisateur...
                     </Text>
                 </View>
 
@@ -266,7 +266,7 @@ const Recap = ({ navigation }) => {
             <View style={{ flex: 1, paddingBottom: 130 }}>
                 {renderEntete()}
                 {renderACommander()}
-                {renderAjouterUnProduit()}
+                {renderAjouterUnArticle()}
                 {renderHistoriqueEntreesSorties()}
             </View>
         </ScrollView>
