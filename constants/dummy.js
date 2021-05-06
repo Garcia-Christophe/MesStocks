@@ -1500,6 +1500,21 @@ export const marques = [
     }
 ];
 
+export const utilisateurs = [
+    {
+        id: 1,
+        nom: "Frédéric"
+    },
+    {
+        id: 2,
+        nom: "Romain"
+    },
+    {
+        id: 3,
+        nom: "Louis"
+    }
+];
+
 // Export
 const dummyData = { 
     sousCategories, 
@@ -1512,6 +1527,7 @@ const dummyData = {
     categories,
     sousCategories,
     marques,
+    utilisateurs,
     typesFiltresRecherche,
     categoriesFiltresRecherche,
     sousCategoriesFiltresRecherche,

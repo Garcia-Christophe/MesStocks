@@ -13,19 +13,22 @@ import {
 import { BarreRetour, BoutonTexte } from '../components';
 import { COLORS, SIZES, FONTS, icons, dummyData } from '../constants';
 
-const FicheArticle = ({ navigation, idArticle }) => {
+const FicheArticle = ({ navigation, route }) => {
 
-    const [designation, setDesignation] = useState("Ampoule E27")
-    const [stocks, setStocks] = useState(74)
-    const [stocksMini, setStocksMini] = useState(10)
+    const { nouveau, idArticle } = route.params;
+    const article = nouveau ? null : dummyData.articles[idArticle - 1];
+
+    const [designation, setDesignation] = useState(nouveau ? "" : article.nom)
+    const [stocks, setStocks] = useState(nouveau ? 0 : article.stocks)
+    const [stocksMini, setStocksMini] = useState(nouveau ? 0 : article.stockMini)
 
     const [categories, setCategories] = useState(dummyData.categoriesParentsArticle)
     const [sousCategories, setSousCategories] = useState(dummyData.sousCategoriesParentsArticle)
     const [marques, setMarques] = useState(dummyData.marquesParentsArticle)
 
-    const [categorieSelectionnee, setCategorieSelectionnee] = useState(dummyData.categoriesParentsArticle[0])
-    const [sousCategorieSelectionnee, setSousCategorieSelectionnee] = useState(dummyData.sousCategoriesParentsArticle[0])
-    const [marqueSelectionnee, setMarqueSelectionnee] = useState(dummyData.marquesParentsArticle[0])
+    const [categorieSelectionnee, setCategorieSelectionnee] = useState(nouveau ? dummyData.categoriesParentsArticle[0] : dummyData.categoriesParentsArticle[article.idCategorie])
+    const [sousCategorieSelectionnee, setSousCategorieSelectionnee] = useState(nouveau ? dummyData.categoriesParentsArticle[0] : dummyData.sousCategoriesParentsArticle[article.idCategorie])
+    const [marqueSelectionnee, setMarqueSelectionnee] = useState(nouveau ? dummyData.categoriesParentsArticle[0] : dummyData.marquesParentsArticle[article.idCategorie])
 
     function renderDesignation() {
         return (
@@ -624,11 +627,6 @@ const FicheArticle = ({ navigation, idArticle }) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     shadow: {
         shadowColor: "#000",
         shadowOffset: {

@@ -24,6 +24,7 @@ const categories = require("../assets/icons/categories.png");
 const sousCategories = require("../assets/icons/sousCategories.png");
 const marques = require("../assets/icons/marques.png");
 const modifier = require("../assets/icons/modifier.png");
+const utilisateurs = require("../assets/icons/utilisateurs.png");
 
 export default {
     recap,
@@ -50,5 +51,6 @@ export default {
     categories,
     sousCategories,
     marques,
-    modifier
+    modifier,
+    utilisateurs
 }

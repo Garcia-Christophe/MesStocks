@@ -445,7 +445,7 @@ const Rechercher = ({ navigation }) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingBottom: 90 }}>
             {renderBarreRecherche()}
             
             <ScrollView 
