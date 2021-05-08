@@ -18,6 +18,7 @@
     "expo-linear-gradient": "~9.1.0",
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-easy-toast": "^2.0.0",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-reanimated": "~2.1.0",

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -9,9 +9,94 @@ import {
     ImageBackground
 } from 'react-native';
 
+import Toast, { DURATION } from 'react-native-easy-toast';
+
 import { FONTS, SIZES, COLORS, icons, images } from "../constants";
 
 const Params = ({ navigation }) => {
+
+    var [toastAnnule, setToastOk] = useState();
+    var [toastOk, setToastOk] = useState();
+
+    function renderThemes() {
+        return (
+            <View
+                style={{ 
+                    flexDirection: 'column',
+                    paddingVertical: SIZES.padding / 2,
+                    marginHorizontal: SIZES.padding,
+                    marginTop: SIZES.padding,
+                    marginBottom : SIZES.padding / 2,
+                    backgroundColor: COLORS.white,
+                    borderRadius: SIZES.radius,
+                    ...styles.shadow 
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingHorizontal: SIZES.padding
+                    }}
+                >
+                    <Image
+                        source={icons.theme}
+                        resizeMode= "contain"
+                        style={{
+                            width: 25,
+                            height: 25,
+                            tintColor: COLORS.yellow
+                        }}
+                    />
+                    <Text style={{ marginLeft: SIZES.padding / 2, color: COLORS.black, fontWeight: 'bold', ...FONTS.h2 }}>
+                        Thèmes
+                    </Text>
+                </View>
+
+                <View></View>
+            </View>
+        )
+    }
+
+    function renderNotifications() {
+        return (
+            <View
+                style={{ 
+                    flexDirection: 'column',
+                    paddingVertical: SIZES.padding / 2,
+                    marginHorizontal: SIZES.padding,
+                    marginTop: SIZES.padding / 2,
+                    marginBottom : SIZES.padding / 2,
+                    backgroundColor: COLORS.white,
+                    borderRadius: SIZES.radius,
+                    ...styles.shadow 
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingHorizontal: SIZES.padding
+                    }}
+                >
+                    <Image
+                        source={icons.notification}
+                        resizeMode= "contain"
+                        style={{
+                            width: 25,
+                            height: 25,
+                            tintColor: COLORS.yellow
+                        }}
+                    />
+                    <Text style={{ marginLeft: SIZES.padding / 2, color: COLORS.black, fontWeight: 'bold', ...FONTS.h2 }}>
+                        Notifications
+                    </Text>
+                </View>
+
+                <View></View>
+            </View>
+        )
+    }
 
     function renderBoutons() {
         return (
@@ -35,7 +120,9 @@ const Params = ({ navigation }) => {
                         borderRadius: SIZES.radius,
                         ...styles.shadow
                     }}
-                    onPress={() => navigation.goBack()}
+                    onPress={() => {
+                        toastAnnule.show('Changements annulés', 1000);
+                    }}
                 >
                     <Text
                         style={{
@@ -60,7 +147,9 @@ const Params = ({ navigation }) => {
                         borderRadius: SIZES.radius,
                         ...styles.shadow
                     }}
-                    onPress={() => navigation.goBack()}
+                    onPress={() => {
+                        toastOk.show('Changements enregistrés', 1000);
+                    }}
                 >
                     <Text
                         style={{
@@ -81,8 +170,36 @@ const Params = ({ navigation }) => {
             <ScrollView 
                 showsVerticalScrollIndicator={false}
             >
+                {renderThemes()}
+                {renderNotifications()}
                 {renderBoutons()}
             </ScrollView>
+
+            {/* Toasts */}
+            <Toast 
+                ref={(toast) => toastAnnule = toast} 
+                position={"bottom"}
+                fadeInDuration={500}
+                fadeOutDuration={750}
+                opacity={0.8}
+                style={{
+                    backgroundColor: COLORS.red, 
+                    borderRadius: 20,
+                    padding: SIZES.padding / 2
+                }}
+            />
+            <Toast 
+                ref={(toast) => toastOk = toast} 
+                position={"bottom"}
+                fadeInDuration={500}
+                fadeOutDuration={750}
+                opacity={0.8}
+                style={{
+                    backgroundColor: COLORS.green,
+                    borderRadius: 20,
+                    padding: SIZES.padding / 2
+                }}
+            />
         </View>
     )
 }

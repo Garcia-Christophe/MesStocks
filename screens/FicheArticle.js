@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { BarreRetour, BoutonTexte } from '../components';
-import { COLORS, SIZES, FONTS, icons, dummyData } from '../constants';
+import { COLORS, SIZES, FONTS, icons, images, dummyData } from '../constants';
 
 const FicheArticle = ({ navigation, route }) => {
 
@@ -116,7 +116,7 @@ const FicheArticle = ({ navigation, route }) => {
                         }}
                     >
                         <Image 
-                            source={icons.reapprovisionnement}
+                            source={images.stocks}
                             style={{
                                 height: 25,
                                 width: 25
@@ -135,7 +135,7 @@ const FicheArticle = ({ navigation, route }) => {
                         }}
                     >
                         <Image 
-                            source={icons.stocksMini}
+                            source={images.stocksMini}
                             style={{
                                 height: 25,
                                 width: 25

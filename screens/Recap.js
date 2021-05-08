@@ -110,17 +110,17 @@ const Recap = ({ navigation }) => {
                     >
                         <TouchableOpacity
                             style={{
-                                width: 35,
-                                height: 35,
+                                width: 30,
+                                height: 30,
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
                             onPress={() => navigation.navigate("DerniersEvenements")}
                         >
                             <Image
-                                source={icons.notification}
+                                source={icons.derniersEvenements}
                                 resizeMode="contain"
-                                style={{ flex: 1 }}
+                                style={{ flex: 1, tintColor: COLORS.white }}
                             />
                         </TouchableOpacity>
                     </View>
@@ -186,7 +186,7 @@ const Recap = ({ navigation }) => {
                 onPress={() => navigation.navigate("Rechercher", {aCommander: true})}
             >
                 <Image 
-                    source={icons.reapprovisionnement}
+                    source={images.stocks}
                     style={{
                         width: 30,
                         height: 30
