@@ -445,7 +445,7 @@ const Ajouter = ({ navigation }) => {
                             style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-evenly',
-                                marginVertical: SIZES.base
+                                marginBottom: SIZES.padding
                             }}
                         >
                             <TouchableOpacity
