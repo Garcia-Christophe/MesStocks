@@ -382,6 +382,29 @@ export const marquesParentsArticle = [
     }
 ];
 
+// Paramètres
+export const themes = [
+    {
+        id: 1,
+        nom: "Clair"
+    },
+    {
+        id: 2,
+        nom: "Sombre"
+    }
+];
+
+export const notifications = [
+    {
+        id: 1,
+        nom: "Activées"
+    },
+    {
+        id: 2,
+        nom: "Désactivées"
+    }
+];
+
 // Objets
 export const articles = [
     {
@@ -1534,7 +1557,9 @@ const dummyData = {
     marquesFiltresRecherche,
     categoriesParentsArticle,
     sousCategoriesParentsArticle,
-    marquesParentsArticle
+    marquesParentsArticle,
+    themes,
+    notifications
 };
 
 export default dummyData;

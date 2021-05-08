@@ -24,6 +24,7 @@ const modifier = require("../assets/icons/modifier.png");
 const utilisateurs = require("../assets/icons/utilisateurs.png");
 const derniersEvenements = require("../assets/icons/derniersEvenements.png");
 const theme = require("../assets/icons/theme.png");
+const exportation = require("../assets/icons/exportation.png");
 
 export default {
     recap,
@@ -51,5 +52,6 @@ export default {
     modifier,
     utilisateurs,
     derniersEvenements,
-    theme
+    theme,
+    exportation
 }
