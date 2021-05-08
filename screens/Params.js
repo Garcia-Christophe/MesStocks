@@ -10,7 +10,7 @@ import {
     TextInput
 } from 'react-native';
 
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast from 'react-native-easy-toast';
 
 import { FONTS, SIZES, COLORS, icons, images, dummyData } from "../constants";
 
