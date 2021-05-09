@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     Image,
     ImageBackground,
-    TextInput
+    TextInput,
+    PermissionsAndroid
 } from 'react-native';
 
 import Toast from 'react-native-easy-toast';
