@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 
 import Toast from 'react-native-easy-toast';
+import XLSX from 'xlsx';
+import { Table, Row } from 'react-native-table-component';
 
 import { FONTS, SIZES, COLORS, icons, images, dummyData } from "../constants";
 
