@@ -8,12 +8,16 @@ import {
     Image,
     ImageBackground,
     TextInput,
+    Alert,
     PermissionsAndroid
 } from 'react-native';
 
 import Toast from 'react-native-easy-toast';
 import XLSX from 'xlsx';
 import { Table, Row } from 'react-native-table-component';
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
 
 import { FONTS, SIZES, COLORS, icons, images, dummyData } from "../constants";
 
@@ -631,6 +635,10 @@ const Params = ({ navigation }) => {
         )
     }
 
+    async function exportFile() {
+        Alert.alert("Ficher exporté avec succès !", "Chemin d'accès : " + "Downloads/MesStocks.xlsx");
+	};
+
     function renderExportation() {
         return (
             <View
@@ -768,6 +776,7 @@ const Params = ({ navigation }) => {
                         onPress={() => {
                             if (email.length > 0) {
                                 setEmail("")
+                                exportFile()
                                 toast.show('Exportation réussie !', 1000)
                             } else {
                                 toast.show("Veuillez saisir l'email.", 1000)

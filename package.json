@@ -15,7 +15,10 @@
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.2",
     "expo": "^41.0.1",
+    "expo-file-system": "~11.0.2",
     "expo-linear-gradient": "~9.1.0",
+    "expo-media-library": "~12.0.2",
+    "expo-permissions": "~12.0.1",
     "react": "16.13.1",
     "react-native": "^0.63.4",
     "react-native-easy-toast": "^2.0.0",
@@ -26,6 +29,7 @@
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "~3.0.0",
     "react-native-table-component": "^1.2.1",
+    "unimodules-permissions-interface": "~6.1.0",
     "xlsx": "^0.16.9"
   },
   "devDependencies": {
@@ -34,6 +38,7 @@
     "@react-native-community/eslint-config": "1.1.0",
     "babel-jest": "25.5.1",
     "eslint": "6.8.0",
+    "eslint-plugin-react": "^7.23.2",
     "jest": "25.5.4",
     "metro-react-native-babel-preset": "0.59.0",
     "react-test-renderer": "16.13.1"
