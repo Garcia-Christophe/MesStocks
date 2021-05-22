@@ -19,6 +19,7 @@
     "expo-linear-gradient": "~9.1.0",
     "expo-media-library": "~12.0.2",
     "expo-permissions": "~12.0.1",
+    "firebase": "8.2.3",
     "react": "16.13.1",
     "react-native": "^0.63.4",
     "react-native-easy-toast": "^2.0.0",
