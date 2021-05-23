@@ -17,6 +17,33 @@ import firebase from "firebase";
 import { FONTS, SIZES, COLORS, images, icons, dummyData } from "../constants";
 
 const Ajouter = ({ navigation }) => {
+  const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
+
+  const [nbTotalArticles, setNbTotalArticles] = useState();
+  const [nbTotalCategories, setNbTotalCategories] = useState();
+  const [nbTotalSousCategories, setNbTotalSousCategories] = useState();
+  const [nbTotalMarques, setNbTotalMarques] = useState();
+  const [nbTotalUtilisateurs, setNbTotalUtilisateurs] = useState();
+
+  const [categories, setCategories] = useState(dummyData.categories);
+  const [sousCategories, setSousCategories] = useState(
+    dummyData.sousCategories
+  );
+  const [marques, setMarques] = useState();
+  const [utilisateurs, setUtilisateurs] = useState(dummyData.utilisateurs);
+
+  const [modalCategorieOuverte, setModalCategorieOuverte] = useState(false);
+  const [modalSousCategorieOuverte, setModalSousCategorieOuverte] = useState(
+    false
+  );
+  const [modalMarqueOuverte, setModalMarqueOuverte] = useState(false);
+  const [modalUtilisateurOuverte, setModalUtilisateurOuverte] = useState(false);
+
+  const [nouvelleCategorie, setNouvelleCategorie] = useState("");
+  const [nouvelleSousCategorie, setNouvelleSousCategorie] = useState("");
+  const [nouvelleMarque, setNouvelleMarque] = useState("");
+  const [nouvelUtilisateur, setNouvelUtilisateur] = useState("");
+
   useEffect(() => {
     if (!firebase.apps.length) {
       // Configuration de la Firebase
@@ -189,32 +216,7 @@ const Ajouter = ({ navigation }) => {
           error
         );
       });
-  });
-
-  const [nbTotalArticles, setNbTotalArticles] = useState();
-  const [nbTotalCategories, setNbTotalCategories] = useState();
-  const [nbTotalSousCategories, setNbTotalSousCategories] = useState();
-  const [nbTotalMarques, setNbTotalMarques] = useState();
-  const [nbTotalUtilisateurs, setNbTotalUtilisateurs] = useState();
-
-  const [categories, setCategories] = useState(dummyData.categories);
-  const [sousCategories, setSousCategories] = useState(
-    dummyData.sousCategories
-  );
-  const [marques, setMarques] = useState();
-  const [utilisateurs, setUtilisateurs] = useState(dummyData.utilisateurs);
-
-  const [modalCategorieOuverte, setModalCategorieOuverte] = useState(false);
-  const [modalSousCategorieOuverte, setModalSousCategorieOuverte] = useState(
-    false
-  );
-  const [modalMarqueOuverte, setModalMarqueOuverte] = useState(false);
-  const [modalUtilisateurOuverte, setModalUtilisateurOuverte] = useState(false);
-
-  const [nouvelleCategorie, setNouvelleCategorie] = useState("");
-  const [nouvelleSousCategorie, setNouvelleSousCategorie] = useState("");
-  const [nouvelleMarque, setNouvelleMarque] = useState("");
-  const [nouvelUtilisateur, setNouvelUtilisateur] = useState("");
+  }, [nbRefresh]);
 
   function renderStats() {
     return (
@@ -484,7 +486,41 @@ const Ajouter = ({ navigation }) => {
               padding: SIZES.base,
               marginRight: SIZES.base,
             }}
-            onPress={() => console.log("")}
+            onPress={() => {
+              if (nom === "Catégories") {
+                firebase
+                  .firestore()
+                  .collection("categories")
+                  .doc(item.id)
+                  .update({
+                    nom: "",
+                  });
+
+                var toutesLesCategories = myArray.map(
+                  (value, index) => index + ": " + value
+                );
+              } else if (nom === "Sous-catégories") {
+                firebase
+                  .firestore()
+                  .collection("sousCategories")
+                  .doc(item.id)
+                  .update({
+                    nom: "",
+                  });
+              } else if (nom === "Marques") {
+                firebase.firestore().collection("marques").doc(item.id).update({
+                  nom: "",
+                });
+              } else if (nom === "Utilisateurs") {
+                firebase
+                  .firestore()
+                  .collection("utilisateurs")
+                  .doc(item.id)
+                  .update({
+                    nom: "",
+                  });
+              }
+            }}
           >
             <Image
               source={icons.croix}
@@ -518,7 +554,34 @@ const Ajouter = ({ navigation }) => {
                 },
                 {
                   text: "Confirmer",
-                  onPress: () => console.log("Confirmé"),
+                  onPress: () => {
+                    if (nom === "Catégories") {
+                      firebase
+                        .firestore()
+                        .collection("categories")
+                        .doc(item.id)
+                        .delete();
+                    } else if (nom === "Sous-catégories") {
+                      firebase
+                        .firestore()
+                        .collection("sousCategories")
+                        .doc(item.id)
+                        .delete();
+                    } else if (nom === "Marques") {
+                      firebase
+                        .firestore()
+                        .collection("marques")
+                        .doc(item.id)
+                        .delete();
+                    } else if (nom === "Utilisateurs") {
+                      firebase
+                        .firestore()
+                        .collection("utilisateurs")
+                        .doc(item.id)
+                        .delete();
+                    }
+                    setNbRefresh(nbRefresh + 1);
+                  },
                 },
               ]
             );
@@ -710,12 +773,16 @@ const Ajouter = ({ navigation }) => {
                 onPress={() => {
                   if (nom === "Catégorie") {
                     setModalCategorieOuverte(false);
+                    setNouvelleCategorie("");
                   } else if (nom === "Sous-catégorie") {
                     setModalSousCategorieOuverte(false);
+                    setNouvelleSousCategorie("");
                   } else if (nom === "Marque") {
                     setModalMarqueOuverte(false);
+                    setNouvelleMarque("");
                   } else if (nom === "Utilisateur") {
                     setModalUtilisateurOuverte(false);
+                    setNouvelUtilisateur("");
                   }
                 }}
               >
@@ -726,13 +793,30 @@ const Ajouter = ({ navigation }) => {
                 onPress={() => {
                   if (nom === "Catégorie") {
                     setModalCategorieOuverte(false);
+                    setNouvelleCategorie("");
+                    firebase.firestore().collection("categories").add({
+                      nom: nouvelleCategorie,
+                    });
                   } else if (nom === "Sous-catégorie") {
                     setModalSousCategorieOuverte(false);
+                    setNouvelleSousCategorie("");
+                    firebase.firestore().collection("sousCategories").add({
+                      nom: nouvelleSousCategorie,
+                    });
                   } else if (nom === "Marque") {
                     setModalMarqueOuverte(false);
+                    setNouvelleMarque("");
+                    firebase.firestore().collection("marques").add({
+                      nom: nouvelleMarque,
+                    });
                   } else if (nom === "Utilisateur") {
                     setModalUtilisateurOuverte(false);
+                    setNouvelUtilisateur("");
+                    firebase.firestore().collection("utilisateurs").add({
+                      nom: nouvelUtilisateur,
+                    });
                   }
+                  setNbRefresh(nbRefresh + 1);
                 }}
               >
                 <Text style={{ ...FONTS.h2, color: COLORS.primary }}>
