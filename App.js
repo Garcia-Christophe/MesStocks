@@ -10,24 +10,21 @@ const Stack = createStackNavigator();
 
 const App = () => {
   useEffect(() => {
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    var firebaseConfig = {
-      apiKey: "AIzaSyBfRGYAMrZnSYhkQN-YeZa1kcTq71_H5xQ",
-      authDomain: "messtocks-17fee.firebaseapp.com",
-      projectId: "messtocks-17fee",
-      storageBucket: "messtocks-17fee.appspot.com",
-      messagingSenderId: "772139915219",
-      appId: "1:772139915219:web:3d6720ecd5ed424b648126",
-      measurementId: "G-91GK8TDNTB",
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    //firebase.analytics();
+    if (!firebase.apps.length) {
+      // Configuration de la Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBfRGYAMrZnSYhkQN-YeZa1kcTq71_H5xQ",
+        authDomain: "messtocks-17fee.firebaseapp.com",
+        projectId: "messtocks-17fee",
+        storageBucket: "messtocks-17fee.appspot.com",
+        messagingSenderId: "772139915219",
+        appId: "1:772139915219:web:3d6720ecd5ed424b648126",
+        measurementId: "G-91GK8TDNTB",
+      };
 
-    firebase.firestore().collection("marques").add({
-      nom: "Decoute",
-    });
+      // Initialise Firebase
+      firebase.initializeApp(firebaseConfig);
+    }
   }, []);
 
   return (

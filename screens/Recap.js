@@ -10,11 +10,33 @@ import {
   ImageBackground,
   LogBox,
 } from "react-native";
+import firebase from "firebase";
 
 import { dummyData, COLORS, SIZES, FONTS, icons, images } from "../constants";
 import { HistoriqueEntreesSorties } from "../components";
 
 const Recap = ({ navigation }) => {
+  useEffect(() => {
+    // Enlève les warnings inutiles
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+
+    if (!firebase.apps.length) {
+      // Configuration de la Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBfRGYAMrZnSYhkQN-YeZa1kcTq71_H5xQ",
+        authDomain: "messtocks-17fee.firebaseapp.com",
+        projectId: "messtocks-17fee",
+        storageBucket: "messtocks-17fee.appspot.com",
+        messagingSenderId: "772139915219",
+        appId: "1:772139915219:web:3d6720ecd5ed424b648126",
+        measurementId: "G-91GK8TDNTB",
+      };
+
+      // Initialise Firebase
+      firebase.initializeApp(firebaseConfig);
+    }
+  }, []);
+
   const [sousCategories, setSousCategories] = useState(
     dummyData.sousCategories
   );
@@ -22,11 +44,6 @@ const Recap = ({ navigation }) => {
     historiquePremieresEntreesSorties,
     setHistoriqueEntreesSorties,
   ] = useState(dummyData.historiquePremieresEntreesSorties);
-
-  // Enlever les warnings inutiles
-  useEffect(() => {
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
-  }, []);
 
   function renderEntete() {
     const renderItem = ({ item, index }) => (
