@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import firebase from "firebase";
 
-import { FONTS, SIZES, COLORS, images, icons, dummyData } from "../constants";
+import { FONTS, SIZES, COLORS, images, icons } from "../constants";
 
 const Ajouter = ({ navigation }) => {
   const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
@@ -25,12 +25,10 @@ const Ajouter = ({ navigation }) => {
   const [nbTotalMarques, setNbTotalMarques] = useState();
   const [nbTotalUtilisateurs, setNbTotalUtilisateurs] = useState();
 
-  const [categories, setCategories] = useState(dummyData.categories);
-  const [sousCategories, setSousCategories] = useState(
-    dummyData.sousCategories
-  );
+  const [categories, setCategories] = useState();
+  const [sousCategories, setSousCategories] = useState();
   const [marques, setMarques] = useState();
-  const [utilisateurs, setUtilisateurs] = useState(dummyData.utilisateurs);
+  const [utilisateurs, setUtilisateurs] = useState();
 
   const [modalCategorieOuverte, setModalCategorieOuverte] = useState(false);
   const [modalSousCategorieOuverte, setModalSousCategorieOuverte] = useState(
@@ -154,6 +152,27 @@ const Ajouter = ({ navigation }) => {
         );
       });
 
+    // Articles
+    var tousLesArticles = [];
+    db.collection("articles")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          tousLesArticles.push({
+            id: doc.id,
+            idSousCategorie: doc.data().idSousCategorie,
+            stocks: doc.data().stocks,
+            stocksMini: doc.data().stocksMini,
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Ajouter.js > useEffect() > articles) : ",
+          error
+        );
+      });
+
     // Sous-catégories
     var toutesLesSousCategories = [];
     db.collection("sousCategories")
@@ -163,9 +182,14 @@ const Ajouter = ({ navigation }) => {
           toutesLesSousCategories.push({
             id: doc.id,
             nom: doc.data().nom,
-            idCategorie: doc.data().idCategorie,
-            nbArticles: doc.data().nbArticles,
-            nbArticlesACommander: doc.data().nbArticlesACommander,
+            nbArticles: tousLesArticles.filter(
+              (article) => article.idSousCategorie === doc.id
+            ).length,
+            nbArticlesACommander: tousLesArticles.filter(
+              (article) =>
+                article.idSousCategorie === doc.id &&
+                article.stocks < article.stocksMini
+            ).length,
           });
         });
         setSousCategories(toutesLesSousCategories);

@@ -12,10 +12,19 @@ import {
 } from "react-native";
 import firebase from "firebase";
 
-import { dummyData, COLORS, SIZES, FONTS, icons, images } from "../constants";
+import { COLORS, SIZES, FONTS, icons, images } from "../constants";
 import { HistoriqueEntreesSorties } from "../components";
 
 const Recap = ({ navigation }) => {
+  const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
+
+  const [nbArticles, setNbArticles] = useState(0);
+  const [sousCategories, setSousCategories] = useState();
+  const [
+    historiquePremieresEntreesSorties,
+    setHistoriquePremieresEntreesSorties,
+  ] = useState();
+
   useEffect(() => {
     // Enlève les warnings inutiles
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
@@ -35,15 +44,59 @@ const Recap = ({ navigation }) => {
       // Initialise Firebase
       firebase.initializeApp(firebaseConfig);
     }
-  }, []);
 
-  const [sousCategories, setSousCategories] = useState(
-    dummyData.sousCategories
-  );
-  const [
-    historiquePremieresEntreesSorties,
-    setHistoriqueEntreesSorties,
-  ] = useState(dummyData.historiquePremieresEntreesSorties);
+    var db = firebase.firestore();
+
+    // Articles
+    var tousLesArticles = [];
+    db.collection("articles")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          tousLesArticles.push({
+            id: doc.id,
+            idSousCategorie: doc.data().idSousCategorie,
+            stocks: doc.data().stocks,
+            stocksMini: doc.data().stocksMini,
+          });
+        });
+        setNbArticles(tousLesArticles.length);
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Recap.js > useEffect() > articles) : ",
+          error
+        );
+      });
+
+    // Sous-catégories
+    var toutesLesSousCategories = [];
+    db.collection("sousCategories")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutesLesSousCategories.push({
+            id: doc.id,
+            nom: doc.data().nom,
+            nbArticles: tousLesArticles.filter(
+              (article) => article.idSousCategorie === doc.id
+            ).length,
+            nbArticlesACommander: tousLesArticles.filter(
+              (article) =>
+                article.idSousCategorie === doc.id &&
+                article.stocks < article.stocksMini
+            ).length,
+          });
+        });
+        setSousCategories(toutesLesSousCategories);
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Recap.js > useEffect() > sousCategories) : ",
+          error
+        );
+      });
+  }, [nbRefresh]);
 
   function renderEntete() {
     const renderItem = ({ item, index }) => (
@@ -60,19 +113,16 @@ const Recap = ({ navigation }) => {
           ...styles.shadow,
         }}
       >
-        {/* Titres */}
+        {/* Titre */}
         <View style={{ flexDirection: "column" }}>
           <View style={{ marginleft: SIZES.base }}>
-            <View style={{ height: 31 }}>
+            <View style={{ height: 35 }}>
               <ScrollView nestedScrollEnabled={true}>
                 <Text style={{ ...FONTS.body2, flexWrap: "wrap" }}>
                   {item.nom}
                 </Text>
               </ScrollView>
             </View>
-            <Text style={{ color: COLORS.gray, ...FONTS.body5 }}>
-              {item.nomCategorie}
-            </Text>
           </View>
         </View>
 
@@ -176,7 +226,7 @@ const Recap = ({ navigation }) => {
                 fontWeight: "bold",
               }}
             >
-              102
+              {nbArticles.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
             </Text>
             <Text style={{ color: COLORS.white, ...FONTS.body5 }}>
               articles dans l'inventaire
@@ -308,10 +358,10 @@ const Recap = ({ navigation }) => {
       <HistoriqueEntreesSorties
         customContainerStyle={{ ...styles.shadow }}
         navigation={navigation}
-        history={historiquePremieresEntreesSorties}
         number={5}
-        personne="Tous"
+        personne="Toutes"
         type="Tous"
+        periode="Toutes"
       />
     );
   }
