@@ -181,24 +181,7 @@ export const types = [
   },
 ];
 
-export const personnes = [
-  {
-    id: 1,
-    nom: "Toutes",
-  },
-  {
-    id: 2,
-    nom: "Frédéric",
-  },
-  {
-    id: 3,
-    nom: "Romain",
-  },
-  {
-    id: 4,
-    nom: "Louis",
-  },
-];
+export const personnes = [];
 
 export const periodes = [
   {

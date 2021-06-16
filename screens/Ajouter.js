@@ -519,10 +519,6 @@ const Ajouter = ({ navigation }) => {
                   .update({
                     nom: "",
                   });
-
-                var toutesLesCategories = myArray.map(
-                  (value, index) => index + ": " + value
-                );
               } else if (nom === "Sous-catégories") {
                 firebase
                   .firestore()

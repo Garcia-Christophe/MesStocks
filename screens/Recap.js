@@ -20,10 +20,6 @@ const Recap = ({ navigation }) => {
 
   const [nbArticles, setNbArticles] = useState(0);
   const [sousCategories, setSousCategories] = useState();
-  const [
-    historiquePremieresEntreesSorties,
-    setHistoriquePremieresEntreesSorties,
-  ] = useState();
 
   useEffect(() => {
     // Enlève les warnings inutiles
@@ -359,9 +355,9 @@ const Recap = ({ navigation }) => {
         customContainerStyle={{ ...styles.shadow }}
         navigation={navigation}
         number={5}
-        personne="Toutes"
-        type="Tous"
-        periode="Toutes"
+        personneFiltre="Toutes"
+        typeFiltre="Tous"
+        periodeFiltre="Toutes"
       />
     );
   }

@@ -9,18 +9,17 @@ import {
 } from "react-native";
 import firebase from "firebase";
 
-import { COLORS, SIZES, FONTS, icons, dummyData } from "../constants";
+import { COLORS, SIZES, FONTS, icons } from "../constants";
 
 const HistoriqueEntreesSorties = ({
   navigation,
   customContainerStyle,
-  history,
   number,
-  personne,
-  type,
-  periode,
+  periodeFiltre,
+  personneFiltre,
+  typeFiltre,
+  nbRefresh,
 }) => {
-  const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
   const [historiqueEntreesSorties, setHistoriqueEntreesSorties] = useState();
   const [
     historiquePremieresEntreesSorties,
@@ -95,9 +94,9 @@ const HistoriqueEntreesSorties = ({
           var date = doc.data().date.split(" ");
           var anneeMoisJour = date[0].split("/");
           var heureMinute = date[1].split(":");
-          var annee = anneeMoisJour[0];
+          var jour = anneeMoisJour[0];
           var mois = anneeMoisJour[1];
-          var jour = anneeMoisJour[2];
+          var annee = anneeMoisJour[2];
           var heure = heureMinute[0];
           var minute = heureMinute[1];
 
@@ -113,7 +112,13 @@ const HistoriqueEntreesSorties = ({
               (utilisateur) => utilisateur.id === doc.data().idUtilisateur
             )[0].nom,
             type: doc.data().type,
-            date: new Date(annee, mois - 1, jour, heure, minute),
+            date: new Date(
+              parseInt(annee),
+              parseInt(mois) - 1,
+              parseInt(jour),
+              parseInt(heure),
+              parseInt(minute)
+            ),
             dateString: doc.data().date,
           });
         });
@@ -121,6 +126,45 @@ const HistoriqueEntreesSorties = ({
         // trier l'historique par ordre de date
         historiqueEntier = historique.sort((a, b) => b.date - a.date);
         historiqueDernieresLignes = historiqueEntier.slice(0, 6);
+
+        // Trier l'historique suivant le filtre Type
+        if (typeFiltre.nom === "Entrées") {
+          historiqueEntier = historiqueEntier.filter(
+            (ligne) => ligne.type === "E"
+          );
+        } else if (typeFiltre.nom === "Sorties") {
+          historiqueEntier = historiqueEntier.filter(
+            (ligne) => ligne.type === "S"
+          );
+        }
+
+        // Trier l'historique suivant le filtre Personne
+        if (personneFiltre.id !== "0") {
+          historiqueEntier = historiqueEntier.filter(
+            (ligne) => ligne.idUtilisateur === personneFiltre.id
+          );
+        }
+
+        // Trier l'historique suivant le filtre Période
+        var maintenant = new Date();
+        if (periodeFiltre.id === 2) {
+          historiqueEntier = historiqueEntier.filter(
+            (ligne) =>
+              ligne.date.getMonth() === maintenant.getMonth() &&
+              ligne.date.getFullYear() === maintenant.getFullYear()
+          );
+        } else if (periodeFiltre.id === 3) {
+          historiqueEntier = historiqueEntier.filter(
+            (ligne) => ligne.date.getTime() > maintenant.getTime() - 604800000
+          );
+        } else if (periodeFiltre.id === 4) {
+          historiqueEntier = historiqueEntier.filter(
+            (ligne) =>
+              ligne.date.getDate() === maintenant.getDate() &&
+              ligne.date.getMonth() === maintenant.getMonth() &&
+              ligne.date.getFullYear() === maintenant.getFullYear()
+          );
+        }
 
         setHistoriqueEntreesSorties(historiqueEntier);
         setHistoriquePremieresEntreesSorties(historiqueDernieresLignes);
