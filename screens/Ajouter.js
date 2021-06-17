@@ -19,7 +19,6 @@ import { FONTS, SIZES, COLORS, images, icons } from "../constants";
 const Ajouter = ({ navigation }) => {
   const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
 
-  const [nbTotalArticles, setNbTotalArticles] = useState();
   const [nbTotalCategories, setNbTotalCategories] = useState();
   const [nbTotalSousCategories, setNbTotalSousCategories] = useState();
   const [nbTotalMarques, setNbTotalMarques] = useState();
@@ -36,11 +35,28 @@ const Ajouter = ({ navigation }) => {
   );
   const [modalMarqueOuverte, setModalMarqueOuverte] = useState(false);
   const [modalUtilisateurOuverte, setModalUtilisateurOuverte] = useState(false);
+  const [
+    modalOuvertePourModification,
+    setModalOuvertePourModification,
+  ] = useState(false);
 
-  const [nouvelleCategorie, setNouvelleCategorie] = useState("");
-  const [nouvelleSousCategorie, setNouvelleSousCategorie] = useState("");
-  const [nouvelleMarque, setNouvelleMarque] = useState("");
-  const [nouvelUtilisateur, setNouvelUtilisateur] = useState("");
+  const [nouvelleCategorie, setNouvelleCategorie] = useState({
+    id: "",
+    nom: "",
+  });
+  const [nouvelleSousCategorie, setNouvelleSousCategorie] = useState({
+    id: "",
+    nom: "",
+  });
+  const [nouvelleMarque, setNouvelleMarque] = useState({
+    id: "",
+    nom: "",
+  });
+  const [nouvelUtilisateur, setNouvelUtilisateur] = useState({
+    id: "",
+    nom: "",
+  });
+  const [miseAJourObjet, setMiseAJourObjet] = useState("");
 
   useEffect(() => {
     if (!firebase.apps.length) {
@@ -62,20 +78,6 @@ const Ajouter = ({ navigation }) => {
     var db = firebase.firestore();
 
     // Nombres (haut de page)
-    var nbArticles = 0;
-    db.collection("articles")
-      .get()
-      .then((querySnapshot) => {
-        nbArticles = querySnapshot.size;
-        setNbTotalArticles(nbArticles);
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant la taille de la collection (Ajouter.js > useEffect() > nbArticles) : ",
-          error
-        );
-      });
-
     var nbCategories = 0;
     db.collection("categories")
       .get()
@@ -276,25 +278,6 @@ const Ajouter = ({ navigation }) => {
             >
               <Text
                 style={{
-                  color: COLORS.white,
-                  ...FONTS.h15,
-                  fontWeight: "bold",
-                }}
-              >
-                {nbTotalArticles}
-              </Text>
-              <Text style={{ color: COLORS.white, ...FONTS.body5 }}>
-                articles
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
                   color: COLORS.lightGray,
                   ...FONTS.h15,
                   fontWeight: "bold",
@@ -322,7 +305,7 @@ const Ajouter = ({ navigation }) => {
                 {nbTotalSousCategories}
               </Text>
               <Text style={{ color: COLORS.white, ...FONTS.body5 }}>
-                Sous-catégories
+                sous-catégories
               </Text>
             </View>
             <View
@@ -459,6 +442,7 @@ const Ajouter = ({ navigation }) => {
             } else if (nom === "Utilisateurs") {
               setModalUtilisateurOuverte(true);
             }
+            setModalOuvertePourModification(false);
           }}
         >
           <Image
@@ -496,8 +480,8 @@ const Ajouter = ({ navigation }) => {
           <TextInput
             placeholder="Nom de la donnée"
             placeholderTextColor={COLORS.gray}
+            editable={false}
             value={item.nom}
-            onChangeText={(texte) => console.log(texte)}
             style={{
               flex: 1,
               marginLeft: 15,
@@ -508,47 +492,47 @@ const Ajouter = ({ navigation }) => {
               flexDirection: "row",
               alignItems: "center",
               padding: SIZES.base,
-              marginRight: SIZES.base,
             }}
             onPress={() => {
               if (nom === "Catégories") {
-                firebase
-                  .firestore()
-                  .collection("categories")
-                  .doc(item.id)
-                  .update({
-                    nom: "",
-                  });
+                setModalCategorieOuverte(true);
+                var categorie = nouvelleCategorie;
+                categorie.id = item.id;
+                categorie.nom = item.nom;
+                setNouvelleCategorie(categorie);
+                setMiseAJourObjet(categorie.nom);
               } else if (nom === "Sous-catégories") {
-                firebase
-                  .firestore()
-                  .collection("sousCategories")
-                  .doc(item.id)
-                  .update({
-                    nom: "",
-                  });
+                setModalSousCategorieOuverte(true);
+                var sousCategorie = nouvelleSousCategorie;
+                sousCategorie.id = item.id;
+                sousCategorie.nom = item.nom;
+                setNouvelleSousCategorie(sousCategorie);
+                setMiseAJourObjet(sousCategorie.nom);
               } else if (nom === "Marques") {
-                firebase.firestore().collection("marques").doc(item.id).update({
-                  nom: "",
-                });
+                setModalMarqueOuverte(true);
+                var marque = nouvelleMarque;
+                marque.id = item.id;
+                marque.nom = item.nom;
+                setNouvelleMarque(marque);
+                setMiseAJourObjet(marque.nom);
               } else if (nom === "Utilisateurs") {
-                firebase
-                  .firestore()
-                  .collection("utilisateurs")
-                  .doc(item.id)
-                  .update({
-                    nom: "",
-                  });
+                setModalUtilisateurOuverte(true);
+                var utilisateur = nouvelUtilisateur;
+                utilisateur.id = item.id;
+                utilisateur.nom = item.nom;
+                setNouvelUtilisateur(utilisateur);
+                setMiseAJourObjet(utilisateur.nom);
               }
+              setModalOuvertePourModification(true);
             }}
           >
             <Image
-              source={icons.croix}
+              source={icons.modifier}
               resizeMode="contain"
               style={{
-                width: 17,
-                height: 17,
-                tintColor: COLORS.gray,
+                width: 25,
+                height: 25,
+                tintColor: COLORS.yellow,
                 paddingHorizontal: SIZES.base,
               }}
             />
@@ -560,7 +544,6 @@ const Ajouter = ({ navigation }) => {
             flexDirection: "row",
             alignItems: "center",
             padding: SIZES.base,
-            marginRight: SIZES.base,
           }}
           onPress={() => {
             Alert.alert(
@@ -581,24 +564,196 @@ const Ajouter = ({ navigation }) => {
                         .collection("categories")
                         .doc(item.id)
                         .delete();
+
+                      var maintenant = new Date();
+                      var annee = maintenant.getFullYear().toString();
+                      var mois =
+                        maintenant.getMonth() + 1 < 10
+                          ? "0" + (maintenant.getMonth() + 1).toString()
+                          : (maintenant.getMonth() + 1).toString();
+                      var jour =
+                        maintenant.getDate() < 10
+                          ? "0" + maintenant.getDate().toString()
+                          : maintenant.getDate().toString();
+                      var heure =
+                        maintenant.getHours() < 10
+                          ? "0" + maintenant.getHours().toString()
+                          : maintenant.getHours().toString();
+                      var minute =
+                        maintenant.getMinutes() < 10
+                          ? "0" + maintenant.getMinutes().toString()
+                          : maintenant.getMinutes().toString();
+                      var seconde =
+                        maintenant.getSeconds() < 10
+                          ? "0" + maintenant.getSeconds().toString()
+                          : maintenant.getSeconds().toString();
+                      firebase
+                        .firestore()
+                        .collection("derniersEvenements")
+                        .add({
+                          nomObjet: item.nom,
+                          objet: "C",
+                          type: "S",
+                          date:
+                            jour +
+                            "/" +
+                            mois +
+                            "/" +
+                            annee +
+                            " " +
+                            heure +
+                            ":" +
+                            minute +
+                            ":" +
+                            seconde,
+                        });
                     } else if (nom === "Sous-catégories") {
                       firebase
                         .firestore()
                         .collection("sousCategories")
                         .doc(item.id)
                         .delete();
+
+                      var maintenant = new Date();
+                      var annee = maintenant.getFullYear().toString();
+                      var mois =
+                        maintenant.getMonth() + 1 < 10
+                          ? "0" + (maintenant.getMonth() + 1).toString()
+                          : (maintenant.getMonth() + 1).toString();
+                      var jour =
+                        maintenant.getDate() < 10
+                          ? "0" + maintenant.getDate().toString()
+                          : maintenant.getDate().toString();
+                      var heure =
+                        maintenant.getHours() < 10
+                          ? "0" + maintenant.getHours().toString()
+                          : maintenant.getHours().toString();
+                      var minute =
+                        maintenant.getMinutes() < 10
+                          ? "0" + maintenant.getMinutes().toString()
+                          : maintenant.getMinutes().toString();
+                      var seconde =
+                        maintenant.getSeconds() < 10
+                          ? "0" + maintenant.getSeconds().toString()
+                          : maintenant.getSeconds().toString();
+                      firebase
+                        .firestore()
+                        .collection("derniersEvenements")
+                        .add({
+                          nomObjet: item.nom,
+                          objet: "SC",
+                          type: "S",
+                          date:
+                            jour +
+                            "/" +
+                            mois +
+                            "/" +
+                            annee +
+                            " " +
+                            heure +
+                            ":" +
+                            minute +
+                            ":" +
+                            seconde,
+                        });
                     } else if (nom === "Marques") {
                       firebase
                         .firestore()
                         .collection("marques")
                         .doc(item.id)
                         .delete();
+
+                      var maintenant = new Date();
+                      var annee = maintenant.getFullYear().toString();
+                      var mois =
+                        maintenant.getMonth() + 1 < 10
+                          ? "0" + (maintenant.getMonth() + 1).toString()
+                          : (maintenant.getMonth() + 1).toString();
+                      var jour =
+                        maintenant.getDate() < 10
+                          ? "0" + maintenant.getDate().toString()
+                          : maintenant.getDate().toString();
+                      var heure =
+                        maintenant.getHours() < 10
+                          ? "0" + maintenant.getHours().toString()
+                          : maintenant.getHours().toString();
+                      var minute =
+                        maintenant.getMinutes() < 10
+                          ? "0" + maintenant.getMinutes().toString()
+                          : maintenant.getMinutes().toString();
+                      var seconde =
+                        maintenant.getSeconds() < 10
+                          ? "0" + maintenant.getSeconds().toString()
+                          : maintenant.getSeconds().toString();
+                      firebase
+                        .firestore()
+                        .collection("derniersEvenements")
+                        .add({
+                          nomObjet: item.nom,
+                          objet: "M",
+                          type: "S",
+                          date:
+                            jour +
+                            "/" +
+                            mois +
+                            "/" +
+                            annee +
+                            " " +
+                            heure +
+                            ":" +
+                            minute +
+                            ":" +
+                            seconde,
+                        });
                     } else if (nom === "Utilisateurs") {
                       firebase
                         .firestore()
                         .collection("utilisateurs")
                         .doc(item.id)
                         .delete();
+
+                      var maintenant = new Date();
+                      var annee = maintenant.getFullYear().toString();
+                      var mois =
+                        maintenant.getMonth() + 1 < 10
+                          ? "0" + (maintenant.getMonth() + 1).toString()
+                          : (maintenant.getMonth() + 1).toString();
+                      var jour =
+                        maintenant.getDate() < 10
+                          ? "0" + maintenant.getDate().toString()
+                          : maintenant.getDate().toString();
+                      var heure =
+                        maintenant.getHours() < 10
+                          ? "0" + maintenant.getHours().toString()
+                          : maintenant.getHours().toString();
+                      var minute =
+                        maintenant.getMinutes() < 10
+                          ? "0" + maintenant.getMinutes().toString()
+                          : maintenant.getMinutes().toString();
+                      var seconde =
+                        maintenant.getSeconds() < 10
+                          ? "0" + maintenant.getSeconds().toString()
+                          : maintenant.getSeconds().toString();
+                      firebase
+                        .firestore()
+                        .collection("derniersEvenements")
+                        .add({
+                          nomObjet: item.nom,
+                          objet: "U",
+                          type: "S",
+                          date:
+                            jour +
+                            "/" +
+                            mois +
+                            "/" +
+                            annee +
+                            " " +
+                            heure +
+                            ":" +
+                            minute +
+                            ":" +
+                            seconde,
+                        });
                     }
                     setNbRefresh(nbRefresh + 1);
                   },
@@ -670,12 +825,24 @@ const Ajouter = ({ navigation }) => {
         onRequestClose={() => {
           if (nom === "Catégorie") {
             setModalCategorieOuverte(false);
+            var categorie = nouvelleCategorie;
+            categorie.nom = "";
+            setNouvelleCategorie(categorie);
           } else if (nom === "Sous-catégorie") {
             setModalSousCategorieOuverte(false);
+            var sousCategorie = nouvelleSousCategorie;
+            sousCategorie.nom = "";
+            setNouvelleSousCategorie(sousCategorie);
           } else if (nom === "Marque") {
             setModalMarqueOuverte(false);
+            var marque = nouvelleMarque;
+            marque.nom = "";
+            setNouvelleMarque(marque);
           } else if (nom === "Utilisateur") {
             setModalUtilisateurOuverte(false);
+            var utilisateur = nouvelUtilisateur;
+            utilisateur.nom = "";
+            setNouvelUtilisateur(utilisateur);
           }
         }}
       >
@@ -726,23 +893,32 @@ const Ajouter = ({ navigation }) => {
                   placeholderTextColor={COLORS.gray}
                   value={
                     nom === "Catégorie"
-                      ? nouvelleCategorie
+                      ? nouvelleCategorie.nom
                       : nom === "Sous-catégorie"
-                      ? nouvelleSousCategorie
+                      ? nouvelleSousCategorie.nom
                       : nom === "Marque"
-                      ? nouvelleMarque
-                      : nouvelUtilisateur
+                      ? nouvelleMarque.nom
+                      : nouvelUtilisateur.nom
                   }
                   onChangeText={(texte) => {
                     if (nom === "Catégorie") {
-                      setNouvelleCategorie(texte);
+                      var categorie = nouvelleCategorie;
+                      categorie.nom = texte;
+                      setNouvelleCategorie(categorie);
                     } else if (nom === "Sous-catégorie") {
-                      setNouvelleSousCategorie(texte);
+                      var sousCategorie = nouvelleSousCategorie;
+                      sousCategorie.nom = texte;
+                      setNouvelleSousCategorie(sousCategorie);
                     } else if (nom === "Marque") {
-                      setNouvelleMarque(texte);
+                      var marque = nouvelleMarque;
+                      marque.nom = texte;
+                      setNouvelleMarque(soumarquesCategorie);
                     } else if (nom === "Utilisateur") {
-                      setNouvelUtilisateur(texte);
+                      var utilisateur = nouvelUtilisateur;
+                      utilisateur.nom = texte;
+                      setNouvelUtilisateur(utilisateur);
                     }
+                    setNbRefresh(nbRefresh + 1);
                   }}
                   style={{
                     flex: 1,
@@ -758,14 +934,23 @@ const Ajouter = ({ navigation }) => {
                   }}
                   onPress={() => {
                     if (nom === "Catégorie") {
-                      setNouvelleCategorie("");
+                      var categorie = nouvelleCategorie;
+                      categorie.nom = "";
+                      setNouvelleCategorie(categorie);
                     } else if (nom === "Sous-catégorie") {
-                      setNouvelleSousCategorie("");
+                      var sousCategorie = nouvelleSousCategorie;
+                      sousCategorie.nom = "";
+                      setNouvelleSousCategorie(sousCategorie);
                     } else if (nom === "Marque") {
-                      setNouvelleMarque("");
+                      var marque = nouvelleMarque;
+                      marque.nom = "";
+                      setNouvelleMarque(marque);
                     } else if (nom === "Utilisateur") {
-                      setNouvelUtilisateur("");
+                      var utilisateur = nouvelUtilisateur;
+                      utilisateur.nom = "";
+                      setNouvelUtilisateur(utilisateur);
                     }
+                    setNbRefresh(nbRefresh + 1);
                   }}
                 >
                   <Image
@@ -793,16 +978,24 @@ const Ajouter = ({ navigation }) => {
                 onPress={() => {
                   if (nom === "Catégorie") {
                     setModalCategorieOuverte(false);
-                    setNouvelleCategorie("");
+                    var categorie = nouvelleCategorie;
+                    categorie.nom = "";
+                    setNouvelleCategorie(categorie);
                   } else if (nom === "Sous-catégorie") {
                     setModalSousCategorieOuverte(false);
-                    setNouvelleSousCategorie("");
+                    var sousCategorie = nouvelleSousCategorie;
+                    sousCategorie.nom = "";
+                    setNouvelleSousCategorie(sousCategorie);
                   } else if (nom === "Marque") {
                     setModalMarqueOuverte(false);
-                    setNouvelleMarque("");
+                    var marque = nouvelleMarque;
+                    marque.nom = "";
+                    setNouvelleMarque(marque);
                   } else if (nom === "Utilisateur") {
                     setModalUtilisateurOuverte(false);
-                    setNouvelUtilisateur("");
+                    var utilisateur = nouvelUtilisateur;
+                    utilisateur.nom = "";
+                    setNouvelUtilisateur(utilisateur);
                   }
                 }}
               >
@@ -812,29 +1005,261 @@ const Ajouter = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => {
                   if (nom === "Catégorie") {
+                    if (modalOuvertePourModification) {
+                      firebase
+                        .firestore()
+                        .collection("categories")
+                        .doc(nouvelleCategorie.id)
+                        .update({
+                          nom: nouvelleCategorie.nom,
+                        });
+                    } else {
+                      firebase.firestore().collection("categories").add({
+                        nom: nouvelleCategorie.nom,
+                      });
+                    }
+
+                    var maintenant = new Date();
+                    var annee = maintenant.getFullYear().toString();
+                    var mois =
+                      maintenant.getMonth() + 1 < 10
+                        ? "0" + (maintenant.getMonth() + 1).toString()
+                        : (maintenant.getMonth() + 1).toString();
+                    var jour =
+                      maintenant.getDate() < 10
+                        ? "0" + maintenant.getDate().toString()
+                        : maintenant.getDate().toString();
+                    var heure =
+                      maintenant.getHours() < 10
+                        ? "0" + maintenant.getHours().toString()
+                        : maintenant.getHours().toString();
+                    var minute =
+                      maintenant.getMinutes() < 10
+                        ? "0" + maintenant.getMinutes().toString()
+                        : maintenant.getMinutes().toString();
+                    var seconde =
+                      maintenant.getSeconds() < 10
+                        ? "0" + maintenant.getSeconds().toString()
+                        : maintenant.getSeconds().toString();
+                    firebase
+                      .firestore()
+                      .collection("derniersEvenements")
+                      .add({
+                        nomObjet: modalOuvertePourModification
+                          ? miseAJourObjet + " → " + nouvelleCategorie.nom
+                          : nouvelleCategorie.nom,
+                        objet: "C",
+                        type: modalOuvertePourModification ? "M" : "A",
+                        date:
+                          jour +
+                          "/" +
+                          mois +
+                          "/" +
+                          annee +
+                          " " +
+                          heure +
+                          ":" +
+                          minute +
+                          ":" +
+                          seconde,
+                      });
+
                     setModalCategorieOuverte(false);
-                    setNouvelleCategorie("");
-                    firebase.firestore().collection("categories").add({
-                      nom: nouvelleCategorie,
-                    });
+                    var categorie = nouvelleCategorie;
+                    categorie.nom = "";
+                    setNouvelleCategorie(categorie);
                   } else if (nom === "Sous-catégorie") {
+                    if (modalOuvertePourModification) {
+                      firebase
+                        .firestore()
+                        .collection("sousCategories")
+                        .doc(nouvelleSousCategorie.id)
+                        .update({
+                          nom: nouvelleSousCategorie.nom,
+                        });
+                    } else {
+                      firebase.firestore().collection("sousCategories").add({
+                        nom: nouvelleSousCategorie.nom,
+                      });
+                    }
+
+                    var maintenant = new Date();
+                    var annee = maintenant.getFullYear().toString();
+                    var mois =
+                      maintenant.getMonth() + 1 < 10
+                        ? "0" + (maintenant.getMonth() + 1).toString()
+                        : (maintenant.getMonth() + 1).toString();
+                    var jour =
+                      maintenant.getDate() < 10
+                        ? "0" + maintenant.getDate().toString()
+                        : maintenant.getDate().toString();
+                    var heure =
+                      maintenant.getHours() < 10
+                        ? "0" + maintenant.getHours().toString()
+                        : maintenant.getHours().toString();
+                    var minute =
+                      maintenant.getMinutes() < 10
+                        ? "0" + maintenant.getMinutes().toString()
+                        : maintenant.getMinutes().toString();
+                    var seconde =
+                      maintenant.getSeconds() < 10
+                        ? "0" + maintenant.getSeconds().toString()
+                        : maintenant.getSeconds().toString();
+                    firebase
+                      .firestore()
+                      .collection("derniersEvenements")
+                      .add({
+                        nomObjet: modalOuvertePourModification
+                          ? miseAJourObjet + " → " + nouvelleSousCategorie.nom
+                          : nouvelleSousCategorie.nom,
+                        objet: "SC",
+                        type: modalOuvertePourModification ? "M" : "A",
+                        date:
+                          jour +
+                          "/" +
+                          mois +
+                          "/" +
+                          annee +
+                          " " +
+                          heure +
+                          ":" +
+                          minute +
+                          ":" +
+                          seconde,
+                      });
+
                     setModalSousCategorieOuverte(false);
-                    setNouvelleSousCategorie("");
-                    firebase.firestore().collection("sousCategories").add({
-                      nom: nouvelleSousCategorie,
-                    });
+                    var sousCategorie = nouvelleSousCategorie;
+                    sousCategorie.nom = "";
+                    setNouvelleSousCategorie(sousCategorie);
                   } else if (nom === "Marque") {
-                    setModalMarqueOuverte(false);
-                    setNouvelleMarque("");
-                    firebase.firestore().collection("marques").add({
-                      nom: nouvelleMarque,
-                    });
+                    if (modalOuvertePourModification) {
+                      firebase
+                        .firestore()
+                        .collection("marques")
+                        .doc(nouvelleMarque.id)
+                        .update({
+                          nom: nouvelleMarque.nom,
+                        });
+                    } else {
+                      firebase.firestore().collection("marques").add({
+                        nom: nouvelleMarque.nom,
+                      });
+                    }
+
+                    var maintenant = new Date();
+                    var annee = maintenant.getFullYear().toString();
+                    var mois =
+                      maintenant.getMonth() + 1 < 10
+                        ? "0" + (maintenant.getMonth() + 1).toString()
+                        : (maintenant.getMonth() + 1).toString();
+                    var jour =
+                      maintenant.getDate() < 10
+                        ? "0" + maintenant.getDate().toString()
+                        : maintenant.getDate().toString();
+                    var heure =
+                      maintenant.getHours() < 10
+                        ? "0" + maintenant.getHours().toString()
+                        : maintenant.getHours().toString();
+                    var minute =
+                      maintenant.getMinutes() < 10
+                        ? "0" + maintenant.getMinutes().toString()
+                        : maintenant.getMinutes().toString();
+                    var seconde =
+                      maintenant.getSeconds() < 10
+                        ? "0" + maintenant.getSeconds().toString()
+                        : maintenant.getSeconds().toString();
+                    firebase
+                      .firestore()
+                      .collection("derniersEvenements")
+                      .add({
+                        nomObjet: modalOuvertePourModification
+                          ? miseAJourObjet + " → " + nouvelleMarque.nom
+                          : nouvelleMarque.nom,
+                        objet: "M",
+                        type: modalOuvertePourModification ? "M" : "A",
+                        date:
+                          jour +
+                          "/" +
+                          mois +
+                          "/" +
+                          annee +
+                          " " +
+                          heure +
+                          ":" +
+                          minute +
+                          ":" +
+                          seconde,
+                      });
+
+                    setModalMarqueuverte(false);
+                    var marque = nouvelleMarque;
+                    marque.nom = "";
+                    setNouvelleMarque(marque);
                   } else if (nom === "Utilisateur") {
+                    if (modalOuvertePourModification) {
+                      firebase
+                        .firestore()
+                        .collection("utilisateurs")
+                        .doc(nouvelUtilisateur.id)
+                        .update({
+                          nom: nouvelUtilisateur.nom,
+                        });
+                    } else {
+                      firebase.firestore().collection("utilisateurs").add({
+                        nom: nouvelUtilisateur.nom,
+                      });
+                    }
+
+                    var maintenant = new Date();
+                    var annee = maintenant.getFullYear().toString();
+                    var mois =
+                      maintenant.getMonth() + 1 < 10
+                        ? "0" + (maintenant.getMonth() + 1).toString()
+                        : (maintenant.getMonth() + 1).toString();
+                    var jour =
+                      maintenant.getDate() < 10
+                        ? "0" + maintenant.getDate().toString()
+                        : maintenant.getDate().toString();
+                    var heure =
+                      maintenant.getHours() < 10
+                        ? "0" + maintenant.getHours().toString()
+                        : maintenant.getHours().toString();
+                    var minute =
+                      maintenant.getMinutes() < 10
+                        ? "0" + maintenant.getMinutes().toString()
+                        : maintenant.getMinutes().toString();
+                    var seconde =
+                      maintenant.getSeconds() < 10
+                        ? "0" + maintenant.getSeconds().toString()
+                        : maintenant.getSeconds().toString();
+                    firebase
+                      .firestore()
+                      .collection("derniersEvenements")
+                      .add({
+                        nomObjet: modalOuvertePourModification
+                          ? miseAJourObjet + " → " + nouvelUtilisateur.nom
+                          : nouvelUtilisateur.nom,
+                        objet: "U",
+                        type: modalOuvertePourModification ? "M" : "A",
+                        date:
+                          jour +
+                          "/" +
+                          mois +
+                          "/" +
+                          annee +
+                          " " +
+                          heure +
+                          ":" +
+                          minute +
+                          ":" +
+                          seconde,
+                      });
+
                     setModalUtilisateurOuverte(false);
-                    setNouvelUtilisateur("");
-                    firebase.firestore().collection("utilisateurs").add({
-                      nom: nouvelUtilisateur,
-                    });
+                    var utilisateur = nouvelUtilisateur;
+                    utilisateur.nom = "";
+                    setNouvelUtilisateur(utilisateur);
                   }
                   setNbRefresh(nbRefresh + 1);
                 }}

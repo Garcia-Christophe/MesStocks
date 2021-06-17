@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Image,
-  ImageBackground,
-} from "react-native";
+import { View, Text, ScrollView, Image, ImageBackground } from "react-native";
 import firebase from "firebase";
 
 import { BarreRetour } from "../components";
@@ -36,101 +29,6 @@ const DerniersEvenements = ({ navigation }) => {
 
     var db = firebase.firestore();
 
-    // Utilisateurs
-    var tousLesUtilisateurs = [];
-    db.collection("utilisateurs")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          tousLesUtilisateurs.push({
-            id: doc.id,
-            nom: doc.data().nom,
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (DerniersEvenements.js > useEffect() > utilisateurs) : ",
-          error
-        );
-      });
-
-    // Articles
-    var tousLesArticles = [];
-    db.collection("articles")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          tousLesArticles.push({
-            id: doc.id,
-            nom: doc.data().nom,
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (DerniersEvenements.js > useEffect() > articles) : ",
-          error
-        );
-      });
-
-    // Catégories
-    var toutesLesCategories = [];
-    db.collection("categories")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          toutesLesCategories.push({
-            id: doc.id,
-            nom: doc.data().nom,
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (DerniersEvenements.js > useEffect() > categories) : ",
-          error
-        );
-      });
-
-    // Sous-catégories
-    var toutesLesSousCategories = [];
-    db.collection("sousCategories")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          toutesLesSousCategories.push({
-            id: doc.id,
-            nom: doc.data().nom,
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (DerniersEvenements.js > useEffect() > sousCategories) : ",
-          error
-        );
-      });
-
-    // Marques
-    var toutesLesMarques = [];
-    db.collection("marques")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          toutesLesMarques.push({
-            id: doc.id,
-            nom: doc.data().nom,
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (DerniersEvenements.js > useEffect() > marques) : ",
-          error
-        );
-      });
-
     // Derniers évènements
     var evenements = [];
     db.collection("derniersEvenements")
@@ -139,49 +37,26 @@ const DerniersEvenements = ({ navigation }) => {
         querySnapshot.forEach((doc) => {
           var date = doc.data().date.split(" ");
           var anneeMoisJour = date[0].split("/");
-          var heureMinute = date[1].split(":");
+          var heureMinuteSeconde = date[1].split(":");
           var jour = anneeMoisJour[0];
           var mois = anneeMoisJour[1];
           var annee = anneeMoisJour[2];
-          var heure = heureMinute[0];
-          var minute = heureMinute[1];
+          var heure = heureMinuteSeconde[0];
+          var minute = heureMinuteSeconde[1];
+          var seconde = heureMinuteSeconde[2];
 
           evenements.push({
             id: doc.id,
-            // filtre in tousLesArticles ou toutesLesCategories ou toutesLesSousCategories ou toutesLesMarques suivant doc.data().objet
-            nomObjet:
-              doc.data().objet === "U"
-                ? tousLesUtilisateurs.filter(
-                    (utilisateur) => utilisateur.id === doc.data().idObjet
-                  )[0].nom
-                : doc.data().objet === "A"
-                ? tousLesArticles.filter(
-                    (article) => article.id === doc.data().idObjet
-                  )[0].nom
-                : doc.data().objet === "C"
-                ? toutesLesCategories.filter(
-                    (categorie) => categorie.id === doc.data().idObjet
-                  )[0].nom
-                : doc.data().objet === "SC"
-                ? toutesLesSousCategories.filter(
-                    (sousCategorie) => sousCategorie.id === doc.data().idObjet
-                  )[0].nom
-                : doc.data().objet === "M"
-                ? toutesLesMarques.filter(
-                    (marque) => marque.id === doc.data().idObjet
-                  )[0].nom
-                : "",
+            nomObjet: doc.data().nomObjet,
             objet: doc.data().objet,
-            nomUtilisateur: tousLesUtilisateurs.filter(
-              (utilisateur) => utilisateur.id === doc.data().idUtilisateur
-            )[0].nom,
             type: doc.data().type,
             date: new Date(
               parseInt(annee),
               parseInt(mois) - 1,
               parseInt(jour),
               parseInt(heure),
-              parseInt(minute)
+              parseInt(minute),
+              parseInt(seconde)
             ),
             dateString: doc.data().date,
           });
@@ -194,20 +69,13 @@ const DerniersEvenements = ({ navigation }) => {
       })
       .catch((error) => {
         console.log(
-          "Erreur en récupérant le document (Recap.js > useEffect() > derniersEvenements) : ",
+          "Erreur en récupérant le document (DerniersEvenements.js > useEffect() > derniersEvenements) : ",
           error
         );
       });
   }, [nbRefresh]);
 
-  function renderEvenement({
-    icon,
-    iconColor,
-    nomObjet,
-    description,
-    personne,
-    date,
-  }) {
+  function renderEvenement({ icon, iconColor, nomObjet, description, date }) {
     return (
       <View
         style={{
@@ -233,7 +101,7 @@ const DerniersEvenements = ({ navigation }) => {
         <View style={{ flex: 1, marginLeft: SIZES.radius }}>
           <Text style={{ ...FONTS.h3, fontWeight: "bold" }}>{nomObjet}</Text>
           <Text style={{ ...FONTS.body4, color: COLORS.gray, lineHeight: 18 }}>
-            {description} par {personne}
+            {description}
             {"\n" + date}
           </Text>
         </View>
@@ -270,7 +138,6 @@ const DerniersEvenements = ({ navigation }) => {
         <View style={{ flex: 1 }}>
           {derniersEvenements.map((evenement) =>
             renderEvenement({
-              idArticle: 1,
               icon:
                 evenement.type === "A"
                   ? icons.ajouter
@@ -316,7 +183,6 @@ const DerniersEvenements = ({ navigation }) => {
                   : evenement.objet === "M" && evenement.type === "S"
                   ? "Marque supprimée"
                   : "",
-              personne: evenement.nomUtilisateur,
               date: evenement.dateString,
             })
           )}
@@ -325,24 +191,5 @@ const DerniersEvenements = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  shadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-
-    elevation: 8,
-  },
-});
 
 export default DerniersEvenements;
