@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,68 +10,100 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import firebase from "firebase";
 
 import Toast from "react-native-easy-toast";
 
 import { FONTS, SIZES, COLORS, icons, images, dummyData } from "../constants";
 
 const Params = ({ navigation }) => {
+  const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
   const [toast, setToast] = useState();
   const [email, setEmail] = useState("");
-
   const [themes, setThemes] = useState(dummyData.themes);
   const [notifications, setNotifications] = useState(dummyData.notifications);
+  const [parametres, setParametres] = useState({
+    id: "",
+    theme: themes[0],
+    notifEntreesSorties: notifications[0],
+    notifACommander: notifications[0],
+    notifCreation: notifications[0],
+    notifModification: notifications[0],
+    notifSuppression: notifications[0],
+  });
+  const [paramsTMP, setParamsTMP] = useState({
+    id: "",
+    theme: themes[0],
+    notifEntreesSorties: notifications[0],
+    notifACommander: notifications[0],
+    notifCreation: notifications[0],
+    notifModification: notifications[0],
+    notifSuppression: notifications[0],
+  });
 
-  const [themeOriginal, setThemeOriginal] = useState(dummyData.themes[0]);
-  const [
-    notificationEntreesSortiesOriginale,
-    setNotificationEntreesSortiesOriginale,
-  ] = useState(dummyData.notifications[0]);
-  const [
-    notificationACommanderOriginale,
-    setNotificationACommanderOriginale,
-  ] = useState(dummyData.notifications[0]);
-  const [
-    notificationDonneesOriginale,
-    setNotificationDonneesOriginale,
-  ] = useState(dummyData.notifications[0]);
-  const [
-    notificationCreationOriginale,
-    setNotificationCreationOriginale,
-  ] = useState(dummyData.notifications[0]);
-  const [
-    notificationModificationOriginale,
-    setNotificationModificationOriginale,
-  ] = useState(dummyData.notifications[0]);
-  const [
-    notificationSuppressionOriginale,
-    setNotificationSuppressionOriginale,
-  ] = useState(dummyData.notifications[0]);
+  useEffect(() => {
+    if (!firebase.apps.length) {
+      // Configuration de la Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBfRGYAMrZnSYhkQN-YeZa1kcTq71_H5xQ",
+        authDomain: "messtocks-17fee.firebaseapp.com",
+        projectId: "messtocks-17fee",
+        storageBucket: "messtocks-17fee.appspot.com",
+        messagingSenderId: "772139915219",
+        appId: "1:772139915219:web:3d6720ecd5ed424b648126",
+        measurementId: "G-91GK8TDNTB",
+      };
 
-  const [themeChoisi, setThemeChoisi] = useState(themeOriginal);
-  const [
-    notificationEntreesSortiesChoisie,
-    setNotificationEntreesSortiesChoisie,
-  ] = useState(notificationEntreesSortiesOriginale);
-  const [
-    notificationACommanderChoisie,
-    setNotificationACommanderChoisie,
-  ] = useState(notificationACommanderOriginale);
-  const [notificationDonneesChoisie, setNotificationDonneesChoisie] = useState(
-    notificationDonneesOriginale
-  );
-  const [
-    notificationCreationChoisie,
-    setNotificationCreationChoisie,
-  ] = useState(notificationCreationOriginale);
-  const [
-    notificationModificationChoisie,
-    setNotificationModificationChoisie,
-  ] = useState(notificationModificationOriginale);
-  const [
-    notificationSuppressionChoisie,
-    setNotificationSuppressionChoisie,
-  ] = useState(notificationSuppressionOriginale);
+      // Initialise Firebase
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    var db = firebase.firestore();
+
+    // Paramètres
+    var tousLesParametres = [];
+    db.collection("parametres")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          tousLesParametres.push({
+            id: doc.id,
+            theme: doc.data().theme === "C" ? themes[0] : themes[1],
+            notifEntreesSorties:
+              doc.data().notifEntreesSorties === "A"
+                ? notifications[0]
+                : notifications[1],
+            notifACommander:
+              doc.data().notifACommander === "A"
+                ? notifications[0]
+                : notifications[1],
+            notifCreation:
+              doc.data().notifCreations === "A"
+                ? notifications[0]
+                : notifications[1],
+            notifModification:
+              doc.data().notifModifications === "A"
+                ? notifications[0]
+                : notifications[1],
+            notifSuppression:
+              doc.data().notifSuppressions === "A"
+                ? notifications[0]
+                : notifications[1],
+          });
+        });
+
+        setParametres(tousLesParametres[0]);
+        if (nbRefresh === 0) {
+          setParamsTMP(tousLesParametres[0]);
+        }
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Params.js > useEffect() > parametres) : ",
+          error
+        );
+      });
+  }, [nbRefresh]);
 
   function renderEnTete() {
     return (
@@ -159,7 +191,7 @@ const Params = ({ navigation }) => {
               ...FONTS.h2,
             }}
           >
-            Thème
+            Thème {parametres.theme.id}
           </Text>
         </View>
 
@@ -180,17 +212,24 @@ const Params = ({ navigation }) => {
               marginTop: SIZES.base * 2,
               paddingVertical: SIZES.base,
               backgroundColor:
-                themeChoisi.id === themes[0].id
+                paramsTMP.theme.id === themes[0].id
                   ? COLORS.primary
                   : COLORS.lightGray,
               borderRadius: 20,
             }}
-            onPress={() => setThemeChoisi(themes[0])}
+            onPress={() => {
+              var params = paramsTMP;
+              params.theme = themes[0];
+              setParamsTMP(params);
+              setNbRefresh(nbRefresh + 1);
+            }}
           >
             <Text
               style={{
                 color:
-                  themeChoisi.id === themes[0].id ? COLORS.white : COLORS.gray,
+                  paramsTMP.theme.id === themes[0].id
+                    ? COLORS.white
+                    : COLORS.gray,
                 ...FONTS.h3,
               }}
             >
@@ -207,17 +246,24 @@ const Params = ({ navigation }) => {
               marginTop: SIZES.base * 2,
               paddingVertical: SIZES.base,
               backgroundColor:
-                themeChoisi.id === themes[1].id
+                paramsTMP.theme.id === themes[1].id
                   ? COLORS.primary
                   : COLORS.lightGray,
               borderRadius: 20,
             }}
-            onPress={() => setThemeChoisi(themes[1])}
+            onPress={() => {
+              var params = paramsTMP;
+              params.theme = themes[1];
+              setParamsTMP(params);
+              setNbRefresh(nbRefresh + 1);
+            }}
           >
             <Text
               style={{
                 color:
-                  themeChoisi.id === themes[1].id ? COLORS.white : COLORS.gray,
+                  paramsTMP.theme.id === themes[1].id
+                    ? COLORS.white
+                    : COLORS.gray,
                 ...FONTS.h3,
               }}
             >
@@ -298,19 +344,22 @@ const Params = ({ navigation }) => {
               marginTop: SIZES.base,
               paddingVertical: SIZES.base,
               backgroundColor:
-                notificationEntreesSortiesChoisie.id === notifications[0].id
+                paramsTMP.notifEntreesSorties.id === notifications[0].id
                   ? COLORS.primary
                   : COLORS.lightGray,
               borderRadius: 20,
             }}
-            onPress={() =>
-              setNotificationEntreesSortiesChoisie(notifications[0])
-            }
+            onPress={() => {
+              var params = paramsTMP;
+              params.notifEntreesSorties = notifications[0];
+              setParamsTMP(params);
+              setNbRefresh(nbRefresh + 1);
+            }}
           >
             <Text
               style={{
                 color:
-                  notificationEntreesSortiesChoisie.id === notifications[0].id
+                  paramsTMP.notifEntreesSorties.id === notifications[0].id
                     ? COLORS.white
                     : COLORS.gray,
                 ...FONTS.h3,
@@ -329,19 +378,22 @@ const Params = ({ navigation }) => {
               marginTop: SIZES.base,
               paddingVertical: SIZES.base,
               backgroundColor:
-                notificationEntreesSortiesChoisie.id === notifications[1].id
+                paramsTMP.notifEntreesSorties.id === notifications[1].id
                   ? COLORS.primary
                   : COLORS.lightGray,
               borderRadius: 20,
             }}
-            onPress={() =>
-              setNotificationEntreesSortiesChoisie(notifications[1])
-            }
+            onPress={() => {
+              var params = paramsTMP;
+              params.notifEntreesSorties = notifications[1];
+              setParamsTMP(params);
+              setNbRefresh(nbRefresh + 1);
+            }}
           >
             <Text
               style={{
                 color:
-                  notificationEntreesSortiesChoisie.id === notifications[1].id
+                  paramsTMP.notifEntreesSorties.id === notifications[1].id
                     ? COLORS.white
                     : COLORS.gray,
                 ...FONTS.h3,
@@ -380,17 +432,22 @@ const Params = ({ navigation }) => {
               marginTop: SIZES.base,
               paddingVertical: SIZES.base,
               backgroundColor:
-                notificationACommanderChoisie.id === notifications[0].id
+                paramsTMP.notifACommander.id === notifications[0].id
                   ? COLORS.primary
                   : COLORS.lightGray,
               borderRadius: 20,
             }}
-            onPress={() => setNotificationACommanderChoisie(notifications[0])}
+            onPress={() => {
+              var params = paramsTMP;
+              params.notifACommander = notifications[0];
+              setParamsTMP(params);
+              setNbRefresh(nbRefresh + 1);
+            }}
           >
             <Text
               style={{
                 color:
-                  notificationACommanderChoisie.id === notifications[0].id
+                  paramsTMP.notifACommander.id === notifications[0].id
                     ? COLORS.white
                     : COLORS.gray,
                 ...FONTS.h3,
@@ -409,17 +466,22 @@ const Params = ({ navigation }) => {
               marginTop: SIZES.base,
               paddingVertical: SIZES.base,
               backgroundColor:
-                notificationACommanderChoisie.id === notifications[1].id
+                paramsTMP.notifACommander.id === notifications[1].id
                   ? COLORS.primary
                   : COLORS.lightGray,
               borderRadius: 20,
             }}
-            onPress={() => setNotificationACommanderChoisie(notifications[1])}
+            onPress={() => {
+              var params = paramsTMP;
+              params.notifACommander = notifications[1];
+              setParamsTMP(params);
+              setNbRefresh(nbRefresh + 1);
+            }}
           >
             <Text
               style={{
                 color:
-                  notificationACommanderChoisie.id === notifications[1].id
+                  paramsTMP.notifACommander.id === notifications[1].id
                     ? COLORS.white
                     : COLORS.gray,
                 ...FONTS.h3,
@@ -479,17 +541,22 @@ const Params = ({ navigation }) => {
                   width: 75,
                   paddingVertical: SIZES.base,
                   backgroundColor:
-                    notificationCreationChoisie.id === notifications[0].id
+                    paramsTMP.notifCreation.id === notifications[0].id
                       ? COLORS.primary
                       : COLORS.lightGray,
                   borderRadius: 20,
                 }}
-                onPress={() => setNotificationCreationChoisie(notifications[0])}
+                onPress={() => {
+                  var params = paramsTMP;
+                  params.notifCreation = notifications[0];
+                  setParamsTMP(params);
+                  setNbRefresh(nbRefresh + 1);
+                }}
               >
                 <Text
                   style={{
                     color:
-                      notificationCreationChoisie.id === notifications[0].id
+                      paramsTMP.notifCreation.id === notifications[0].id
                         ? COLORS.white
                         : COLORS.gray,
                     ...FONTS.body5,
@@ -507,17 +574,22 @@ const Params = ({ navigation }) => {
                   width: 75,
                   paddingVertical: SIZES.base,
                   backgroundColor:
-                    notificationCreationChoisie.id === notifications[1].id
+                    paramsTMP.notifCreation.id === notifications[1].id
                       ? COLORS.primary
                       : COLORS.lightGray,
                   borderRadius: 20,
                 }}
-                onPress={() => setNotificationCreationChoisie(notifications[1])}
+                onPress={() => {
+                  var params = paramsTMP;
+                  params.notifCreation = notifications[1];
+                  setParamsTMP(params);
+                  setNbRefresh(nbRefresh + 1);
+                }}
               >
                 <Text
                   style={{
                     color:
-                      notificationCreationChoisie.id === notifications[1].id
+                      paramsTMP.notifCreation.id === notifications[1].id
                         ? COLORS.white
                         : COLORS.gray,
                     ...FONTS.body5,
@@ -559,19 +631,22 @@ const Params = ({ navigation }) => {
                   width: 75,
                   paddingVertical: SIZES.base,
                   backgroundColor:
-                    notificationModificationChoisie.id === notifications[0].id
+                    paramsTMP.notifModification.id === notifications[0].id
                       ? COLORS.primary
                       : COLORS.lightGray,
                   borderRadius: 20,
                 }}
-                onPress={() =>
-                  setNotificationModificationChoisie(notifications[0])
-                }
+                onPress={() => {
+                  var params = paramsTMP;
+                  params.notifModification = notifications[0];
+                  setParamsTMP(params);
+                  setNbRefresh(nbRefresh + 1);
+                }}
               >
                 <Text
                   style={{
                     color:
-                      notificationModificationChoisie.id === notifications[0].id
+                      paramsTMP.notifModification.id === notifications[0].id
                         ? COLORS.white
                         : COLORS.gray,
                     ...FONTS.body5,
@@ -589,19 +664,22 @@ const Params = ({ navigation }) => {
                   width: 75,
                   paddingVertical: SIZES.base,
                   backgroundColor:
-                    notificationModificationChoisie.id === notifications[1].id
+                    paramsTMP.notifModification.id === notifications[1].id
                       ? COLORS.primary
                       : COLORS.lightGray,
                   borderRadius: 20,
                 }}
-                onPress={() =>
-                  setNotificationModificationChoisie(notifications[1])
-                }
+                onPress={() => {
+                  var params = paramsTMP;
+                  params.notifModification = notifications[1];
+                  setParamsTMP(params);
+                  setNbRefresh(nbRefresh + 1);
+                }}
               >
                 <Text
                   style={{
                     color:
-                      notificationModificationChoisie.id === notifications[1].id
+                      paramsTMP.notifModification.id === notifications[1].id
                         ? COLORS.white
                         : COLORS.gray,
                     ...FONTS.body5,
@@ -643,19 +721,22 @@ const Params = ({ navigation }) => {
                   width: 75,
                   paddingVertical: SIZES.base,
                   backgroundColor:
-                    notificationSuppressionChoisie.id === notifications[0].id
+                    paramsTMP.notifSuppression.id === notifications[0].id
                       ? COLORS.primary
                       : COLORS.lightGray,
                   borderRadius: 20,
                 }}
-                onPress={() =>
-                  setNotificationSuppressionChoisie(notifications[0])
-                }
+                onPress={() => {
+                  var params = paramsTMP;
+                  params.notifSuppression = notifications[0];
+                  setParamsTMP(params);
+                  setNbRefresh(nbRefresh + 1);
+                }}
               >
                 <Text
                   style={{
                     color:
-                      notificationSuppressionChoisie.id === notifications[0].id
+                      paramsTMP.notifSuppression.id === notifications[0].id
                         ? COLORS.white
                         : COLORS.gray,
                     ...FONTS.body5,
@@ -673,19 +754,22 @@ const Params = ({ navigation }) => {
                   width: 75,
                   paddingVertical: SIZES.base,
                   backgroundColor:
-                    notificationSuppressionChoisie.id === notifications[1].id
+                    paramsTMP.notifSuppression.id === notifications[1].id
                       ? COLORS.primary
                       : COLORS.lightGray,
                   borderRadius: 20,
                 }}
-                onPress={() =>
-                  setNotificationSuppressionChoisie(notifications[1])
-                }
+                onPress={() => {
+                  var params = paramsTMP;
+                  params.notifSuppression = notifications[1];
+                  setParamsTMP(params);
+                  setNbRefresh(nbRefresh + 1);
+                }}
               >
                 <Text
                   style={{
                     color:
-                      notificationSuppressionChoisie.id === notifications[1].id
+                      paramsTMP.notifSuppression.id === notifications[1].id
                         ? COLORS.white
                         : COLORS.gray,
                     ...FONTS.body5,
@@ -725,31 +809,18 @@ const Params = ({ navigation }) => {
           }}
           onPress={() => {
             if (
-              themeOriginal != themeChoisi ||
-              notificationEntreesSortiesOriginale !=
-                notificationEntreesSortiesChoisie ||
-              notificationACommanderOriginale !=
-                notificationACommanderChoisie ||
-              notificationDonneesOriginale != notificationDonneesChoisie ||
-              notificationCreationOriginale != notificationCreationChoisie ||
-              notificationModificationOriginale !=
-                notificationModificationChoisie ||
-              notificationSuppressionOriginale != notificationSuppressionChoisie
+              parametres.theme.id != paramsTMP.theme.id ||
+              parametres.notifEntreesSorties.id !=
+                paramsTMP.notifEntreesSorties.id ||
+              parametres.notifACommander.id != paramsTMP.notifACommander.id ||
+              parametres.notifCreation.id != paramsTMP.notifCreation.id ||
+              parametres.notifModification.id !=
+                paramsTMP.notifModification.id ||
+              parametres.notifSuppression.id != paramsTMP.notifSuppression.id
             ) {
-              setThemeChoisi(themeOriginal);
-              setNotificationEntreesSortiesChoisie(
-                notificationEntreesSortiesOriginale
-              );
-              setNotificationACommanderChoisie(notificationACommanderOriginale);
-              setNotificationDonneesChoisie(notificationDonneesOriginale);
-              setNotificationCreationChoisie(notificationCreationOriginale);
-              setNotificationModificationChoisie(
-                notificationModificationOriginale
-              );
-              setNotificationSuppressionChoisie(
-                notificationSuppressionOriginale
-              );
+              setParamsTMP(parametres);
               toast.show("Changements annulés.", 1000);
+              setNbRefresh(nbRefresh + 1);
             } else {
               toast.show("Aucun changement n'a été fait.", 1000);
             }
@@ -780,31 +851,45 @@ const Params = ({ navigation }) => {
           }}
           onPress={() => {
             if (
-              themeOriginal != themeChoisi ||
-              notificationEntreesSortiesOriginale !=
-                notificationEntreesSortiesChoisie ||
-              notificationACommanderOriginale !=
-                notificationACommanderChoisie ||
-              notificationDonneesOriginale != notificationDonneesChoisie ||
-              notificationCreationOriginale != notificationCreationChoisie ||
-              notificationModificationOriginale !=
-                notificationModificationChoisie ||
-              notificationSuppressionOriginale != notificationSuppressionChoisie
+              parametres.theme.id != paramsTMP.theme.id ||
+              parametres.notifEntreesSorties.id !=
+                paramsTMP.notifEntreesSorties.id ||
+              parametres.notifACommander.id != paramsTMP.notifACommander.id ||
+              parametres.notifCreation.id != paramsTMP.notifCreation.id ||
+              parametres.notifModification.id !=
+                paramsTMP.notifModification.id ||
+              parametres.notifSuppression.id != paramsTMP.notifSuppression.id
             ) {
-              setThemeOriginal(themeChoisi);
-              setNotificationEntreesSortiesOriginale(
-                notificationEntreesSortiesChoisie
-              );
-              setNotificationACommanderOriginale(notificationACommanderChoisie);
-              setNotificationDonneesOriginale(notificationDonneesChoisie);
-              setNotificationCreationOriginale(notificationCreationChoisie);
-              setNotificationModificationOriginale(
-                notificationModificationChoisie
-              );
-              setNotificationSuppressionOriginale(
-                notificationSuppressionChoisie
-              );
+              setParametres(paramsTMP);
               toast.show("Changements enregistrés !", 1000);
+              firebase
+                .firestore()
+                .collection("parametres")
+                .doc(parametres.id)
+                .update({
+                  theme: paramsTMP.theme.id === themes[0].id ? "C" : "S",
+                  notifEntreesSorties:
+                    paramsTMP.notifEntreesSorties.id === notifications[0].id
+                      ? "A"
+                      : "D",
+                  notifACommander:
+                    paramsTMP.notifACommander.id === notifications[0].id
+                      ? "A"
+                      : "D",
+                  notifCreations:
+                    paramsTMP.notifCreation.id === notifications[0].id
+                      ? "A"
+                      : "D",
+                  notifModifications:
+                    paramsTMP.notifModification.id === notifications[0].id
+                      ? "A"
+                      : "D",
+                  notifSuppressions:
+                    paramsTMP.notifSuppression.id === notifications[0].id
+                      ? "A"
+                      : "D",
+                });
+              setNbRefresh(nbRefresh + 1);
             } else {
               toast.show("Aucun changement n'a été fait.", 1000);
             }

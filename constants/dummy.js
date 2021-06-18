@@ -1,9 +1,4 @@
-// Historique
-export const historiquePremieresEntreesSorties = [];
-
-export const historiqueEntreesSorties = [];
-
-// Filtres historique
+// Historique > Filtres Type et Période
 export const types = [
   {
     id: 1,
@@ -18,8 +13,6 @@ export const types = [
     nom: "Sorties",
   },
 ];
-
-export const personnes = [];
 
 export const periodes = [
   {
@@ -40,7 +33,7 @@ export const periodes = [
   },
 ];
 
-// Filtres recherche
+// Rechercher > Filtre Type
 export const typesFiltresRecherche = [
   {
     id: 0,
@@ -56,13 +49,7 @@ export const typesFiltresRecherche = [
   },
 ];
 
-export const categoriesFiltresRecherche = [];
-
-export const sousCategoriesFiltresRecherche = [];
-
-export const marquesFiltresRecherche = [];
-
-// Parents fiche article
+// Fiche article > Parents
 export const categoriesParentsArticle = [
   {
     id: 1,
@@ -136,57 +123,34 @@ export const marquesParentsArticle = [
   },
 ];
 
-// Paramètres
+// Params > Thèmes et notifications
 export const themes = [
   {
-    id: 1,
+    id: 0,
     nom: "Clair",
   },
   {
-    id: 2,
+    id: 1,
     nom: "Sombre",
   },
 ];
 
 export const notifications = [
   {
-    id: 1,
+    id: 0,
     nom: "Activées",
   },
   {
-    id: 2,
+    id: 1,
     nom: "Désactivées",
   },
 ];
 
-// Objets
-export const articles = [];
-
-export const categories = [];
-
-export const sousCategories = [];
-
-export const marques = [];
-
-export const utilisateurs = [];
-
 // Export
 const dummyData = {
-  sousCategories,
-  historiquePremieresEntreesSorties,
-  historiqueEntreesSorties,
   types,
-  personnes,
   periodes,
-  articles,
-  categories,
-  sousCategories,
-  marques,
-  utilisateurs,
   typesFiltresRecherche,
-  categoriesFiltresRecherche,
-  sousCategoriesFiltresRecherche,
-  marquesFiltresRecherche,
   categoriesParentsArticle,
   sousCategoriesParentsArticle,
   marquesParentsArticle,

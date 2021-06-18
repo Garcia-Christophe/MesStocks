@@ -1163,7 +1163,7 @@ const Ajouter = ({ navigation }) => {
                           seconde,
                       });
 
-                    setModalMarqueuverte(false);
+                    setModalMarqueOuverte(false);
                     var marque = nouvelleMarque;
                     marque.nom = "";
                     setNouvelleMarque(marque);
