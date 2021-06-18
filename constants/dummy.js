@@ -43,91 +43,24 @@ export const periodes = [
 // Filtres recherche
 export const typesFiltresRecherche = [
   {
-    id: 1,
+    id: 0,
     nom: "Tous",
   },
   {
-    id: 2,
+    id: 1,
     nom: "À commander",
   },
   {
-    id: 3,
+    id: 2,
     nom: "Stocks à jour",
   },
 ];
 
-export const categoriesFiltresRecherche = [
-  {
-    id: 1,
-    nom: "Toutes",
-  },
-  {
-    id: 2,
-    nom: "Éclairage",
-  },
-  {
-    id: 3,
-    nom: "Appareillage",
-  },
-];
+export const categoriesFiltresRecherche = [];
 
-export const sousCategoriesFiltresRecherche = [
-  {
-    id: 1,
-    nom: "Toutes",
-  },
-  {
-    id: 2,
-    nom: "Ampoules",
-  },
-  {
-    id: 3,
-    nom: "Appliques",
-  },
-  {
-    id: 4,
-    nom: "Plafonniers",
-  },
-  {
-    id: 5,
-    nom: "Hublots",
-  },
-  {
-    id: 6,
-    nom: "Boite de dérivation / Coffret",
-  },
-  {
-    id: 7,
-    nom: "Détecteurs de mouvementations",
-  },
-];
+export const sousCategoriesFiltresRecherche = [];
 
-export const marquesFiltresRecherche = [
-  {
-    id: 1,
-    nom: "Toutes",
-  },
-  {
-    id: 2,
-    nom: "Robus",
-  },
-  {
-    id: 3,
-    nom: "Philips",
-  },
-  {
-    id: 4,
-    nom: "Decoute",
-  },
-  {
-    id: 5,
-    nom: "Legrand",
-  },
-  {
-    id: 6,
-    nom: "Limaro",
-  },
-];
+export const marquesFiltresRecherche = [];
 
 // Parents fiche article
 export const categoriesParentsArticle = [

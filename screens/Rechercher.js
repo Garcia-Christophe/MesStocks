@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -10,52 +10,218 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import firebase from "firebase";
 
 import { BoutonTexte } from "../components";
 import { FONTS, SIZES, COLORS, images, icons, dummyData } from "../constants";
 
 const Rechercher = ({ navigation }) => {
-  const [recherche, setRecherche] = useState(null);
+  const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
+  const [recherche, setRecherche] = useState("");
   const [voirFiltres, setVoirFiltres] = useState(false);
 
-  const [categories, setCategories] = useState(
-    dummyData.categoriesFiltresRecherche
-  );
-  const [sousCategories, setSousCategories] = useState(
-    dummyData.sousCategoriesFiltresRecherche
-  );
-  const [marques, setMarques] = useState(dummyData.marquesFiltresRecherche);
+  const [categories, setCategories] = useState([]);
+  const [sousCategories, setSousCategories] = useState([]);
+  const [marques, setMarques] = useState([]);
   const [types, setTypes] = useState(dummyData.typesFiltresRecherche);
-  const [articles, setArticles] = useState(dummyData.articles);
+  const [articles, setArticles] = useState([]);
 
-  const [categorieSelectionnee, setCategorieSelectionnee] = useState(
-    dummyData.categoriesFiltresRecherche[0]
-  );
+  const [categorieSelectionnee, setCategorieSelectionnee] = useState("");
   const [sousCategorieSelectionnee, setSousCategorieSelectionnee] = useState(
-    dummyData.sousCategoriesFiltresRecherche[0]
+    ""
   );
-  const [marqueSelectionnee, setMarqueSelectionnee] = useState(
-    dummyData.marquesFiltresRecherche[0]
-  );
+  const [marqueSelectionnee, setMarqueSelectionnee] = useState("");
   const [typeSelectionne, setTypeSelectionne] = useState(
     dummyData.typesFiltresRecherche[0]
   );
 
-  function renderBarreRecherche() {
-    const filtrerLesArticles = (texte) => {
-      setRecherche(texte);
+  useEffect(() => {
+    if (!firebase.apps.length) {
+      // Configuration de la Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBfRGYAMrZnSYhkQN-YeZa1kcTq71_H5xQ",
+        authDomain: "messtocks-17fee.firebaseapp.com",
+        projectId: "messtocks-17fee",
+        storageBucket: "messtocks-17fee.appspot.com",
+        messagingSenderId: "772139915219",
+        appId: "1:772139915219:web:3d6720ecd5ed424b648126",
+        measurementId: "G-91GK8TDNTB",
+      };
 
-      if (texte.length > 0) {
-        var articles = dummyData.articles.filter((article) =>
-          article.nom.toLowerCase().match(texte.toLowerCase())
+      // Initialise Firebase
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    var db = firebase.firestore();
+
+    // Catégories
+    var toutesLesCategories = [];
+    toutesLesCategories.push({
+      id: 0,
+      nom: "Toutes",
+    });
+    db.collection("categories")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutesLesCategories.push({
+            id: doc.id,
+            nom: doc.data().nom,
+          });
+        });
+        setCategories(toutesLesCategories);
+        if (nbRefresh === 0) {
+          setCategorieSelectionnee(toutesLesCategories[0]);
+        }
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Rechercher.js > useEffect() > categories) : ",
+          error
         );
+      });
 
-        setArticles(articles);
-      } else {
-        setArticles(dummyData.articles);
-      }
-    };
+    // Sous-catégories
+    var toutesLesSousCategories = [];
+    toutesLesSousCategories.push({
+      id: 0,
+      nom: "Toutes",
+    });
+    db.collection("sousCategories")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutesLesSousCategories.push({
+            id: doc.id,
+            nom: doc.data().nom,
+          });
+        });
+        setSousCategories(toutesLesSousCategories);
+        if (nbRefresh === 0) {
+          setSousCategorieSelectionnee(toutesLesSousCategories[0]);
+        }
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Rechercher.js > useEffect() > sousCategories) : ",
+          error
+        );
+      });
 
+    // Marques
+    var toutesLesMarques = [];
+    toutesLesMarques.push({
+      id: 0,
+      nom: "Toutes",
+    });
+    db.collection("marques")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutesLesMarques.push({
+            id: doc.id,
+            nom: doc.data().nom,
+          });
+        });
+        setMarques(toutesLesMarques);
+        if (nbRefresh === 0) {
+          setMarqueSelectionnee(toutesLesMarques[0]);
+        }
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Rechercher.js > useEffect() > marques) : ",
+          error
+        );
+      });
+
+    // Articles
+    var tousLesArticles = [];
+    db.collection("articles")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          tousLesArticles.push({
+            id: doc.id,
+            nom: doc.data().nom,
+            idCategorie: doc.data().idCategorie,
+            nomCategorie: toutesLesCategories.filter(
+              (categorie) => categorie.id === doc.data().idCategorie
+            )[0].nom,
+            idSousCategorie: doc.data().idSousCategorie,
+            nomSousCategorie: toutesLesSousCategories.filter(
+              (sousCategorie) => sousCategorie.id === doc.data().idSousCategorie
+            )[0].nom,
+            idMarque: doc.data().idMarque,
+            nomMarque: toutesLesMarques.filter(
+              (marque) => marque.id === doc.data().idMarque
+            )[0].nom,
+            stocks: doc.data().stocks,
+            stocksMini: doc.data().stocksMini,
+          });
+        });
+
+        // Trier l'historique suivant le filtre Catégories
+        if (
+          categorieSelectionnee.id !== undefined &&
+          categorieSelectionnee.id.length > 0 &&
+          categorieSelectionnee.id !== 0
+        ) {
+          tousLesArticles = tousLesArticles.filter(
+            (ligne) => categorieSelectionnee.id === ligne.idCategorie
+          );
+        }
+
+        // Trier l'historique suivant le filtre Sous-Catégories
+        if (
+          sousCategorieSelectionnee.id !== undefined &&
+          sousCategorieSelectionnee.id.length > 0 &&
+          sousCategorieSelectionnee.id !== 0
+        ) {
+          tousLesArticles = tousLesArticles.filter(
+            (ligne) => sousCategorieSelectionnee.id === ligne.idSousCategorie
+          );
+        }
+
+        // Trier l'historique suivant le filtre Marques
+        if (
+          marqueSelectionnee.id !== undefined &&
+          marqueSelectionnee.id.length > 0 &&
+          marqueSelectionnee.id !== 0
+        ) {
+          tousLesArticles = tousLesArticles.filter(
+            (ligne) => marqueSelectionnee.id === ligne.idMarque
+          );
+        }
+
+        // Trier l'historique suivant le filtre Types
+        if (typeSelectionne.id === 1) {
+          tousLesArticles = tousLesArticles.filter(
+            (ligne) => ligne.stocks < ligne.stocksMini
+          );
+        } else if (typeSelectionne.id === 2) {
+          tousLesArticles = tousLesArticles.filter(
+            (ligne) => ligne.stocks >= ligne.stocksMini
+          );
+        }
+
+        if (recherche.length > 0) {
+          tousLesArticles = tousLesArticles.filter((ligne) =>
+            ligne.nom.toLowerCase().match(recherche.toLowerCase())
+          );
+        }
+
+        setArticles(tousLesArticles);
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Rechercher.js > useEffect() > articles) : ",
+          error
+        );
+      });
+  }, [nbRefresh]);
+
+  function renderBarreRecherche() {
     return (
       <View
         style={{
@@ -97,7 +263,10 @@ const Rechercher = ({ navigation }) => {
                 placeholder="Rechercher..."
                 placeholderTextColor={COLORS.gray}
                 value={recherche}
-                onChangeText={(texte) => filtrerLesArticles(texte)}
+                onChangeText={(texte) => {
+                  setRecherche(texte);
+                  setNbRefresh(nbRefresh + 1);
+                }}
                 style={{
                   flex: 1,
                   marginLeft: 15,
@@ -112,7 +281,7 @@ const Rechercher = ({ navigation }) => {
                 }}
                 onPress={() => {
                   setRecherche("");
-                  setArticles(dummyData.articles);
+                  setNbRefresh(nbRefresh + 1);
                 }}
               >
                 <Image
@@ -152,7 +321,10 @@ const Rechercher = ({ navigation }) => {
           color:
             categorieSelectionnee.id === item.id ? COLORS.white : COLORS.gray,
         }}
-        onPress={() => setCategorieSelectionnee(item)}
+        myOnPress={() => {
+          setCategorieSelectionnee(item);
+          setNbRefresh(nbRefresh + 1);
+        }}
       />
     );
 
@@ -176,7 +348,10 @@ const Rechercher = ({ navigation }) => {
               ? COLORS.white
               : COLORS.gray,
         }}
-        onPress={() => setSousCategorieSelectionnee(item)}
+        myOnPress={() => {
+          setSousCategorieSelectionnee(item);
+          setNbRefresh(nbRefresh + 1);
+        }}
       />
     );
 
@@ -197,7 +372,10 @@ const Rechercher = ({ navigation }) => {
         customLabelStyle={{
           color: marqueSelectionnee.id === item.id ? COLORS.white : COLORS.gray,
         }}
-        onPress={() => setMarqueSelectionnee(item)}
+        myOnPress={() => {
+          setMarqueSelectionnee(item);
+          setNbRefresh(nbRefresh + 1);
+        }}
       />
     );
 
@@ -216,7 +394,10 @@ const Rechercher = ({ navigation }) => {
         customLabelStyle={{
           color: typeSelectionne.id === item.id ? COLORS.white : COLORS.gray,
         }}
-        onPress={() => setTypeSelectionne(item)}
+        myOnPress={() => {
+          setTypeSelectionne(item);
+          setNbRefresh(nbRefresh + 1);
+        }}
       />
     );
 
@@ -381,7 +562,11 @@ const Rechercher = ({ navigation }) => {
         <View style={{ flex: 1 }}>
           <Text style={{ ...FONTS.h3, flexWrap: "wrap" }}>{item.nom}</Text>
           <Text style={{ ...FONTS.body4, color: COLORS.gray }}>
-            Éclairage {">"} Ampoules {">"} Philips
+            {item.nomCategorie +
+              " > " +
+              item.nomSousCategorie +
+              " > " +
+              item.nomMarque}
           </Text>
         </View>
 
@@ -395,7 +580,7 @@ const Rechercher = ({ navigation }) => {
         >
           <Text
             style={{
-              color: item.stocks >= item.stockMini ? COLORS.green : COLORS.red,
+              color: item.stocks >= item.stocksMini ? COLORS.green : COLORS.red,
               fontWeight: "bold",
               ...FONTS.body4,
             }}
@@ -411,7 +596,7 @@ const Rechercher = ({ navigation }) => {
             }}
           />
           <Text style={{ color: COLORS.black, ...FONTS.body5 }}>
-            {item.stockMini}
+            {item.stocksMini}
           </Text>
         </View>
       </TouchableOpacity>
@@ -461,7 +646,7 @@ const Rechercher = ({ navigation }) => {
                 fontWeight: "bold",
               }}
             >
-              102
+              {articles.length}
             </Text>
           </View>
         </View>

@@ -154,27 +154,6 @@ const Ajouter = ({ navigation }) => {
         );
       });
 
-    // Articles
-    var tousLesArticles = [];
-    db.collection("articles")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          tousLesArticles.push({
-            id: doc.id,
-            idSousCategorie: doc.data().idSousCategorie,
-            stocks: doc.data().stocks,
-            stocksMini: doc.data().stocksMini,
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (Ajouter.js > useEffect() > articles) : ",
-          error
-        );
-      });
-
     // Sous-catégories
     var toutesLesSousCategories = [];
     db.collection("sousCategories")
@@ -184,14 +163,6 @@ const Ajouter = ({ navigation }) => {
           toutesLesSousCategories.push({
             id: doc.id,
             nom: doc.data().nom,
-            nbArticles: tousLesArticles.filter(
-              (article) => article.idSousCategorie === doc.id
-            ).length,
-            nbArticlesACommander: tousLesArticles.filter(
-              (article) =>
-                article.idSousCategorie === doc.id &&
-                article.stocks < article.stocksMini
-            ).length,
           });
         });
         setSousCategories(toutesLesSousCategories);
