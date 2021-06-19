@@ -15,7 +15,7 @@ import firebase from "firebase";
 import { BoutonTexte } from "../components";
 import { FONTS, SIZES, COLORS, images, icons, dummyData } from "../constants";
 
-const Rechercher = ({ navigation }) => {
+const Rechercher = ({ route, navigation }) => {
   const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
   const [recherche, setRecherche] = useState("");
   const [voirFiltres, setVoirFiltres] = useState(false);
@@ -53,6 +53,19 @@ const Rechercher = ({ navigation }) => {
     }
 
     var db = firebase.firestore();
+
+    if (nbRefresh === 0) {
+      if (
+        route != undefined &&
+        route.params != undefined &&
+        route.params.aCommander != undefined &&
+        route.params.aCommander
+      ) {
+        setTypeSelectionne(dummyData.typesFiltresRecherche[1]);
+      } else {
+        setTypeSelectionne(dummyData.typesFiltresRecherche[0]);
+      }
+    }
 
     // Catégories
     var toutesLesCategories = [];
@@ -212,6 +225,11 @@ const Rechercher = ({ navigation }) => {
         }
 
         setArticles(tousLesArticles);
+
+        if (nbRefresh === 0) {
+          route.params = undefined;
+          setNbRefresh(nbRefresh + 1);
+        }
       })
       .catch((error) => {
         console.log(
@@ -220,6 +238,15 @@ const Rechercher = ({ navigation }) => {
         );
       });
   }, [nbRefresh]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setNbRefresh(0);
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   function renderBarreRecherche() {
     return (
@@ -323,6 +350,7 @@ const Rechercher = ({ navigation }) => {
         }}
         myOnPress={() => {
           setCategorieSelectionnee(item);
+          route.params = undefined;
           setNbRefresh(nbRefresh + 1);
         }}
       />
@@ -350,6 +378,7 @@ const Rechercher = ({ navigation }) => {
         }}
         myOnPress={() => {
           setSousCategorieSelectionnee(item);
+          route.params = undefined;
           setNbRefresh(nbRefresh + 1);
         }}
       />
@@ -374,6 +403,7 @@ const Rechercher = ({ navigation }) => {
         }}
         myOnPress={() => {
           setMarqueSelectionnee(item);
+          route.params = undefined;
           setNbRefresh(nbRefresh + 1);
         }}
       />
@@ -396,6 +426,7 @@ const Rechercher = ({ navigation }) => {
         }}
         myOnPress={() => {
           setTypeSelectionne(item);
+          route.params = undefined;
           setNbRefresh(nbRefresh + 1);
         }}
       />
