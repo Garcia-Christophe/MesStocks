@@ -338,7 +338,9 @@ const Ajouter = ({ navigation }) => {
           borderRadius: SIZES.radius,
           ...styles.shadow,
         }}
-        onPress={() => navigation.navigate("FicheArticle", { nouveau: true })}
+        onPress={() =>
+          navigation.navigate("FicheArticle", { nouvelArticle: true })
+        }
       >
         <Image
           source={icons.article}

@@ -195,6 +195,14 @@ const Rechercher = ({ route, navigation }) => {
           });
         });
 
+        tousLesArticles.map((ligne) => {
+          ligne.nomCategorie =
+            ligne.idCategorie === 0 ? "∅" : ligne.nomCategorie;
+          ligne.nomSousCategorie =
+            ligne.idSousCategorie === 0 ? "∅" : ligne.nomSousCategorie;
+          ligne.nomMarque = ligne.idMarque === 0 ? "∅" : ligne.nomMarque;
+        });
+
         // Trier l'historique suivant le filtre Catégories
         if (
           categorieSelectionnee.id !== undefined &&
@@ -608,7 +616,10 @@ const Rechercher = ({ route, navigation }) => {
           paddingVertical: SIZES.base,
         }}
         onPress={() =>
-          navigation.navigate("FicheArticle", { idArticle: item.id })
+          navigation.navigate("FicheArticle", {
+            idArticle: item.id,
+            nouvelArticle: false,
+          })
         }
       >
         <View style={{ flex: 1 }}>

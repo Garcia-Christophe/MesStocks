@@ -20,22 +20,22 @@ const FicheArticle = ({ navigation, route }) => {
   const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
   const [toast, setToast] = useState();
   const [article, setArticle] = useState({
-    id: "",
+    id: -1,
     nom: "",
-    idCategorie: "",
-    idSousCategorie: "",
-    idMarque: "",
-    stocks: "",
-    stocksMini: "",
+    idCategorie: 0,
+    idSousCategorie: 0,
+    idMarque: 0,
+    stocks: 0,
+    stocksMini: 0,
   });
   const [articleTMP, setArticleTMP] = useState({
-    id: "",
+    id: -1,
     nom: "",
-    idCategorie: "",
-    idSousCategorie: "",
-    idMarque: "",
-    stocks: "",
-    stocksMini: "",
+    idCategorie: 0,
+    idSousCategorie: 0,
+    idMarque: 0,
+    stocks: 0,
+    stocksMini: 0,
   });
 
   const [categories, setCategories] = useState();
@@ -822,65 +822,131 @@ const FicheArticle = ({ navigation, route }) => {
               article.stocks != articleTMP.stocks ||
               article.stocksMini != articleTMP.stocksMini
             ) {
-              setArticle(articleTMP);
-              toast.show("Changements enregistrés !", 1000);
-              firebase
-                .firestore()
-                .collection("articles")
-                .doc(article.id)
-                .update({
-                  nom: articleTMP.nom,
-                  idCategorie: articleTMP.idCategorie,
-                  idSousCategorie: articleTMP.idSousCategorie,
-                  idMarque: articleTMP.idMarque,
-                  stocks: articleTMP.stocks,
-                  stocksMini: articleTMP.stocksMini,
-                });
+              if (articleTMP.nom.length <= 0) {
+                toast.show(
+                  "Veuillez spécifier la désignation de l'article.",
+                  2500
+                );
+              } else {
+                if (route.params.nouvelArticle) {
+                  setArticle(articleTMP);
+                  toast.show("Article enregistré !", 1000);
+                  firebase.firestore().collection("articles").add({
+                    nom: articleTMP.nom,
+                    idCategorie: articleTMP.idCategorie,
+                    idSousCategorie: articleTMP.idSousCategorie,
+                    idMarque: articleTMP.idMarque,
+                    stocks: articleTMP.stocks,
+                    stocksMini: articleTMP.stocksMini,
+                  });
 
-              var maintenant = new Date();
-              var annee = maintenant.getFullYear().toString();
-              var mois =
-                maintenant.getMonth() + 1 < 10
-                  ? "0" + (maintenant.getMonth() + 1).toString()
-                  : (maintenant.getMonth() + 1).toString();
-              var jour =
-                maintenant.getDate() < 10
-                  ? "0" + maintenant.getDate().toString()
-                  : maintenant.getDate().toString();
-              var heure =
-                maintenant.getHours() < 10
-                  ? "0" + maintenant.getHours().toString()
-                  : maintenant.getHours().toString();
-              var minute =
-                maintenant.getMinutes() < 10
-                  ? "0" + maintenant.getMinutes().toString()
-                  : maintenant.getMinutes().toString();
-              var seconde =
-                maintenant.getSeconds() < 10
-                  ? "0" + maintenant.getSeconds().toString()
-                  : maintenant.getSeconds().toString();
-              firebase
-                .firestore()
-                .collection("derniersEvenements")
-                .add({
-                  nomObjet: articleTMP.nom,
-                  objet: "A",
-                  type: "M",
-                  date:
-                    jour +
-                    "/" +
-                    mois +
-                    "/" +
-                    annee +
-                    " " +
-                    heure +
-                    ":" +
-                    minute +
-                    ":" +
-                    seconde,
-                });
+                  var maintenant = new Date();
+                  var annee = maintenant.getFullYear().toString();
+                  var mois =
+                    maintenant.getMonth() + 1 < 10
+                      ? "0" + (maintenant.getMonth() + 1).toString()
+                      : (maintenant.getMonth() + 1).toString();
+                  var jour =
+                    maintenant.getDate() < 10
+                      ? "0" + maintenant.getDate().toString()
+                      : maintenant.getDate().toString();
+                  var heure =
+                    maintenant.getHours() < 10
+                      ? "0" + maintenant.getHours().toString()
+                      : maintenant.getHours().toString();
+                  var minute =
+                    maintenant.getMinutes() < 10
+                      ? "0" + maintenant.getMinutes().toString()
+                      : maintenant.getMinutes().toString();
+                  var seconde =
+                    maintenant.getSeconds() < 10
+                      ? "0" + maintenant.getSeconds().toString()
+                      : maintenant.getSeconds().toString();
+                  firebase
+                    .firestore()
+                    .collection("derniersEvenements")
+                    .add({
+                      nomObjet: articleTMP.nom,
+                      objet: "A",
+                      type: "A",
+                      date:
+                        jour +
+                        "/" +
+                        mois +
+                        "/" +
+                        annee +
+                        " " +
+                        heure +
+                        ":" +
+                        minute +
+                        ":" +
+                        seconde,
+                    });
 
-              setNbRefresh(nbRefresh + 1);
+                  setNbRefresh(nbRefresh + 1);
+                  navigation.goBack();
+                } else {
+                  setArticle(articleTMP);
+                  toast.show("Changements enregistrés !", 1000);
+                  firebase
+                    .firestore()
+                    .collection("articles")
+                    .doc(article.id)
+                    .update({
+                      nom: articleTMP.nom,
+                      idCategorie: articleTMP.idCategorie,
+                      idSousCategorie: articleTMP.idSousCategorie,
+                      idMarque: articleTMP.idMarque,
+                      stocks: articleTMP.stocks,
+                      stocksMini: articleTMP.stocksMini,
+                    });
+
+                  var maintenant = new Date();
+                  var annee = maintenant.getFullYear().toString();
+                  var mois =
+                    maintenant.getMonth() + 1 < 10
+                      ? "0" + (maintenant.getMonth() + 1).toString()
+                      : (maintenant.getMonth() + 1).toString();
+                  var jour =
+                    maintenant.getDate() < 10
+                      ? "0" + maintenant.getDate().toString()
+                      : maintenant.getDate().toString();
+                  var heure =
+                    maintenant.getHours() < 10
+                      ? "0" + maintenant.getHours().toString()
+                      : maintenant.getHours().toString();
+                  var minute =
+                    maintenant.getMinutes() < 10
+                      ? "0" + maintenant.getMinutes().toString()
+                      : maintenant.getMinutes().toString();
+                  var seconde =
+                    maintenant.getSeconds() < 10
+                      ? "0" + maintenant.getSeconds().toString()
+                      : maintenant.getSeconds().toString();
+                  firebase
+                    .firestore()
+                    .collection("derniersEvenements")
+                    .add({
+                      nomObjet: articleTMP.nom,
+                      objet: "A",
+                      type: "M",
+                      date:
+                        jour +
+                        "/" +
+                        mois +
+                        "/" +
+                        annee +
+                        " " +
+                        heure +
+                        ":" +
+                        minute +
+                        ":" +
+                        seconde,
+                    });
+
+                  setNbRefresh(nbRefresh + 1);
+                }
+              }
             } else {
               toast.show("Aucun changement n'a été fait.", 1000);
             }
@@ -906,7 +972,7 @@ const FicheArticle = ({ navigation, route }) => {
         style={{ paddingBottom: SIZES.padding, backgroundColor: COLORS.white }}
       >
         <BarreRetour
-          right={true}
+          right={!route.params.nouvelArticle}
           idArticle={article.id}
           nomArticle={article.nom}
           color={COLORS.black}

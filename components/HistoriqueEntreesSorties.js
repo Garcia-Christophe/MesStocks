@@ -186,7 +186,10 @@ const HistoriqueEntreesSorties = ({
           paddingVertical: SIZES.base,
         }}
         onPress={() =>
-          navigation.navigate("FicheArticle", { idArticle: item.idArticle })
+          navigation.navigate("FicheArticle", {
+            idArticle: item.idArticle,
+            nouvelArticle: false,
+          })
         }
       >
         <Image
