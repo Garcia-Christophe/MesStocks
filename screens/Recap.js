@@ -43,6 +43,10 @@ const Recap = ({ navigation }) => {
 
     var db = firebase.firestore();
 
+    if (nbRefresh === 0) {
+      setNbRefresh(nbRefresh + 1);
+    }
+
     // Articles
     var tousLesArticles = [];
     db.collection("articles")
@@ -93,6 +97,15 @@ const Recap = ({ navigation }) => {
         );
       });
   }, [nbRefresh]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setNbRefresh(0);
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   function renderEntete() {
     const renderItem = ({ item, index }) => (

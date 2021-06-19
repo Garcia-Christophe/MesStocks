@@ -49,80 +49,6 @@ export const typesFiltresRecherche = [
   },
 ];
 
-// Fiche article > Parents
-export const categoriesParentsArticle = [
-  {
-    id: 1,
-    nom: "Aucune",
-  },
-  {
-    id: 2,
-    nom: "Éclairage",
-  },
-  {
-    id: 3,
-    nom: "Appareillage",
-  },
-];
-
-export const sousCategoriesParentsArticle = [
-  {
-    id: 1,
-    nom: "Aucune",
-  },
-  {
-    id: 2,
-    nom: "Ampoules",
-  },
-  {
-    id: 3,
-    nom: "Appliques",
-  },
-  {
-    id: 4,
-    nom: "Plafonniers",
-  },
-  {
-    id: 5,
-    nom: "Hublots",
-  },
-  {
-    id: 6,
-    nom: "Boite de dérivation / Coffret",
-  },
-  {
-    id: 7,
-    nom: "Détecteurs de mouvementations",
-  },
-];
-
-export const marquesParentsArticle = [
-  {
-    id: 1,
-    nom: "Aucune",
-  },
-  {
-    id: 2,
-    nom: "Robus",
-  },
-  {
-    id: 3,
-    nom: "Philips",
-  },
-  {
-    id: 4,
-    nom: "Decoute",
-  },
-  {
-    id: 5,
-    nom: "Legrand",
-  },
-  {
-    id: 6,
-    nom: "Limaro",
-  },
-];
-
 // Params > Thèmes et notifications
 export const themes = [
   {
@@ -151,9 +77,6 @@ const dummyData = {
   types,
   periodes,
   typesFiltresRecherche,
-  categoriesParentsArticle,
-  sousCategoriesParentsArticle,
-  marquesParentsArticle,
   themes,
   notifications,
 };

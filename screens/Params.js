@@ -105,6 +105,15 @@ const Params = ({ navigation }) => {
       });
   }, [nbRefresh]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setNbRefresh(0);
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
   function renderEnTete() {
     return (
       <View
@@ -191,7 +200,7 @@ const Params = ({ navigation }) => {
               ...FONTS.h2,
             }}
           >
-            Thème {parametres.theme.id}
+            Thème
           </Text>
         </View>
 

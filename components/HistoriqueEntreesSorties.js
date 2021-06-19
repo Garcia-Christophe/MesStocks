@@ -125,7 +125,7 @@ const HistoriqueEntreesSorties = ({
 
         // trier l'historique par ordre de date
         historiqueEntier = historique.sort((a, b) => b.date - a.date);
-        historiqueDernieresLignes = historiqueEntier.slice(0, 6);
+        historiqueDernieresLignes = historiqueEntier.slice(0, 5);
 
         // Trier l'historique suivant le filtre Type
         if (typeFiltre.nom === "Entrées") {
