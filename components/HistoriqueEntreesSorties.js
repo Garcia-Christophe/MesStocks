@@ -14,6 +14,7 @@ import { COLORS, SIZES, FONTS, icons } from "../constants";
 const HistoriqueEntreesSorties = ({
   navigation,
   customContainerStyle,
+  idArticle,
   number,
   periodeFiltre,
   personneFiltre,
@@ -51,10 +52,12 @@ const HistoriqueEntreesSorties = ({
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          tousLesArticles.push({
-            id: doc.id,
-            nom: doc.data().nom,
-          });
+          if (idArticle === -1 || idArticle === doc.id) {
+            tousLesArticles.push({
+              id: doc.id,
+              nom: doc.data().nom,
+            });
+          }
         });
       })
       .catch((error) => {
@@ -91,36 +94,38 @@ const HistoriqueEntreesSorties = ({
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          var date = doc.data().date.split(" ");
-          var anneeMoisJour = date[0].split("/");
-          var heureMinute = date[1].split(":");
-          var jour = anneeMoisJour[0];
-          var mois = anneeMoisJour[1];
-          var annee = anneeMoisJour[2];
-          var heure = heureMinute[0];
-          var minute = heureMinute[1];
+          if (idArticle === -1 || idArticle === doc.data().idArticle) {
+            var date = doc.data().date.split(" ");
+            var anneeMoisJour = date[0].split("/");
+            var heureMinute = date[1].split(":");
+            var jour = anneeMoisJour[0];
+            var mois = anneeMoisJour[1];
+            var annee = anneeMoisJour[2];
+            var heure = heureMinute[0];
+            var minute = heureMinute[1];
 
-          historique.push({
-            id: doc.id,
-            idArticle: doc.data().idArticle,
-            nomArticle: tousLesArticles.filter(
-              (article) => article.id === doc.data().idArticle
-            )[0].nom,
-            nombre: doc.data().nombre,
-            idUtilisateur: doc.data().idUtilisateur,
-            nomUtilisateur: tousLesUtilisateurs.filter(
-              (utilisateur) => utilisateur.id === doc.data().idUtilisateur
-            )[0].nom,
-            type: doc.data().type,
-            date: new Date(
-              parseInt(annee),
-              parseInt(mois) - 1,
-              parseInt(jour),
-              parseInt(heure),
-              parseInt(minute)
-            ),
-            dateString: doc.data().date,
-          });
+            historique.push({
+              id: doc.id,
+              idArticle: doc.data().idArticle,
+              nomArticle: tousLesArticles.filter(
+                (article) => article.id === doc.data().idArticle
+              )[0].nom,
+              nombre: doc.data().nombre,
+              idUtilisateur: doc.data().idUtilisateur,
+              nomUtilisateur: tousLesUtilisateurs.filter(
+                (utilisateur) => utilisateur.id === doc.data().idUtilisateur
+              )[0].nom,
+              type: doc.data().type,
+              date: new Date(
+                parseInt(annee),
+                parseInt(mois) - 1,
+                parseInt(jour),
+                parseInt(heure),
+                parseInt(minute)
+              ),
+              dateString: doc.data().date,
+            });
+          }
         });
 
         // trier l'historique par ordre de date

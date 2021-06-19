@@ -17,7 +17,7 @@ import {
 } from "../components";
 import { COLORS, SIZES, FONTS, icons, images, dummyData } from "../constants";
 
-const Historique = ({ navigation }) => {
+const Historique = ({ route, navigation }) => {
   const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
   const [nbEntrees, setNbEntrees] = useState(0);
   const [nbSorties, setNbSorties] = useState(0);
@@ -91,33 +91,69 @@ const Historique = ({ navigation }) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          var date = doc.data().date.split(" ");
-          var anneeMoisJour = date[0].split("/");
-          var heureMinute = date[1].split(":");
-          var jour = anneeMoisJour[0];
-          var mois = anneeMoisJour[1];
-          var annee = anneeMoisJour[2];
-          var heure = heureMinute[0];
-          var minute = heureMinute[1];
+          if (
+            route != undefined &&
+            route.params != undefined &&
+            route.params.idArticle != undefined
+          ) {
+            if (route.params.idArticle === doc.data().idArticle) {
+              var date = doc.data().date.split(" ");
+              var anneeMoisJour = date[0].split("/");
+              var heureMinute = date[1].split(":");
+              var jour = anneeMoisJour[0];
+              var mois = anneeMoisJour[1];
+              var annee = anneeMoisJour[2];
+              var heure = heureMinute[0];
+              var minute = heureMinute[1];
 
-          historique.push({
-            id: doc.id,
-            idArticle: doc.data().idArticle,
-            nombre: doc.data().nombre,
-            idUtilisateur: doc.data().idUtilisateur,
-            nomUtilisateur: toutesLesPersonnes.filter(
-              (utilisateur) => utilisateur.id === doc.data().idUtilisateur
-            )[0].nom,
-            type: doc.data().type,
-            date: new Date(
-              parseInt(annee),
-              parseInt(mois) - 1,
-              parseInt(jour),
-              parseInt(heure),
-              parseInt(minute)
-            ),
-            dateString: doc.data().date,
-          });
+              historique.push({
+                id: doc.id,
+                idArticle: doc.data().idArticle,
+                nombre: doc.data().nombre,
+                idUtilisateur: doc.data().idUtilisateur,
+                nomUtilisateur: toutesLesPersonnes.filter(
+                  (utilisateur) => utilisateur.id === doc.data().idUtilisateur
+                )[0].nom,
+                type: doc.data().type,
+                date: new Date(
+                  parseInt(annee),
+                  parseInt(mois) - 1,
+                  parseInt(jour),
+                  parseInt(heure),
+                  parseInt(minute)
+                ),
+                dateString: doc.data().date,
+              });
+            }
+          } else {
+            var date = doc.data().date.split(" ");
+            var anneeMoisJour = date[0].split("/");
+            var heureMinute = date[1].split(":");
+            var jour = anneeMoisJour[0];
+            var mois = anneeMoisJour[1];
+            var annee = anneeMoisJour[2];
+            var heure = heureMinute[0];
+            var minute = heureMinute[1];
+
+            historique.push({
+              id: doc.id,
+              idArticle: doc.data().idArticle,
+              nombre: doc.data().nombre,
+              idUtilisateur: doc.data().idUtilisateur,
+              nomUtilisateur: toutesLesPersonnes.filter(
+                (utilisateur) => utilisateur.id === doc.data().idUtilisateur
+              )[0].nom,
+              type: doc.data().type,
+              date: new Date(
+                parseInt(annee),
+                parseInt(mois) - 1,
+                parseInt(jour),
+                parseInt(heure),
+                parseInt(minute)
+              ),
+              dateString: doc.data().date,
+            });
+          }
         });
 
         // Trier l'historique suivant le filtre Type
@@ -172,6 +208,15 @@ const Historique = ({ navigation }) => {
         );
       });
   }, [nbRefresh]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setNbRefresh(0);
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   function renderPetitsPoints() {
     const positionPoint = Animated.divide(scrollX, SIZES.width);
@@ -487,6 +532,13 @@ const Historique = ({ navigation }) => {
               SIZES.padding * 6 /* le reste */,
           }}
           navigation={navigation}
+          idArticle={
+            route != undefined &&
+            route.params != undefined &&
+            route.params.idArticle != undefined
+              ? route.params.idArticle
+              : -1
+          }
           number={0}
           periodeFiltre={periodeSelectionnee}
           personneFiltre={personneSelectionnee}

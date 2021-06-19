@@ -370,6 +370,7 @@ const Recap = ({ navigation }) => {
       <HistoriqueEntreesSorties
         customContainerStyle={{ ...styles.shadow }}
         navigation={navigation}
+        idArticle={-1}
         number={5}
         personneFiltre="Toutes"
         typeFiltre="Tous"

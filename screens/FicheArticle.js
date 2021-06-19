@@ -719,9 +719,16 @@ const FicheArticle = ({ navigation, route }) => {
           borderRadius: SIZES.radius,
           ...styles.shadow,
         }}
-        onPress={() =>
-          navigation.navigate("Historique", { idArticle: article.id })
-        }
+        onPress={() => {
+          if (route.params.nouvelArticle) {
+            toast.show(
+              "Pas d'historique pour un article encore inexistant.",
+              2500
+            );
+          } else {
+            navigation.navigate("Historique", { idArticle: article.id });
+          }
+        }}
       >
         <Image
           source={icons.entree_sortie}
@@ -838,6 +845,8 @@ const FicheArticle = ({ navigation, route }) => {
                     idMarque: articleTMP.idMarque,
                     stocks: articleTMP.stocks,
                     stocksMini: articleTMP.stocksMini,
+                    entrees: 0,
+                    sorties: 0,
                   });
 
                   var maintenant = new Date();
