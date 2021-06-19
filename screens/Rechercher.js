@@ -26,11 +26,18 @@ const Rechercher = ({ route, navigation }) => {
   const [types, setTypes] = useState(dummyData.typesFiltresRecherche);
   const [articles, setArticles] = useState([]);
 
-  const [categorieSelectionnee, setCategorieSelectionnee] = useState("");
-  const [sousCategorieSelectionnee, setSousCategorieSelectionnee] = useState(
-    ""
-  );
-  const [marqueSelectionnee, setMarqueSelectionnee] = useState("");
+  const [categorieSelectionnee, setCategorieSelectionnee] = useState({
+    id: "",
+    nom: "",
+  });
+  const [sousCategorieSelectionnee, setSousCategorieSelectionnee] = useState({
+    id: "",
+    nom: "",
+  });
+  const [marqueSelectionnee, setMarqueSelectionnee] = useState({
+    id: "",
+    nom: "",
+  });
   const [typeSelectionne, setTypeSelectionne] = useState(
     dummyData.typesFiltresRecherche[0]
   );
@@ -110,8 +117,22 @@ const Rechercher = ({ route, navigation }) => {
           });
         });
         setSousCategories(toutesLesSousCategories);
+
         if (nbRefresh === 0) {
-          setSousCategorieSelectionnee(toutesLesSousCategories[0]);
+          if (
+            route != undefined &&
+            route.params != undefined &&
+            route.params.sousCategorie != undefined &&
+            (route.params.aCommander === undefined || !route.params.aCommander)
+          ) {
+            setSousCategorieSelectionnee(
+              toutesLesSousCategories.filter(
+                (ligne) => ligne.id === route.params.sousCategorie
+              )[0]
+            );
+          } else {
+            setSousCategorieSelectionnee(toutesLesSousCategories[0]);
+          }
         }
       })
       .catch((error) => {

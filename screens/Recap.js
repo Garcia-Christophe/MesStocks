@@ -124,7 +124,10 @@ const Recap = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("Rechercher", { sousCategorie: item })
+            navigation.navigate("Rechercher", {
+              aCommander: false,
+              sousCategorie: item.id,
+            })
           }
         >
           {/* Séparateur */}
