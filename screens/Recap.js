@@ -44,58 +44,59 @@ const Recap = ({ navigation }) => {
     var db = firebase.firestore();
 
     if (nbRefresh === 0) {
+      // Articles
+      var tousLesArticles = [];
+      db.collection("articles")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            tousLesArticles.push({
+              id: doc.id,
+              idSousCategorie: doc.data().idSousCategorie,
+              stocks: doc.data().stocks,
+              stocksMini: doc.data().stocksMini,
+            });
+          });
+          setNbArticles(tousLesArticles.length);
+        })
+        .catch((error) => {
+          console.log(
+            "Erreur en récupérant le document (Recap.js > useEffect() > articles) : ",
+            error
+          );
+        });
+
+      // Sous-catégories
+      var toutesLesSousCategories = [];
+      db.collection("sousCategories")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            toutesLesSousCategories.push({
+              id: doc.id,
+              nom: doc.data().nom,
+              nbArticles: tousLesArticles.filter(
+                (article) => article.idSousCategorie === doc.id
+              ).length,
+              nbArticlesACommander: tousLesArticles.filter(
+                (article) =>
+                  article.idSousCategorie === doc.id &&
+                  article.stocks < article.stocksMini
+              ).length,
+            });
+          });
+          setSousCategories(toutesLesSousCategories);
+          setNbRefresh(nbRefresh + 1);
+        })
+        .catch((error) => {
+          console.log(
+            "Erreur en récupérant le document (Recap.js > useEffect() > sousCategories) : ",
+            error
+          );
+        });
+
       setNbRefresh(nbRefresh + 1);
     }
-
-    // Articles
-    var tousLesArticles = [];
-    db.collection("articles")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          tousLesArticles.push({
-            id: doc.id,
-            idSousCategorie: doc.data().idSousCategorie,
-            stocks: doc.data().stocks,
-            stocksMini: doc.data().stocksMini,
-          });
-        });
-        setNbArticles(tousLesArticles.length);
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (Recap.js > useEffect() > articles) : ",
-          error
-        );
-      });
-
-    // Sous-catégories
-    var toutesLesSousCategories = [];
-    db.collection("sousCategories")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          toutesLesSousCategories.push({
-            id: doc.id,
-            nom: doc.data().nom,
-            nbArticles: tousLesArticles.filter(
-              (article) => article.idSousCategorie === doc.id
-            ).length,
-            nbArticlesACommander: tousLesArticles.filter(
-              (article) =>
-                article.idSousCategorie === doc.id &&
-                article.stocks < article.stocksMini
-            ).length,
-          });
-        });
-        setSousCategories(toutesLesSousCategories);
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (Recap.js > useEffect() > sousCategories) : ",
-          error
-        );
-      });
   }, [nbRefresh]);
 
   useEffect(() => {

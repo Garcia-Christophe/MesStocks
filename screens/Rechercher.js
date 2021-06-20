@@ -25,6 +25,7 @@ const Rechercher = ({ route, navigation }) => {
   const [marques, setMarques] = useState([]);
   const [types, setTypes] = useState(dummyData.typesFiltresRecherche);
   const [articles, setArticles] = useState([]);
+  const [articlesTMP, setArticlesTMP] = useState([]);
 
   const [categorieSelectionnee, setCategorieSelectionnee] = useState({
     id: "",
@@ -59,9 +60,111 @@ const Rechercher = ({ route, navigation }) => {
       firebase.initializeApp(firebaseConfig);
     }
 
+    // Articles
+    var tousLesArticles = articles;
+
+    // Trier l'historique suivant le filtre Catégories
+    if (
+      categorieSelectionnee.id !== undefined &&
+      categorieSelectionnee.id.length > 0 &&
+      categorieSelectionnee.id !== 0
+    ) {
+      tousLesArticles = tousLesArticles.filter(
+        (ligne) => categorieSelectionnee.id === ligne.idCategorie
+      );
+    }
+
+    // Trier l'historique suivant le filtre Sous-Catégories
+    if (
+      sousCategorieSelectionnee != undefined &&
+      sousCategorieSelectionnee.id !== undefined &&
+      sousCategorieSelectionnee.id.length > 0 &&
+      sousCategorieSelectionnee.id !== 0
+    ) {
+      setSousCategorieSelectionnee(sousCategorieSelectionnee);
+      tousLesArticles = tousLesArticles.filter(
+        (ligne) => sousCategorieSelectionnee.id === ligne.idSousCategorie
+      );
+    } else if (
+      route != undefined &&
+      route.params != undefined &&
+      route.params.sousCategorie != undefined &&
+      (route.params.aCommander === undefined || !route.params.aCommander)
+    ) {
+      var sousCat = sousCategories.filter(
+        (ligne) => ligne.id === route.params.sousCategorie
+      )[0];
+      setSousCategorieSelectionnee(sousCat);
+      tousLesArticles = tousLesArticles.filter(
+        (ligne) => sousCat.id === ligne.idSousCategorie
+      );
+    }
+
+    // Trier l'historique suivant le filtre Marques
+    if (
+      marqueSelectionnee.id !== undefined &&
+      marqueSelectionnee.id.length > 0 &&
+      marqueSelectionnee.id !== 0
+    ) {
+      tousLesArticles = tousLesArticles.filter(
+        (ligne) => marqueSelectionnee.id === ligne.idMarque
+      );
+    }
+
+    // Trier l'historique suivant le filtre Types
+    if (
+      typeSelectionne.id === 1 ||
+      (route != undefined &&
+        route.params != undefined &&
+        route.params.aCommander != undefined &&
+        route.params.aCommander)
+    ) {
+      setTypeSelectionne(dummyData.typesFiltresRecherche[1]);
+      tousLesArticles = tousLesArticles.filter(
+        (ligne) => ligne.stocks < ligne.stocksMini
+      );
+    } else if (typeSelectionne.id === 2) {
+      tousLesArticles = tousLesArticles.filter(
+        (ligne) => ligne.stocks >= ligne.stocksMini
+      );
+    }
+
+    // Trier l'historique suivant la recherche
+    if (recherche.length > 0) {
+      tousLesArticles = tousLesArticles.filter((ligne) =>
+        ligne.nom.toLowerCase().match(recherche.toLowerCase())
+      );
+    }
+
+    setArticlesTMP(tousLesArticles);
+
+    if (nbRefresh === 1) {
+      route.params = undefined;
+      setNbRefresh(nbRefresh + 1);
+    }
+  }, [nbRefresh]);
+
+  useEffect(() => {
     var db = firebase.firestore();
 
-    if (nbRefresh === 0) {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setNbRefresh(nbRefresh + 1);
+
+      var idSousCat =
+        route != undefined &&
+        route.params != undefined &&
+        route.params.sousCategorie != undefined &&
+        (route.params.aCommander === undefined || !route.params.aCommander)
+          ? route.params.sousCategorie
+          : 0;
+
+      if (idSousCat === 0) {
+        setSousCategorieSelectionnee({
+          id: 0,
+          nom: "Toutes",
+        });
+      }
+
       if (
         route != undefined &&
         route.params != undefined &&
@@ -72,205 +175,158 @@ const Rechercher = ({ route, navigation }) => {
       } else {
         setTypeSelectionne(dummyData.typesFiltresRecherche[0]);
       }
-    }
 
-    // Catégories
-    var toutesLesCategories = [];
-    toutesLesCategories.push({
-      id: 0,
-      nom: "Toutes",
-    });
-    db.collection("categories")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          toutesLesCategories.push({
-            id: doc.id,
-            nom: doc.data().nom,
+      // Catégories
+      var toutesLesCategories = [];
+      toutesLesCategories.push({
+        id: 0,
+        nom: "Toutes",
+      });
+      db.collection("categories")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            toutesLesCategories.push({
+              id: doc.id,
+              nom: doc.data().nom,
+            });
           });
-        });
-        setCategories(toutesLesCategories);
-        if (nbRefresh === 0) {
+          setCategories(toutesLesCategories);
           setCategorieSelectionnee(toutesLesCategories[0]);
-        }
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (Rechercher.js > useEffect() > categories) : ",
-          error
-        );
+        })
+        .catch((error) => {
+          console.log(
+            "Erreur en récupérant le document (Rechercher.js > useEffect() > categories) : ",
+            error
+          );
+        });
+
+      // Sous-catégories
+      var toutesLesSousCategories = [];
+      toutesLesSousCategories.push({
+        id: 0,
+        nom: "Toutes",
       });
-
-    // Sous-catégories
-    var toutesLesSousCategories = [];
-    toutesLesSousCategories.push({
-      id: 0,
-      nom: "Toutes",
-    });
-    db.collection("sousCategories")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          toutesLesSousCategories.push({
-            id: doc.id,
-            nom: doc.data().nom,
+      db.collection("sousCategories")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            toutesLesSousCategories.push({
+              id: doc.id,
+              nom: doc.data().nom,
+            });
           });
-        });
-        setSousCategories(toutesLesSousCategories);
+          setSousCategories(toutesLesSousCategories);
 
-        if (nbRefresh === 0) {
-          if (
-            route != undefined &&
-            route.params != undefined &&
-            route.params.sousCategorie != undefined &&
-            (route.params.aCommander === undefined || !route.params.aCommander)
-          ) {
-            setSousCategorieSelectionnee(
-              toutesLesSousCategories.filter(
-                (ligne) => ligne.id === route.params.sousCategorie
-              )[0]
-            );
-          } else {
-            setSousCategorieSelectionnee(toutesLesSousCategories[0]);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (Rechercher.js > useEffect() > sousCategories) : ",
-          error
-        );
-      });
-
-    // Marques
-    var toutesLesMarques = [];
-    toutesLesMarques.push({
-      id: 0,
-      nom: "Toutes",
-    });
-    db.collection("marques")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          toutesLesMarques.push({
-            id: doc.id,
-            nom: doc.data().nom,
-          });
-        });
-        setMarques(toutesLesMarques);
-        if (nbRefresh === 0) {
-          setMarqueSelectionnee(toutesLesMarques[0]);
-        }
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (Rechercher.js > useEffect() > marques) : ",
-          error
-        );
-      });
-
-    // Articles
-    var tousLesArticles = [];
-    db.collection("articles")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          tousLesArticles.push({
-            id: doc.id,
-            nom: doc.data().nom,
-            idCategorie: doc.data().idCategorie,
-            nomCategorie: toutesLesCategories.filter(
-              (categorie) => categorie.id === doc.data().idCategorie
-            )[0].nom,
-            idSousCategorie: doc.data().idSousCategorie,
-            nomSousCategorie: toutesLesSousCategories.filter(
-              (sousCategorie) => sousCategorie.id === doc.data().idSousCategorie
-            )[0].nom,
-            idMarque: doc.data().idMarque,
-            nomMarque: toutesLesMarques.filter(
-              (marque) => marque.id === doc.data().idMarque
-            )[0].nom,
-            stocks: doc.data().stocks,
-            stocksMini: doc.data().stocksMini,
-          });
-        });
-
-        tousLesArticles.map((ligne) => {
-          ligne.nomCategorie =
-            ligne.idCategorie === 0 ? "∅" : ligne.nomCategorie;
-          ligne.nomSousCategorie =
-            ligne.idSousCategorie === 0 ? "∅" : ligne.nomSousCategorie;
-          ligne.nomMarque = ligne.idMarque === 0 ? "∅" : ligne.nomMarque;
-        });
-
-        // Trier l'historique suivant le filtre Catégories
-        if (
-          categorieSelectionnee.id !== undefined &&
-          categorieSelectionnee.id.length > 0 &&
-          categorieSelectionnee.id !== 0
-        ) {
-          tousLesArticles = tousLesArticles.filter(
-            (ligne) => categorieSelectionnee.id === ligne.idCategorie
-          );
-        }
-
-        // Trier l'historique suivant le filtre Sous-Catégories
-        if (
-          sousCategorieSelectionnee.id !== undefined &&
-          sousCategorieSelectionnee.id.length > 0 &&
-          sousCategorieSelectionnee.id !== 0
-        ) {
-          tousLesArticles = tousLesArticles.filter(
-            (ligne) => sousCategorieSelectionnee.id === ligne.idSousCategorie
-          );
-        }
-
-        // Trier l'historique suivant le filtre Marques
-        if (
-          marqueSelectionnee.id !== undefined &&
-          marqueSelectionnee.id.length > 0 &&
-          marqueSelectionnee.id !== 0
-        ) {
-          tousLesArticles = tousLesArticles.filter(
-            (ligne) => marqueSelectionnee.id === ligne.idMarque
-          );
-        }
-
-        // Trier l'historique suivant le filtre Types
-        if (typeSelectionne.id === 1) {
-          tousLesArticles = tousLesArticles.filter(
-            (ligne) => ligne.stocks < ligne.stocksMini
-          );
-        } else if (typeSelectionne.id === 2) {
-          tousLesArticles = tousLesArticles.filter(
-            (ligne) => ligne.stocks >= ligne.stocksMini
-          );
-        }
-
-        if (recherche.length > 0) {
-          tousLesArticles = tousLesArticles.filter((ligne) =>
-            ligne.nom.toLowerCase().match(recherche.toLowerCase())
-          );
-        }
-
-        setArticles(tousLesArticles);
-
-        if (nbRefresh === 0) {
-          route.params = undefined;
           setNbRefresh(nbRefresh + 1);
-        }
-      })
-      .catch((error) => {
-        console.log(
-          "Erreur en récupérant le document (Rechercher.js > useEffect() > articles) : ",
-          error
-        );
-      });
-  }, [nbRefresh]);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      setNbRefresh(0);
+          setSousCategorieSelectionnee(
+            toutesLesSousCategories.filter((ligne) => ligne.id === idSousCat)[0]
+          );
+
+          setNbRefresh(nbRefresh + 1);
+        })
+        .catch((error) => {
+          console.log(
+            "Erreur en récupérant le document (Rechercher.js > useEffect() > sousCategories) : ",
+            error
+          );
+        });
+
+      // Marques
+      var toutesLesMarques = [];
+      toutesLesMarques.push({
+        id: 0,
+        nom: "Toutes",
+      });
+      db.collection("marques")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            toutesLesMarques.push({
+              id: doc.id,
+              nom: doc.data().nom,
+            });
+          });
+          setMarques(toutesLesMarques);
+          setMarqueSelectionnee(toutesLesMarques[0]);
+        })
+        .catch((error) => {
+          console.log(
+            "Erreur en récupérant le document (Rechercher.js > useEffect() > marques) : ",
+            error
+          );
+        });
+
+      // Articles
+      var tousLesArticles = [];
+      db.collection("articles")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            tousLesArticles.push({
+              id: doc.id,
+              nom: doc.data().nom,
+              idCategorie: doc.data().idCategorie,
+              nomCategorie: toutesLesCategories.filter(
+                (categorie) => categorie.id === doc.data().idCategorie
+              )[0].nom,
+              idSousCategorie: doc.data().idSousCategorie,
+              nomSousCategorie: toutesLesSousCategories.filter(
+                (sousCategorie) =>
+                  sousCategorie.id === doc.data().idSousCategorie
+              )[0].nom,
+              idMarque: doc.data().idMarque,
+              nomMarque: toutesLesMarques.filter(
+                (marque) => marque.id === doc.data().idMarque
+              )[0].nom,
+              stocks: doc.data().stocks,
+              stocksMini: doc.data().stocksMini,
+            });
+          });
+
+          tousLesArticles.map((ligne) => {
+            ligne.nomCategorie =
+              ligne.idCategorie === 0 ? "∅" : ligne.nomCategorie;
+            ligne.nomSousCategorie =
+              ligne.idSousCategorie === 0 ? "∅" : ligne.nomSousCategorie;
+            ligne.nomMarque = ligne.idMarque === 0 ? "∅" : ligne.nomMarque;
+          });
+
+          setArticles(tousLesArticles);
+
+          // Trier l'historique suivant le filtre Sous-Catégories
+          if (
+            sousCategorieSelectionnee.id !== undefined &&
+            sousCategorieSelectionnee.id.length > 0 &&
+            sousCategorieSelectionnee.id !== 0
+          ) {
+            tousLesArticles = tousLesArticles.filter(
+              (ligne) => sousCategorieSelectionnee.id === ligne.idSousCategorie
+            );
+          }
+
+          // Trier l'historique suivant le filtre Types
+          if (typeSelectionne.id === 1) {
+            tousLesArticles = tousLesArticles.filter(
+              (ligne) => ligne.stocks < ligne.stocksMini
+            );
+          } else if (typeSelectionne.id === 2) {
+            tousLesArticles = tousLesArticles.filter(
+              (ligne) => ligne.stocks >= ligne.stocksMini
+            );
+          }
+
+          setArticlesTMP(tousLesArticles);
+
+          setNbRefresh(nbRefresh + 1);
+        })
+        .catch((error) => {
+          console.log(
+            "Erreur en récupérant le document (Rechercher.js > useEffect() > articles) : ",
+            error
+          );
+        });
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -709,7 +765,7 @@ const Rechercher = ({ route, navigation }) => {
                 fontWeight: "bold",
               }}
             >
-              {articles.length}
+              {articlesTMP.length}
             </Text>
           </View>
         </View>
@@ -720,7 +776,7 @@ const Rechercher = ({ route, navigation }) => {
           <FlatList
             contentContainerStyle={{ marginTop: SIZES.radius }}
             scrollEnabled={false}
-            data={articles}
+            data={articlesTMP}
             keyExtractor={(item) => `${item.id}`}
             renderItem={renderItemArticle}
             showsVerticalScrollIndicator={false}
