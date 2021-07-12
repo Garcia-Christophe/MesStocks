@@ -70,5 +70,5 @@ Pour commencer mes premiers designs, je suis parti sur ce tutoriel très bien fa
 
 La base de données cloud NoSQL, flexible et évolutive, me permet de stocker et synchroniser les données pour le développement côté client et côté serveur en temps réel : https://firebase.google.com/docs/firestore 
 
-Voici un petit lien pratique pour les toast façon Android pour Android/iOS : https://github.com/crazycodeboy/react-native-easy-toast
+Voici un petit lien pratique pour les toasts façon Android pour Android/iOS : https://github.com/crazycodeboy/react-native-easy-toast
 
