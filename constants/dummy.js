@@ -36,15 +36,15 @@ export const periodes = [
 // Rechercher > Filtre Type
 export const typesFiltresRecherche = [
   {
-    id: 0,
+    id: "0",
     nom: "Tous",
   },
   {
-    id: 1,
+    id: "1",
     nom: "À commander",
   },
   {
-    id: 2,
+    id: "2",
     nom: "Stocks à jour",
   },
 ];

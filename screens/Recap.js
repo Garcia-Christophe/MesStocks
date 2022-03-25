@@ -86,7 +86,6 @@ const Recap = ({ navigation }) => {
             });
           });
           setSousCategories(toutesLesSousCategories);
-          setNbRefresh(nbRefresh + 1);
         })
         .catch((error) => {
           console.log(
@@ -160,7 +159,7 @@ const Recap = ({ navigation }) => {
           <View>
             <Text style={{ ...FONTS.h4 }}>
               <Text style={{ fontWeight: "bold" }}>{item.nbArticles}</Text>{" "}
-              articles
+              {item.nbArticles > 1 ? "articles" : "article"}
             </Text>
             <Text
               style={{
@@ -250,7 +249,7 @@ const Recap = ({ navigation }) => {
           <View
             style={{
               position: "absolute",
-              bottom: 0, // "-30%"
+              bottom: 0,
             }}
           >
             <Text

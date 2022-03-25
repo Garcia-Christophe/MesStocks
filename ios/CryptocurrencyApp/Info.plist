@@ -37,6 +37,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+    <string>En général il faut refuser. Mais là si tu n'acceptes pas, je ne pourrai pas scanner les articles. Ce serait dommage, du coup j'ai besoin que tu acceptes stp.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>UILaunchStoryboardName</key>
