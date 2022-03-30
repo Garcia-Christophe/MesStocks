@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
-import { Historique, FicheArticle, DerniersEvenements } from "./screens";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
 import firebase from "firebase";
 
-import Tabs from "./navigation/tabs";
-
-const Stack = createStackNavigator();
+import MainStackNavigator from "./navigation/MainStackNavigator";
 
 const App = () => {
   useEffect(() => {
@@ -25,30 +20,187 @@ const App = () => {
       // Initialise Firebase
       firebase.initializeApp(firebaseConfig);
     }
+
+    // var db = firebase.firestore();
+
+    // // Catégories
+    // var toutesLesCategories = [];
+    // db.collection("categories")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       toutesLesCategories.push({
+    //         id: doc.id,
+    //         nom: doc.data().nom,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > categories) : ",
+    //       error
+    //     );
+    //   });
+
+    // // Sous-catégories
+    // var toutesLesSousCategories = [];
+    // db.collection("sousCategories")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       toutesLesSousCategories.push({
+    //         id: doc.id,
+    //         nom: doc.data().nom,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > sousCategories) : ",
+    //       error
+    //     );
+    //   });
+
+    // // Marques
+    // var toutesLesMarques = [];
+    // toutesLesMarques.push({
+    //   id: 0,
+    //   nom: "Toutes",
+    // });
+    // db.collection("marques")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       toutesLesMarques.push({
+    //         id: doc.id,
+    //         nom: doc.data().nom,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > marques) : ",
+    //       error
+    //     );
+    //   });
+
+    // // Articles
+    // var tousLesArticles = [];
+    // db.collection("articles")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       tousLesArticles.push({
+    //         id: doc.id,
+    //         nom: doc.data().nom,
+    //         idCategorie: doc.data().idCategorie,
+    //         idSousCategorie: doc.data().idSousCategorie,
+    //         idMarque: doc.data().idMarque,
+    //         stocks: doc.data().stocks,
+    //         stocksMini: doc.data().stocksMini,
+    //         entrees: doc.data().entrees,
+    //         sorties: doc.data().sorties,
+    //         entreesSorties: doc.data().entreesSorties,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > articles) : ",
+    //       error
+    //     );
+    //   });
+
+    // // Derniers évènements
+    // var tousLesDerniersEvenements = [];
+    // db.collection("derniersEvenements")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       tousLesDerniersEvenements.push({
+    //         id: doc.id,
+    //         date: doc.data().date,
+    //         nomObjet: doc.data().nomObjet,
+    //         objet: doc.data().objet,
+    //         type: doc.data().type,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > derniersEvenements) : ",
+    //       error
+    //     );
+    //   });
+
+    // // Historique
+    // var toutHistorique = [];
+    // db.collection("historique")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       toutHistorique.push({
+    //         id: doc.id,
+    //         date: doc.data().date,
+    //         idArticle: doc.data().idArticle,
+    //         idUtilisateur: doc.data().idUtilisateur,
+    //         type: doc.data().type,
+    //         nombre: doc.data().nombre,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > historique) : ",
+    //       error
+    //     );
+    //   });
+
+    // // Parametres
+    // var tousLesParametres = [];
+    // db.collection("parametres")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       tousLesParametres.push({
+    //         id: doc.id,
+    //         notifACommander: doc.data().notifACommander,
+    //         notifCreations: doc.data().notifCreations,
+    //         notifModifications: doc.data().notifModifications,
+    //         notifSuppressions: doc.data().notifSuppressions,
+    //         notifEntreesSorties: doc.data().notifEntreesSorties,
+    //         theme: doc.data().theme,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > parametres) : ",
+    //       error
+    //     );
+    //   });
+
+    // // Utilisateurs
+    // var tousLesUtilisateurs = [];
+    // db.collection("utilisateurs")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       tousLesUtilisateurs.push({
+    //         id: doc.id,
+    //         nom: doc.data().nom,
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(
+    //       "Erreur en récupérant le document (App.js > useEffect() > utilisateurs) : ",
+    //       error
+    //     );
+    //   });
   }, []);
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName={"Récap'"}
-      >
-        <Stack.Screen name="Récap'" component={Tabs} />
-        <Stack.Screen name="Rechercher" component={Tabs} />
-        <Stack.Screen name="Scan" component={Tabs} />
-        <Stack.Screen name="Ajouter" component={Tabs} />
-        <Stack.Screen name="Params" component={Tabs} />
-        <Stack.Screen name="Historique" component={Historique} />
-        <Stack.Screen name="FicheArticle" component={FicheArticle} />
-        <Stack.Screen
-          name="DerniersEvenements"
-          component={DerniersEvenements}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  return <MainStackNavigator />;
 };
 
 export default App;

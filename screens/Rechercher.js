@@ -15,7 +15,7 @@ import firebase from "firebase";
 import { BoutonTexte } from "../components";
 import { FONTS, SIZES, COLORS, images, icons, dummyData } from "../constants";
 
-const Rechercher = ({ route, navigation }) => {
+const Rechercher = ({ route, navigation }, props) => {
   const [nbRefresh, setNbRefresh] = useState(1);
   const [voirFiltres, setVoirFiltres] = useState(false);
 
@@ -76,10 +76,9 @@ const Rechercher = ({ route, navigation }) => {
       firebase.initializeApp(firebaseConfig);
     }
 
-    var db = firebase.firestore();
-
     if (nbRefresh === 0) {
-      alert("ah");
+      var db = firebase.firestore();
+
       // Catégories
       var toutesLesCategories = [];
       toutesLesCategories.push({
@@ -234,7 +233,6 @@ const Rechercher = ({ route, navigation }) => {
 
   useEffect(() => {
     var tousLesArticles = articles.base;
-    // alert(filtres.sousCategorie.id);
 
     // Trier l'historique suivant le filtre Catégories
     if (filtres.categorie.id !== undefined && filtres.categorie.id !== 0) {
@@ -272,7 +270,7 @@ const Rechercher = ({ route, navigation }) => {
     }
 
     // Trier l'historique suivant la recherche
-    if (filtres.recherche.id !== undefined && filtres.recherche.length > 0) {
+    if (filtres.recherche.length > 0) {
       tousLesArticles = tousLesArticles.filter((ligne) =>
         ligne.nom.toLowerCase().match(filtres.recherche.toLowerCase())
       );
