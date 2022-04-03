@@ -1037,7 +1037,7 @@ const FicheArticle = ({ navigation, route }) => {
               style={{
                 alignItems: "center",
               }}
-              value={`${article.id}`}
+              value={`MesStocks_idArticle:${article.id}`}
               size={150}
               color={COLORS.primary}
             />
