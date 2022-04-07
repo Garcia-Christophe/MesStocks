@@ -32,9 +32,6 @@ const Scan = ({ navigation }) => {
     nom: "Aucun article trouvé",
     stocks: 0,
     stocksMini: 0,
-    entrees: 0,
-    sorties: 0,
-    entreesSorties: [],
     idCategorie: 0,
     idSousCategorie: 0,
     idMarque: 0,
@@ -109,15 +106,21 @@ const Scan = ({ navigation }) => {
             });
           });
 
-          if (entreeSortie.idUtilisateur.length === 0) {
-            setEntreeSortie({
-              date: getDate(),
-              idArticle: entreeSortie.idArticle,
-              idUtilisateur: tousLesUtilisateurs[0].id,
-              nombre: entreeSortie.nombre,
-              type: entreeSortie.type,
-            });
-          }
+          setEntreeSortie({
+            date: getDate(),
+            idArticle: 0,
+            idUtilisateur: tousLesUtilisateurs[0].id,
+            nombre: 0,
+            type: "E",
+          });
+          setArticle({
+            nom: "Aucun article trouvé",
+            stocks: 0,
+            stocksMini: 0,
+            idCategorie: 0,
+            idSousCategorie: 0,
+            idMarque: 0,
+          });
           setUtilisateurs(tousLesUtilisateurs);
         })
         .catch((error) => {
@@ -182,7 +185,7 @@ const Scan = ({ navigation }) => {
 
         setEntreeSortie({
           date: getDate(),
-          idArticle: data,
+          idArticle: data.split(":")[1],
           idUtilisateur:
             entreeSortie.idUtilisateur.length > 0
               ? entreeSortie.idUtilisateur
@@ -665,9 +668,6 @@ const Scan = ({ navigation }) => {
                   nom: "Aucun article trouvé",
                   stocks: 0,
                   stocksMini: 0,
-                  entrees: 0,
-                  sorties: 0,
-                  entreesSorties: [],
                   idCategorie: 0,
                   idSousCategorie: 0,
                   idMarque: 0,
@@ -706,8 +706,71 @@ const Scan = ({ navigation }) => {
                 borderWidth: 1,
                 borderRadius: 20,
               }}
-              onPress={() => {
-                toast.show("Stocks de l'article à jour.", 2500);
+              onPress={async () => {
+                if (
+                  entreeSortie.idArticle.length > 0 &&
+                  entreeSortie.nombre <= article.stocks
+                ) {
+                  let evenement = {
+                    date: entreeSortie.date,
+                    nomObjet: article.nom,
+                    objet: "A",
+                    type: "M",
+                  };
+                  let stocksAJour =
+                    article.stocks +
+                    (entreeSortie.type === "E"
+                      ? entreeSortie.nombre
+                      : -entreeSortie.nombre);
+
+                  // Mise à jour des stocks de l'article
+                  await firebase
+                    .firestore()
+                    .collection("articles")
+                    .doc(entreeSortie.idArticle)
+                    .update({
+                      nom: article.nom,
+                      idCategorie: article.idCategorie,
+                      idSousCategorie: article.idSousCategorie,
+                      idMarque: article.idMarque,
+                      stocks: stocksAJour,
+                      stocksMini: article.stocksMini,
+                    });
+
+                  // Mise à jour de l'historique
+                  await firebase
+                    .firestore()
+                    .collection("historique")
+                    .add(entreeSortie);
+
+                  // Mise à jour des derniers évènements
+                  await firebase
+                    .firestore()
+                    .collection("derniersEvenements")
+                    .add(evenement);
+
+                  setArticle({
+                    nom: article.nom,
+                    idCategorie: article.idCategorie,
+                    idSousCategorie: article.idSousCategorie,
+                    idMarque: article.idMarque,
+                    stocks: stocksAJour,
+                    stocksMini: article.stocksMini,
+                  });
+                  setEntreeSortie({
+                    date: entreeSortie.date,
+                    idArticle: entreeSortie.idArticle,
+                    idUtilisateur: entreeSortie.idUtilisateur,
+                    nombre:
+                      entreeSortie.nombre > stocksAJour
+                        ? 1
+                        : entreeSortie.nombre,
+                    type: entreeSortie.type,
+                  });
+                  toast.show("Stocks de l'article à jour.", 2500);
+                } else {
+                  toast.show("L'article n'a pas assez de stocks.", 2500);
+                }
               }}
             >
               <Image

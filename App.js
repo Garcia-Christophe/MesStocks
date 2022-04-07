@@ -98,9 +98,6 @@ const App = () => {
     //         idMarque: doc.data().idMarque,
     //         stocks: doc.data().stocks,
     //         stocksMini: doc.data().stocksMini,
-    //         entrees: doc.data().entrees,
-    //         sorties: doc.data().sorties,
-    //         entreesSorties: doc.data().entreesSorties,
     //       });
     //     });
     //   })

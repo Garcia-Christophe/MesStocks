@@ -100,7 +100,7 @@ const Recap = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      setNbRefresh(0);
+      setNbRefresh(nbRefresh + 1);
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount

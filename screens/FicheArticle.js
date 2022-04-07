@@ -848,8 +848,6 @@ const FicheArticle = ({ navigation, route }) => {
                     idMarque: articleTMP.idMarque,
                     stocks: articleTMP.stocks,
                     stocksMini: articleTMP.stocksMini,
-                    entrees: 0,
-                    sorties: 0,
                   });
 
                   var maintenant = new Date();
