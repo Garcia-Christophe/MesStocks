@@ -26,6 +26,7 @@ const derniersEvenements = require("../assets/icons/derniersEvenements.png");
 const theme = require("../assets/icons/theme.png");
 const exportation = require("../assets/icons/exportation.png");
 const qrcode = require("../assets/icons/scan.png");
+const information = require("../assets/icons/information.png");
 
 export default {
   recap,
@@ -56,4 +57,5 @@ export default {
   theme,
   exportation,
   qrcode,
+  information,
 };

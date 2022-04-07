@@ -458,6 +458,7 @@ const Ajouter = ({ navigation }) => {
             style={{
               flex: 1,
               marginLeft: 15,
+              color: COLORS.gray,
             }}
           />
           <TouchableOpacity
