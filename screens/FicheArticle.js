@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -8,7 +8,6 @@ import {
   Image,
   FlatList,
   TextInput,
-  Alert,
 } from "react-native";
 import firebase from "firebase";
 
@@ -21,7 +20,6 @@ import { COLORS, SIZES, FONTS, icons, images } from "../constants";
 const FicheArticle = ({ navigation, route }) => {
   const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
   const [toast, setToast] = useState();
-  const [email, setEmail] = useState("");
   const [article, setArticle] = useState({
     id: -1,
     nom: "",
@@ -994,6 +992,7 @@ const FicheArticle = ({ navigation, route }) => {
             flexDirection: "column",
           }}
         >
+          {/* Titre */}
           <View
             style={{
               flexDirection: "row",
@@ -1026,9 +1025,9 @@ const FicheArticle = ({ navigation, route }) => {
 
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: "column",
               justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <QRCode
@@ -1040,149 +1039,6 @@ const FicheArticle = ({ navigation, route }) => {
               color={COLORS.primary}
             />
           </View>
-        </View>
-      </View>
-    );
-  }
-
-  async function exportFile() {
-    Alert.alert(
-      "Ficher exporté avec succès !",
-      "Chemin d'accès : " + "Downloads/MS-Article_FZ048FIH218765A.xlsx"
-    );
-  }
-
-  function renderExportation() {
-    return (
-      <View
-        style={{
-          flexDirection: "column",
-          alignItems: "center",
-          paddingVertical: SIZES.padding / 2,
-          marginHorizontal: SIZES.padding,
-          marginTop: SIZES.padding / 2,
-          marginBottom: SIZES.padding,
-          backgroundColor: COLORS.white,
-          borderRadius: SIZES.radius,
-          ...styles.shadow,
-        }}
-      >
-        {/* Titre */}
-        <View
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            alignItems: "center",
-            paddingHorizontal: SIZES.padding,
-          }}
-        >
-          <Image
-            source={icons.exportation}
-            resizeMode="contain"
-            style={{
-              width: 20,
-              height: 20,
-              tintColor: COLORS.yellow,
-            }}
-          />
-          <Text
-            style={{
-              ...FONTS.h2,
-              fontWeight: "bold",
-              marginLeft: SIZES.padding / 2 + 5,
-            }}
-          >
-            Exportation
-          </Text>
-        </View>
-
-        {/* Email */}
-        <View
-          style={{
-            height: 45,
-            width: "90%",
-            flexDirection: "row",
-            alignItems: "center",
-            borderRadius: 20,
-            borderWidth: 1,
-            borderColor: COLORS.gray,
-            backgroundColor: COLORS.white,
-            paddingVertical: 5,
-            marginTop: SIZES.padding,
-            marginBottom: SIZES.base,
-          }}
-        >
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={COLORS.gray}
-            value={email}
-            onChangeText={(texte) => setEmail(texte)}
-            style={{
-              flex: 1,
-              marginLeft: 15,
-            }}
-          />
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              padding: SIZES.base,
-              marginRight: SIZES.base,
-            }}
-            onPress={() => setEmail("")}
-          >
-            <Image
-              source={icons.croix}
-              resizeMode="contain"
-              style={{
-                width: 17,
-                height: 17,
-                tintColor: COLORS.gray,
-                paddingHorizontal: SIZES.base,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Bouton */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            paddingBottom: SIZES.base,
-            justifyContent: "space-evenly",
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 150,
-              marginTop: SIZES.base,
-              paddingVertical: SIZES.padding / 2,
-              backgroundColor: COLORS.green,
-              borderRadius: SIZES.radius,
-            }}
-            onPress={() => {
-              if (email.length > 0) {
-                setEmail("");
-                toast.show("Exportation réussie !", 1000);
-              } else {
-                toast.show("Veuillez saisir l'email.", 1000);
-              }
-            }}
-          >
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.h2,
-                fontWeight: "bold",
-              }}
-            >
-              Exporter
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
     );
@@ -1226,7 +1082,6 @@ const FicheArticle = ({ navigation, route }) => {
         </View>
 
         {renderQRCode()}
-        {renderExportation()}
       </ScrollView>
 
       {/* Toast */}
