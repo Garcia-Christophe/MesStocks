@@ -18,7 +18,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo2.png"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.c_garcia.MesStocks"
     },
     "web": {
       "favicon": "./assets/images.logo2.png"
