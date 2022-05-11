@@ -22,7 +22,6 @@ import { FONTS, SIZES, COLORS, icons, images, dummyData } from "../constants";
 const Params = ({ navigation }) => {
   const [nbRefresh, setNbRefresh] = useState(0); // Incrémenté de 1 pour forcer le useEffect (re-render)
   const [toast, setToast] = useState();
-  const [email, setEmail] = useState("");
   const [themes, setThemes] = useState(dummyData.themes);
   const [notifications, setNotifications] = useState(dummyData.notifications);
   const [parametres, setParametres] = useState({
@@ -923,6 +922,7 @@ const Params = ({ navigation }) => {
 
   async function exportFile() {
     var db = firebase.firestore();
+    let idArticles = [];
     let tousLesUtilisateurs = [];
     await db
       .collection("utilisateurs")
@@ -931,7 +931,7 @@ const Params = ({ navigation }) => {
         querySnapshot.forEach((doc) => {
           tousLesUtilisateurs.push({
             id: doc.id,
-            nom: doc.data().nom,
+            Nom: doc.data().nom,
           });
         });
       })
@@ -948,24 +948,25 @@ const Params = ({ navigation }) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+          idArticles.push(doc.id);
           tousLesArticles.push({
-            id: doc.id,
-            nom: doc.data().nom,
-            stocks: doc.data().stocks,
-            stocksMini: doc.data().stocksMini,
+            Nom: doc.data().nom,
+            Stocks: doc.data().stocks,
+            "Stocks Mini": doc.data().stocksMini,
           });
-          tousLesArticles.sort((a, b) =>
-            a.nom > b.nom ? 1 : b.nom > a.nom ? -1 : 0
-          );
         });
+        tousLesArticles.sort((a, b) =>
+          a.Nom > b.Nom ? 1 : b.Nom > a.Nom ? -1 : 0
+        );
       })
       .catch((error) => {
         console.log(
-          "Erreur en récupérant le document (Params.js > exportFile() > utilisateurs) : ",
+          "Erreur en récupérant le document (Params.js > exportFile() > articles) : ",
           error
         );
       });
     var ws = XLSX.utils.json_to_sheet(tousLesArticles);
+    ws["!cols"] = fitToColumn(tousLesArticles);
     var wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Articles");
 
@@ -976,20 +977,19 @@ const Params = ({ navigation }) => {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           toutLHistorique.push({
-            date: doc.data().date,
-            article: tousLesArticles.find(
-              (article) => article.id === doc.data().idArticle
-            ).nom,
-            type:
+            Date: doc.data().date,
+            Article:
+              tousLesArticles[idArticles.indexOf(doc.data().idArticle)].Nom,
+            Type:
               doc.data().type + (doc.data().type === "E" ? "ntrée" : "ortie"),
-            nombre: doc.data().nombre,
-            utilisateur: tousLesUtilisateurs.find(
+            Nombre: doc.data().nombre,
+            Utilisateur: tousLesUtilisateurs.find(
               (utilisateur) => utilisateur.id === doc.data().idUtilisateur
-            ).nom,
+            ).Nom,
           });
         });
         toutLHistorique.sort((a, b) =>
-          a.article > b.article ? 1 : b.article > a.article ? -1 : 0
+          a.Article > b.Article ? 1 : b.Article > a.Article ? -1 : 0
         );
       })
       .catch((error) => {
@@ -999,6 +999,7 @@ const Params = ({ navigation }) => {
         );
       });
     ws = XLSX.utils.json_to_sheet(toutLHistorique);
+    ws["!cols"] = fitToColumn(toutLHistorique);
     XLSX.utils.book_append_sheet(wb, ws, "Historique");
     const wbout = XLSX.write(wb, {
       type: "base64",
@@ -1016,6 +1017,21 @@ const Params = ({ navigation }) => {
       UTI: "com.microsoft.excel.xlsx",
     });
   }
+
+  const fitToColumn = (data) => {
+    const columnWidths = [];
+    for (const property in data[0]) {
+      columnWidths.push({
+        wch: Math.max(
+          property ? property.toString().length : 0,
+          ...data.map((obj) =>
+            obj[property] ? obj[property].toString().length : 0
+          )
+        ),
+      });
+    }
+    return columnWidths;
+  };
 
   function renderExportation() {
     return (
@@ -1061,61 +1077,11 @@ const Params = ({ navigation }) => {
           </Text>
         </View>
 
-        {/* Email */}
+        {/* Bouton */}
         <View
           style={{
-            height: 45,
-            width: "90%",
-            flexDirection: "row",
-            alignItems: "center",
-            borderRadius: 20,
-            borderWidth: 1,
-            borderColor: COLORS.gray,
-            backgroundColor: COLORS.white,
-            paddingVertical: 5,
-            marginTop: SIZES.padding,
-            marginBottom: SIZES.base,
-          }}
-        >
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={COLORS.gray}
-            value={email}
-            onChangeText={(texte) => setEmail(texte)}
-            style={{
-              flex: 1,
-              marginLeft: 15,
-            }}
-          />
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              padding: SIZES.base,
-              marginRight: SIZES.base,
-            }}
-            onPress={() => setEmail("")}
-          >
-            <Image
-              source={icons.croix}
-              resizeMode="contain"
-              style={{
-                width: 17,
-                height: 17,
-                tintColor: COLORS.gray,
-                paddingHorizontal: SIZES.base,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Boutons */}
-        <View
-          style={{
-            flexDirection: "row",
             width: "100%",
             paddingBottom: SIZES.base,
-            justifyContent: "space-evenly",
           }}
         >
           <TouchableOpacity
@@ -1123,52 +1089,13 @@ const Params = ({ navigation }) => {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              width: 150,
               marginTop: SIZES.base,
-              paddingVertical: SIZES.padding / 2,
-              backgroundColor: COLORS.red,
-              borderRadius: SIZES.radius,
-            }}
-            onPress={() => {
-              if (email.length > 0) {
-                setEmail("");
-                toast.show("Exportation réussie !", 1000);
-              } else {
-                toast.show("Veuillez saisir l'email.", 1000);
-              }
-            }}
-          >
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.h2,
-                fontWeight: "bold",
-              }}
-            >
-              PDF
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 150,
-              marginTop: SIZES.base,
+              marginHorizontal: SIZES.padding,
               paddingVertical: SIZES.padding / 2,
               backgroundColor: COLORS.green,
               borderRadius: SIZES.radius,
             }}
-            onPress={() => {
-              // if (email.length > 0) {
-              setEmail("");
-              exportFile();
-              // toast.show("Exportation réussie !", 1000);
-              // } else {
-              //   toast.show("Veuillez saisir l'email.", 1000);
-              // }
-            }}
+            onPress={() => exportFile()}
           >
             <Text
               style={{
