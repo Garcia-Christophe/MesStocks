@@ -10,6 +10,9 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import XLSX from "xlsx";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
 import firebase from "firebase";
 
 import Toast from "react-native-easy-toast";
@@ -919,10 +922,99 @@ const Params = ({ navigation }) => {
   }
 
   async function exportFile() {
-    Alert.alert(
-      "Ficher exporté avec succès !",
-      "Chemin d'accès : " + "Downloads/MesStocks.xlsx"
-    );
+    var db = firebase.firestore();
+    let tousLesUtilisateurs = [];
+    await db
+      .collection("utilisateurs")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          tousLesUtilisateurs.push({
+            id: doc.id,
+            nom: doc.data().nom,
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Params.js > exportFile() > utilisateurs) : ",
+          error
+        );
+      });
+
+    let tousLesArticles = [];
+    await db
+      .collection("articles")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          tousLesArticles.push({
+            id: doc.id,
+            nom: doc.data().nom,
+            stocks: doc.data().stocks,
+            stocksMini: doc.data().stocksMini,
+          });
+          tousLesArticles.sort((a, b) =>
+            a.nom > b.nom ? 1 : b.nom > a.nom ? -1 : 0
+          );
+        });
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Params.js > exportFile() > utilisateurs) : ",
+          error
+        );
+      });
+    var ws = XLSX.utils.json_to_sheet(tousLesArticles);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Articles");
+
+    let toutLHistorique = [];
+    await db
+      .collection("historique")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutLHistorique.push({
+            date: doc.data().date,
+            article: tousLesArticles.find(
+              (article) => article.id === doc.data().idArticle
+            ).nom,
+            type:
+              doc.data().type + (doc.data().type === "E" ? "ntrée" : "ortie"),
+            nombre: doc.data().nombre,
+            utilisateur: tousLesUtilisateurs.find(
+              (utilisateur) => utilisateur.id === doc.data().idUtilisateur
+            ).nom,
+          });
+        });
+        toutLHistorique.sort((a, b) =>
+          a.article > b.article ? 1 : b.article > a.article ? -1 : 0
+        );
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Params.js > exportFile() > historique) : ",
+          error
+        );
+      });
+    ws = XLSX.utils.json_to_sheet(toutLHistorique);
+    XLSX.utils.book_append_sheet(wb, ws, "Historique");
+    const wbout = XLSX.write(wb, {
+      type: "base64",
+      bookType: "xlsx",
+    });
+    const uri = FileSystem.cacheDirectory + "MesStocks.xlsx";
+    await FileSystem.writeAsStringAsync(uri, wbout, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    await Sharing.shareAsync(uri, {
+      mimeType:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      dialogTitle: "MyWater data",
+      UTI: "com.microsoft.excel.xlsx",
+    });
   }
 
   function renderExportation() {
@@ -1069,13 +1161,13 @@ const Params = ({ navigation }) => {
               borderRadius: SIZES.radius,
             }}
             onPress={() => {
-              if (email.length > 0) {
-                setEmail("");
-                exportFile();
-                toast.show("Exportation réussie !", 1000);
-              } else {
-                toast.show("Veuillez saisir l'email.", 1000);
-              }
+              // if (email.length > 0) {
+              setEmail("");
+              exportFile();
+              // toast.show("Exportation réussie !", 1000);
+              // } else {
+              //   toast.show("Veuillez saisir l'email.", 1000);
+              // }
             }}
           >
             <Text
