@@ -23,6 +23,7 @@ const FicheArticle = ({ navigation, route }) => {
   const [article, setArticle] = useState({
     id: -1,
     nom: "",
+    reference: "",
     idCategorie: 0,
     idSousCategorie: 0,
     idMarque: 0,
@@ -32,6 +33,7 @@ const FicheArticle = ({ navigation, route }) => {
   const [articleTMP, setArticleTMP] = useState({
     id: -1,
     nom: "",
+    reference: "",
     idCategorie: 0,
     idSousCategorie: 0,
     idMarque: 0,
@@ -71,6 +73,7 @@ const FicheArticle = ({ navigation, route }) => {
           tousLesArticles.push({
             id: doc.id,
             nom: doc.data().nom,
+            reference: doc.data().reference,
             idCategorie: doc.data().idCategorie,
             idSousCategorie: doc.data().idSousCategorie,
             idMarque: doc.data().idMarque,
@@ -178,11 +181,13 @@ const FicheArticle = ({ navigation, route }) => {
       <View
         style={{
           width: "100%",
-          flexDirection: "row",
+          flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
           marginTop: SIZES.base,
         }}
       >
+        <Text>Désignation</Text>
         <View
           style={{
             height: 45,
@@ -221,6 +226,76 @@ const FicheArticle = ({ navigation, route }) => {
             onPress={() => {
               let articleAJour = articleTMP;
               articleAJour.nom = "";
+              setArticleTMP(articleAJour);
+              setNbRefresh(nbRefresh + 1);
+            }}
+          >
+            <Image
+              source={icons.croix}
+              resizeMode="contain"
+              style={{
+                width: 17,
+                height: 17,
+                tintColor: COLORS.gray,
+                paddingHorizontal: SIZES.base,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  function renderReference() {
+    return (
+      <View
+        style={{
+          width: "100%",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: SIZES.base,
+        }}
+      >
+        <Text>Référence</Text>
+        <View
+          style={{
+            height: 45,
+            width: "90%",
+            flexDirection: "row",
+            alignItems: "center",
+            borderRadius: 20,
+            backgroundColor: COLORS.white,
+            paddingVertical: 5,
+            marginVertical: SIZES.base,
+            ...styles.shadow,
+          }}
+        >
+          <TextInput
+            placeholder="Référence de l'article..."
+            placeholderTextColor={COLORS.gray}
+            value={articleTMP.reference}
+            onChangeText={(texte) => {
+              let articleAJour = articleTMP;
+              articleAJour.reference = texte;
+              setArticleTMP(articleAJour);
+              setNbRefresh(nbRefresh + 1);
+            }}
+            style={{
+              flex: 1,
+              marginLeft: 15,
+            }}
+          />
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: SIZES.base,
+              marginRight: SIZES.base,
+            }}
+            onPress={() => {
+              let articleAJour = articleTMP;
+              articleAJour.reference = "";
               setArticleTMP(articleAJour);
               setNbRefresh(nbRefresh + 1);
             }}
@@ -784,6 +859,7 @@ const FicheArticle = ({ navigation, route }) => {
           onPress={() => {
             if (
               article.nom != articleTMP.nom ||
+              article.reference != articleTMP.reference ||
               article.idCategorie != articleTMP.idCategorie ||
               article.idSousCategorie != articleTMP.idSousCategorie ||
               article.idMarque != articleTMP.idMarque ||
@@ -824,6 +900,7 @@ const FicheArticle = ({ navigation, route }) => {
           onPress={() => {
             if (
               article.nom != articleTMP.nom ||
+              article.reference != articleTMP.reference ||
               article.idCategorie != articleTMP.idCategorie ||
               article.idSousCategorie != articleTMP.idSousCategorie ||
               article.idMarque != articleTMP.idMarque ||
@@ -841,6 +918,7 @@ const FicheArticle = ({ navigation, route }) => {
                   toast.show("Article enregistré !", 1000);
                   firebase.firestore().collection("articles").add({
                     nom: articleTMP.nom,
+                    reference: articleTMP.reference,
                     idCategorie: articleTMP.idCategorie,
                     idSousCategorie: articleTMP.idSousCategorie,
                     idMarque: articleTMP.idMarque,
@@ -902,6 +980,7 @@ const FicheArticle = ({ navigation, route }) => {
                     .doc(article.id)
                     .update({
                       nom: articleTMP.nom,
+                      reference: articleTMP.reference,
                       idCategorie: articleTMP.idCategorie,
                       idSousCategorie: articleTMP.idSousCategorie,
                       idMarque: articleTMP.idMarque,
@@ -1059,6 +1138,7 @@ const FicheArticle = ({ navigation, route }) => {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderDesignation()}
+        {renderReference()}
         {renderStocks()}
         {renderParents()}
         {renderBoutonHistorique()}

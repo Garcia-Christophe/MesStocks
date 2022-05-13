@@ -922,7 +922,63 @@ const Params = ({ navigation }) => {
 
   async function exportFile() {
     var db = firebase.firestore();
-    let idArticles = [];
+    let toutesLesMarques = [];
+    await db
+      .collection("marques")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutesLesMarques.push({
+            id: doc.id,
+            nom: doc.data().nom,
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Params.js > exportFile() > marques) : ",
+          error
+        );
+      });
+
+    let toutesLesSousCategories = [];
+    await db
+      .collection("sousCategories")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutesLesSousCategories.push({
+            id: doc.id,
+            nom: doc.data().nom,
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Params.js > exportFile() > sousCategories) : ",
+          error
+        );
+      });
+
+    let toutesLesCategories = [];
+    await db
+      .collection("categories")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          toutesLesCategories.push({
+            id: doc.id,
+            nom: doc.data().nom,
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(
+          "Erreur en récupérant le document (Params.js > exportFile() > categories) : ",
+          error
+        );
+      });
+
     let tousLesUtilisateurs = [];
     await db
       .collection("utilisateurs")
@@ -943,21 +999,32 @@ const Params = ({ navigation }) => {
       });
 
     let tousLesArticles = [];
+    let idArticles = [];
     await db
       .collection("articles")
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           idArticles.push(doc.id);
+          let marque = toutesLesMarques.find(
+            (marque) => marque.id === doc.data().idMarque
+          )?.nom;
+          let cat = toutesLesCategories.find(
+            (cat) => cat.id === doc.data().idCategorie
+          )?.nom;
+          let ssCat = toutesLesSousCategories.find(
+            (ssCat) => ssCat.id === doc.data().idSousCategorie
+          )?.nom;
           tousLesArticles.push({
             Nom: doc.data().nom,
+            Référence: doc.data().reference,
             Stocks: doc.data().stocks,
-            "Stocks Mini": doc.data().stocksMini,
+            "Stocks mini": doc.data().stocksMini,
+            Marque: marque ? marque : "",
+            "Sous catégorie": ssCat ? ssCat : "",
+            Catégorie: cat ? cat : "",
           });
         });
-        tousLesArticles.sort((a, b) =>
-          a.Nom > b.Nom ? 1 : b.Nom > a.Nom ? -1 : 0
-        );
       })
       .catch((error) => {
         console.log(
@@ -965,6 +1032,7 @@ const Params = ({ navigation }) => {
           error
         );
       });
+    tousLesArticles.sort((a, b) => a.Nom.localeCompare(b.Nom));
     var ws = XLSX.utils.json_to_sheet(tousLesArticles);
     ws["!cols"] = fitToColumn(tousLesArticles);
     var wb = XLSX.utils.book_new();
@@ -976,28 +1044,30 @@ const Params = ({ navigation }) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+          let article =
+            tousLesArticles[idArticles.indexOf(doc.data().idArticle)]?.Nom;
+          let type =
+            doc.data().type + (doc.data().type === "E" ? "ntrée" : "ortie");
+          let user = tousLesUtilisateurs.find(
+            (utilisateur) => utilisateur.id === doc.data().idUtilisateur
+          )?.Nom;
           toutLHistorique.push({
-            Date: doc.data().date,
-            Article:
-              tousLesArticles[idArticles.indexOf(doc.data().idArticle)].Nom,
-            Type:
-              doc.data().type + (doc.data().type === "E" ? "ntrée" : "ortie"),
+            Article: article ? article : "",
+            Type: type ? type : "",
             Nombre: doc.data().nombre,
-            Utilisateur: tousLesUtilisateurs.find(
-              (utilisateur) => utilisateur.id === doc.data().idUtilisateur
-            ).Nom,
+            Utilisateur: user ? user : "",
+            Date: doc.data().date,
           });
         });
-        toutLHistorique.sort((a, b) =>
-          a.Article > b.Article ? 1 : b.Article > a.Article ? -1 : 0
-        );
       })
       .catch((error) => {
+        Alert.alert("error ", "" + error);
         console.log(
           "Erreur en récupérant le document (Params.js > exportFile() > historique) : ",
           error
         );
       });
+    toutLHistorique.sort((a, b) => a.Article.localeCompare(b.Article));
     ws = XLSX.utils.json_to_sheet(toutLHistorique);
     ws["!cols"] = fitToColumn(toutLHistorique);
     XLSX.utils.book_append_sheet(wb, ws, "Historique");
@@ -1022,12 +1092,13 @@ const Params = ({ navigation }) => {
     const columnWidths = [];
     for (const property in data[0]) {
       columnWidths.push({
-        wch: Math.max(
-          property ? property.toString().length : 0,
-          ...data.map((obj) =>
-            obj[property] ? obj[property].toString().length : 0
-          )
-        ),
+        wch:
+          Math.max(
+            property ? property.toString().length : 0,
+            ...data.map((obj) =>
+              obj[property] ? obj[property].toString().length : 0
+            )
+          ) + 3,
       });
     }
     return columnWidths;
