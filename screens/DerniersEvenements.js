@@ -75,9 +75,17 @@ const DerniersEvenements = ({ navigation }) => {
       });
   }, [nbRefresh]);
 
-  function renderEvenement({ icon, iconColor, nomObjet, description, date }) {
+  function renderEvenement({
+    key,
+    icon,
+    iconColor,
+    nomObjet,
+    description,
+    date,
+  }) {
     return (
       <View
+        key={key}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -138,6 +146,7 @@ const DerniersEvenements = ({ navigation }) => {
         <View style={{ flex: 1 }}>
           {derniersEvenements.map((evenement) =>
             renderEvenement({
+              key: evenement.id,
               icon:
                 evenement.type === "A"
                   ? icons.ajouter
